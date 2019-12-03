@@ -5,3 +5,11 @@ dist/
 ### go mod
 
 go.sum
+
+### go test
+
+# out of testcase
+*.test
+# test coverage out
+coverage.out
+coverage.txt
