@@ -1,0 +1,7 @@
+### build temple
+build/
+dist/
+
+### go mod
+
+go.sum
