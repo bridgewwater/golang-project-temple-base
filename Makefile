@@ -6,7 +6,7 @@ TOP_DIR := $(shell pwd)
 # 	@ echo target file not found
 # endif
 
-DIST_VERSION := 1.0.0
+DIST_VERSION := v1.0.0
 # linux windows darwin  list as: go tool dist list
 DIST_OS := linux
 # amd64 386
