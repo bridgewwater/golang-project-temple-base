@@ -6,14 +6,15 @@
 ## for what
 
 - this project used to github golang
-- use to replace
-
- `bridgewwater/golang-project-temple-base` to you code
 
 ## use
 
+- use to replace
+ `bridgewwater/golang-project-temple-base` to you code
+
+- and run
+
 ```bash
-make help
 make init
 ```
 
@@ -27,7 +28,8 @@ make run
 
 ## evn
 
-```bash
-go version
-go env
-```
+- golang sdk 1.13+
+
+## docker
+
+base docker file can replace
