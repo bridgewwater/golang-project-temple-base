@@ -1,5 +1,13 @@
 # this file must use as base Makefile
 
+travisFile:
+	@echo "you can use #=> find set"
+	@echo "install:"
+	# - export GO111MODULE=on
+	# - go get -t -v $(ROOT_TEST_LIST)
+	@echo "script:"
+	# - go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
+
 travisInstall:
 	#=> GOPROXY=$(ENV_GO_PROXY) GO111MODULE=on go get -t -v $(ROOT_TEST_LIST)
 	@GOPROXY=$(ENV_GO_PROXY) GO111MODULE=on go get -t -v $(ROOT_TEST_LIST)
@@ -22,6 +30,7 @@ travisConveyLocal:
 
 helpGoTravis:
 	@echo "Help: MakeTravis.mk"
+	@echo "~> make travisFile        - show .travis.yml file can right"
 	@echo "~> make travisInstall     - run project to test travis"
 	@echo "~> make travisTest        - run project test"
 	@echo "~> make travisTestFail    - run project test fast find FAIL"
