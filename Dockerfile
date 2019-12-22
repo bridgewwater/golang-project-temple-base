@@ -1,4 +1,4 @@
-# This dockerfile uses extends image https://hub.docker.com/sinlov/go-micro-cli
+# This dockerfile uses extends image https://hub.docker.com/bridgewwater/golang-project-temple-base
 # VERSION 1
 # Author: sinlov
 # dockerfile offical document https://docs.docker.com/engine/reference/builder/

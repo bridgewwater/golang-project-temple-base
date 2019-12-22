@@ -1,16 +1,18 @@
 # this file must use as base Makefile
 
 travisInstall:
-	GOPROXY=$(ENV_GO_PROXY) GO111MODULE=on go get -t -v ./...
+	#=> GOPROXY=$(ENV_GO_PROXY) GO111MODULE=on go get -t -v $(ROOT_TEST_LIST)
+	@GOPROXY=$(ENV_GO_PROXY) GO111MODULE=on go get -t -v $(ROOT_TEST_LIST)
 
 travisTest:
-	GO111MODULE=on go test -v ./... -timeout 1m
+	GO111MODULE=on go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME)
 
 travisTestFail:
-	GO111MODULE=on go test -v ./... -timeout 1m | grep FAIL --color
+	GO111MODULE=on go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME) | grep FAIL --color
 
 travisConvey:
-	GO111MODULE=on go test -cover -coverprofile=coverage.txt -covermode=atomic -v ./...
+	#=> GO111MODULE=on go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
+	@GO111MODULE=on go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
 
 travisConveyLocal:
 	@echo "-> use goconvey at https://github.com/smartystreets/goconvey"

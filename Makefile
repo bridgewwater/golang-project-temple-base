@@ -16,6 +16,13 @@ DIST_ARCH_DOCKER ?= amd64
 
 ROOT_NAME ?= golang-project-temple-base
 
+# ignore used not matching mode
+ROOT_TEST_INVERT_MATCH ?= "vendor"
+# set ignore of test case like grep -v -E "vendor|fataloom" to ignore vendor and fataloom package
+ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
+# test max time
+ROOT_TEST_MAX_TIME := 1m
+
 ROOT_BUILD_PATH ?= ./build
 ROOT_DIST ?= ./dist
 ROOT_REPO ?= ./dist
@@ -96,7 +103,8 @@ run: dev
 
 test:
 	@echo "=> run test start"
-	@go test -test.v ./...
+	#=> go test -test.v $(ROOT_TEST_LIST)
+	@go test -test.v $(ROOT_TEST_LIST)
 
 testBenchmem:
 	@echo "=> run test benchmem start"
@@ -117,7 +125,7 @@ helpProjectRoot:
 	@echo ""
 	@echo "~> make init         - check base env of this project"
 	@echo "~> make clean        - remove binary file and log files"
-	@echo "~> make test         - run test case all benchmem"
+	@echo "~> make test         - run test case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
 	@echo "~> make testBenchmem - run go test benchmem case all"
 	@echo "~> make dev          - run as develop"
 
