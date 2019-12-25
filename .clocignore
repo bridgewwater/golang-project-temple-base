@@ -1,0 +1,6 @@
+vendor/
+node_modules/
+dist/
+build/
+.idea/
+.vsc/

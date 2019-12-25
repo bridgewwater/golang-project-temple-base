@@ -18,9 +18,6 @@ testdata/
 # Expected results when tested
 .golden
 
-### FlatBuffer template
-
-
 ### Go template
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o

@@ -118,6 +118,10 @@ localIPDarwin:
 	@echo "=> now run as docker with darwin"
 	@echo "local ip address is: $(ROOT_LOCAL_IP_V4_DARWIN)"
 
+cloc:
+	# https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore
+	cloc --exclude-list-file=.clocignore .
+
 helpProjectRoot:
 	@echo "Help: Project root Makefile"
 	@echo "-- now build name: $(ROOT_NAME) version: $(DIST_VERSION)"
