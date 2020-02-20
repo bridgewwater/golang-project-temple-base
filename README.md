@@ -7,6 +7,18 @@
 
 - this project used to github golang
 
+## depends
+
+in go mod project
+
+```bash
+# see full version
+$ go list -m -versions github.com/bridgewwater/golang-project-temple-base.git
+# use as
+$ echo "go mod edit -require=$(go list -m -versions github.com/bridgewwater/golang-project-temple-base.git | awk '{print $1 "@" $NF}')"
+$ echo "go mod vendor"
+```
+
 ## use
 
 - use to replace
