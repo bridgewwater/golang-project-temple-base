@@ -12,13 +12,24 @@
 in go mod project
 
 ```bash
-# if use private git reop must set gloable set for once
+# global set for once
+# add private git host like github.com to evn GOPRIVATE
+$ go env -w GOPRIVATE='github.com'
+# use ssh proxy
+# set ssh-key to use ssh as http
+$ git config --global url."git@github.com:".insteadOf "http://github.com/"
+# or use PRIVATE-TOKEN
 # set PRIVATE-TOKEN as gitlab or gitea
 $ git config --global http.extraheader "PRIVATE-TOKEN: {PRIVATE-TOKEN}"
-# add private GOPRIVATE
-$ go env -w GOPRIVATE='github.com'
-# set this reop to download
+# set this rep to download ssh as https use PRIVATE-TOKEN
 $ git config --global url."ssh://github.com/".insteadOf "https://github.com/"
+
+# before above global settings
+# test version info
+$ git ls-remote -q http://github.com/bridgewwater/golang-project-temple-base.git
+
+# test depends see full version
+$ go list -v -m -versions github.com/bridgewwater/golang-project-temple-base
 
 # see full version
 $ go list -v -m -versions github.com/bridgewwater/golang-project-temple-base
