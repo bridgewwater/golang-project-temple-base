@@ -12,8 +12,16 @@
 in go mod project
 
 ```bash
+# if use private git reop must set gloable set for once
+# set PRIVATE-TOKEN as gitlab or gitea
+$ git config --global http.extraheader "PRIVATE-TOKEN: {PRIVATE-TOKEN}"
+# add private GOPRIVATE
+$ go env -w GOPRIVATE='github.com'
+# set this reop to download
+$ git config --global url."ssh://github.com/".insteadOf "https://github.com/"
+
 # see full version
-$ go list -m -versions github.com/bridgewwater/golang-project-temple-base.git
+$ go list -v -m -versions github.com/bridgewwater/golang-project-temple-base
 # use as
 $ echo "go mod edit -require=$(go list -m -versions github.com/bridgewwater/golang-project-temple-base.git | awk '{print $1 "@" $NF}')"
 $ echo "go mod vendor"
