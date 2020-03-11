@@ -38,7 +38,7 @@ ROOT_LOCAL_IP_V4_LINUX = $$(ifconfig enp8s0 | grep inet | grep -v inet6 | cut -d
 ROOT_LOCAL_IP_V4_DARWIN = $$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2)
 
 # can use as https://goproxy.io/ https://gocenter.io https://mirrors.aliyun.com/goproxy/
-ENV_GO_PROXY ?= https://goproxy.io/
+ENV_GO_PROXY ?= https://goproxy.cn/
 
 # include MakeDockerRun.mk for docker run
 include MakeGoMod.mk
