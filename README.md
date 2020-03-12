@@ -12,6 +12,7 @@
 in go mod project
 
 ```bash
+# warning use privte git host must set
 # global set for once
 # add private git host like github.com to evn GOPRIVATE
 $ go env -w GOPRIVATE='github.com'
@@ -44,6 +45,12 @@ $ echo "go mod vendor"
 
 ```bash
 make init
+```
+
+- test code
+
+```bash
+make test
 ```
 
 add main.go file and run
