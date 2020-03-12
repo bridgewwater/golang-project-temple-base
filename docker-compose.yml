@@ -8,7 +8,7 @@ networks:
 #volumes:
 #  web-data:
 services:
-  fastEncryptDecode:
+  golang-project-temple-base:
     container_name: '${ROOT_DOCKER_CONTAINER}'
     image: '${ROOT_DOCKER_IMAGE_NAME}:${ROOT_DOCKER_IMAGE_TAG}' # see local docker file
 #    ports:
