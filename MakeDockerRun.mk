@@ -7,8 +7,8 @@ ROOT_DOCKER_IMAGE_PARENT_NAME ?= golang
 ROOT_DOCKER_IMAGE_PARENT_TAG ?= 1.13.3-stretch
 # change this for dockerRunLinux or dockerRunDarwin
 ROOT_DOCKER_IMAGE_NAME ?= $(ROOT_NAME)
-# can change as local set or read Makefile DIST_VERSION
-ROOT_DOCKER_IMAGE_TAG ?= $(DIST_VERSION)
+# can change as local set or read Makefile ENV_DIST_VERSION
+ROOT_DOCKER_IMAGE_TAG ?= $(ENV_DIST_VERSION)
 
 # For Docker dev images init
 initDockerDevImages:
@@ -21,11 +21,11 @@ initDockerDevImages:
 	-GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod vendor
 
 dockerLocalImageInit:
-	docker build --tag $(ROOT_DOCKER_IMAGE_NAME):$(DIST_VERSION) .
+	docker build --tag $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION) .
 
 dockerLocalImageRebuild:
-	docker image rm $(ROOT_DOCKER_IMAGE_NAME):$(DIST_VERSION)
-	docker build --tag $(ROOT_DOCKER_IMAGE_NAME):$(DIST_VERSION) .
+	docker image rm $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION)
+	docker build --tag $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION) .
 
 dockerRunLinux: localIPLinux
 	@echo "=> check local image as $(ROOT_DOCKER_IMAGE_NAME):$(ROOT_DOCKER_IMAGE_TAG)"
@@ -35,7 +35,7 @@ dockerRunLinux: localIPLinux
 	ROOT_DOCKER_IMAGE_NAME=$(ROOT_DOCKER_IMAGE_NAME) \
 	ROOT_DOCKER_IMAGE_TAG=$(ROOT_DOCKER_IMAGE_TAG) \
 	ENV_WEB_HOST=$(ROOT_LOCAL_IP_V4_LINUX) \
-	DIST_VERSION=$(DIST_VERSION) \
+	ENV_DIST_VERSION=$(ENV_DIST_VERSION) \
 	docker-compose up -d
 	-sleep 5
 	@echo "=> container $(ROOT_DOCKER_CONTAINER) now status"
@@ -50,7 +50,7 @@ dockerRunDarwin: localIPDarwin
 	ROOT_DOCKER_IMAGE_NAME=$(ROOT_DOCKER_IMAGE_NAME) \
 	ROOT_DOCKER_IMAGE_TAG=$(ROOT_DOCKER_IMAGE_TAG) \
 	ENV_WEB_HOST=$(ROOT_LOCAL_IP_V4_DARWIN) \
-	DIST_VERSION=$(DIST_VERSION) \
+	ENV_DIST_VERSION=$(ENV_DIST_VERSION) \
 	docker-compose up -d
 	-sleep 5
 	@echo "=> container $(ROOT_DOCKER_CONTAINER) now status"
@@ -63,12 +63,12 @@ dockerRun:
 	@echo "-> env ROOT_DOCKER_IMAGE_TAG=$(ROOT_DOCKER_IMAGE_PARENT_TAG)"
 	@echo "-> env image: ${ROOT_DOCKER_IMAGE_PARENT_NAME}:${ROOT_DOCKER_IMAGE_PARENT_TAG}"
 	@echo "-> env container_name: ROOT_DOCKER_CONTAINER=$(ROOT_NAME)"
-	@echo "-> env DIST_VERSION=$(DIST_VERSION)"
+	@echo "-> env ENV_DIST_VERSION=$(ENV_DIST_VERSION)"
 	@echo ""
 	ROOT_DOCKER_CONTAINER=$(ROOT_DOCKER_CONTAINER) \
 	ROOT_DOCKER_IMAGE_NAME=$(ROOT_DOCKER_IMAGE_PARENT_NAME) \
 	ROOT_DOCKER_IMAGE_TAG=$(ROOT_DOCKER_IMAGE_PARENT_TAG) \
-	DIST_VERSION=$(DIST_VERSION) \
+	ENV_DIST_VERSION=$(ENV_DIST_VERSION) \
 	docker-compose up -d
 	-sleep 5
 	@echo "=> container $(ROOT_DOCKER_CONTAINER) now status"
@@ -79,14 +79,14 @@ dockerStop:
 	ROOT_DOCKER_CONTAINER=$(ROOT_DOCKER_CONTAINER) \
 	ROOT_DOCKER_IMAGE_NAME=$(ROOT_DOCKER_IMAGE_NAME) \
 	ROOT_DOCKER_IMAGE_TAG=$(ROOT_DOCKER_IMAGE_TAG) \
-	DIST_VERSION=$(DIST_VERSION) \
+	ENV_DIST_VERSION=$(ENV_DIST_VERSION) \
 	docker-compose stop
 
 dockerPrune: dockerStop
 	ROOT_DOCKER_CONTAINER=$(ROOT_DOCKER_CONTAINER) \
 	ROOT_DOCKER_IMAGE_NAME=$(ROOT_DOCKER_IMAGE_NAME) \
 	ROOT_DOCKER_IMAGE_TAG=$(ROOT_DOCKER_IMAGE_TAG) \
-	DIST_VERSION=$(DIST_VERSION) \
+	ENV_DIST_VERSION=$(ENV_DIST_VERSION) \
 	docker-compose rm -f $(ROOT_DOCKER_CONTAINER)
 	-docker rmi -f $(ROOT_DOCKER_IMAGE_NAME):$(ROOT_DOCKER_IMAGE_TAG)
 	docker network prune
@@ -101,9 +101,9 @@ helpDockerRun:
 	@echo "or use"
 	@echo "~> make dockerLocalImageRebuild to rebuild Docker image"
 	@echo "After build Docker image success"
-	@echo "~> make dockerRunLinux  - run docker-compose server as $(ROOT_DOCKER_IMAGE_NAME):$(DIST_VERSION) \
+	@echo "~> make dockerRunLinux  - run docker-compose server as $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION) \
 	container-name at $(ROOT_DOCKER_CONTAINER) in dockerRunLinux"
-	@echo "~> make dockerRunDarwin - run docker-compose server as $(ROOT_DOCKER_IMAGE_NAME):$(DIST_VERSION) \
+	@echo "~> make dockerRunDarwin - run docker-compose server as $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION) \
 	container-name at $(ROOT_DOCKER_CONTAINER) in macOS"
 	@echo "~> make dockerRun       - run image: $(ROOT_DOCKER_IMAGE_PARENT_NAME):$(ROOT_DOCKER_IMAGE_PARENT_TAG) \
 	ROOT_DOCKER_CONTAINER=$(ROOT_DOCKER_CONTAINER)"

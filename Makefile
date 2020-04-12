@@ -6,13 +6,17 @@ TOP_DIR := $(shell pwd)
 # 	@ echo target file not found
 # endif
 
-DIST_VERSION := v1.0.0
+# each tag change this
+ENV_DIST_VERSION := v1.0.0
+# need open proxy 1 is need 0 is default
+ENV_NEED_PROXY=1
+
 # linux windows darwin  list as: go tool dist list
-DIST_OS := linux
+ENV_DIST_OS := linux
 # amd64 386
-DIST_ARCH := amd64
-DIST_OS_DOCKER ?= linux
-DIST_ARCH_DOCKER ?= amd64
+ENV_DIST_ARCH := amd64
+ENV_DIST_OS_DOCKER ?= linux
+ENV_DIST_ARCH_DOCKER ?= amd64
 
 ROOT_NAME ?= golang-project-temple-base
 
@@ -27,11 +31,11 @@ ROOT_BUILD_PATH ?= ./build
 ROOT_DIST ?= ./dist
 ROOT_REPO ?= ./dist
 ROOT_LOG_PATH ?= ./log
-ROOT_TEST_BUILD_PATH ?= $(ROOT_BUILD_PATH)/test/$(DIST_VERSION)
-ROOT_TEST_DIST_PATH ?= $(ROOT_DIST)/test/$(DIST_VERSION)
-ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(DIST_OS)/test/$(DIST_VERSION)
-ROOT_REPO_DIST_PATH ?= $(ROOT_REPO)/$(DIST_VERSION)
-ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(DIST_OS)/release/$(DIST_VERSION)
+ROOT_TEST_BUILD_PATH ?= $(ROOT_BUILD_PATH)/test/$(ENV_DIST_VERSION)
+ROOT_TEST_DIST_PATH ?= $(ROOT_DIST)/test/$(ENV_DIST_VERSION)
+ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(ENV_DIST_OS)/test/$(ENV_DIST_VERSION)
+ROOT_REPO_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_VERSION)
+ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release/$(ENV_DIST_VERSION)
 
 # change this for ip-v4 get
 ROOT_LOCAL_IP_V4_LINUX = $$(ifconfig enp8s0 | grep inet | grep -v inet6 | cut -d ':' -f2 | cut -d ' ' -f1)
@@ -52,13 +56,22 @@ ifndef GOPATH
 endif
 
 cleanBuild:
-	@if [ -d ${ROOT_BUILD_PATH} ]; then rm -rf ${ROOT_BUILD_PATH} && echo "~> cleaned ${ROOT_BUILD_PATH}"; else echo "~> has cleaned ${ROOT_BUILD_PATH}"; fi
+	@if [ -d ${ROOT_BUILD_PATH} ]; \
+	then rm -rf ${ROOT_BUILD_PATH} && echo "~> cleaned ${ROOT_BUILD_PATH}"; \
+	else echo "~> has cleaned ${ROOT_BUILD_PATH}"; \
+	fi
 
 cleanDist:
-	@if [ -d ${ROOT_DIST} ]; then rm -rf ${ROOT_DIST} && echo "~> cleaned ${ROOT_DIST}"; else echo "~> has cleaned ${ROOT_DIST}"; fi
+	@if [ -d ${ROOT_DIST} ]; \
+	then rm -rf ${ROOT_DIST} && echo "~> cleaned ${ROOT_DIST}"; \
+	else echo "~> has cleaned ${ROOT_DIST}"; \
+	fi
 
 cleanLog:
-	@if [ -d ${ROOT_LOG_PATH} ]; then rm -rf ${ROOT_LOG_PATH} && echo "~> cleaned ${ROOT_LOG_PATH}"; else echo "~> has cleaned ${ROOT_LOG_PATH}"; fi
+	@if [ -d ${ROOT_LOG_PATH} ]; \
+	then rm -rf ${ROOT_LOG_PATH} && echo "~> cleaned ${ROOT_LOG_PATH}"; \
+	else echo "~> has cleaned ${ROOT_LOG_PATH}"; \
+	fi
 
 clean: cleanBuild cleanLog
 	@echo "~> clean finish"
@@ -92,8 +105,8 @@ buildMain:
 	@go build -o build/main main.go
 
 buildARCH:
-	@echo "-> start build OS:$(DIST_OS) ARCH:$(DIST_ARCH)"
-	@GOOS=$(DIST_OS) GOARCH=$(DIST_ARCH) go build -o build/main main.go
+	@echo "-> start build OS:$(ENV_DIST_OS) ARCH:$(ENV_DIST_ARCH)"
+	@GOOS=$(ENV_DIST_OS) GOARCH=$(ENV_DIST_ARCH) go build -o build/main main.go
 
 dev: buildMain
 	-ENV_WEB_AUTO_HOST=true ./build/main
@@ -124,8 +137,8 @@ cloc:
 
 helpProjectRoot:
 	@echo "Help: Project root Makefile"
-	@echo "-- now build name: $(ROOT_NAME) version: $(DIST_VERSION)"
-	@echo "-- distTestOS or distReleaseOS will out abi as: $(DIST_OS) $(DIST_ARCH) --"
+	@echo "-- now build name: $(ROOT_NAME) version: $(ENV_DIST_VERSION)"
+	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_DIST_OS) $(ENV_DIST_ARCH) --"
 	@echo ""
 	@echo "~> make init         - check base env of this project"
 	@echo "~> make clean        - remove binary file and log files"
