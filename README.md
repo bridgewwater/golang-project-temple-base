@@ -36,12 +36,28 @@ $ echo "go mod edit -require=$(go list -m -versions github.com/bridgewwater/gola
 $ echo "go mod vendor"
 ```
 
+## evn
+
+- golang sdk 1.13+
+
 ## use
 
 - use to replace
  `bridgewwater/golang-project-temple-base` to you code
 
-- and run
+
+
+# cli tools to init project fast
+
+```
+$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/master/temp-golang-base
+# let temp-golang-base file folder under $PATH
+$ chmod +x temp-golang-base
+# see how to use
+$ temp-golang-base -h
+```
+
+# dev
 
 ```bash
 make init
@@ -59,22 +75,6 @@ add main.go file and run
 make run
 ```
 
-# dev
-
-## evn
-
-- golang sdk 1.13+
-
 ## docker
 
 base docker file can replace
-
-# cli tools to init project fast
-
-```
-$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/master/temp-golang-base
-# let temp-golang-base file folder under $PATH
-$ chmod +x temp-golang-base
-# see how to use
-$ temp-golang-base -h
-```
