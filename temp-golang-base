@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+
+#temple url
+temple_url="https://github.com/bridgewwater/golang-project-temple-base.git"
+temple_repo_host="github.com"
+temple_group="bridgewwater"
+temple_name="golang-project-temple-base"
+
+new_repo_host=${temple_repo_host}
+new_repo_group=${temple_group}
+new_project=
+
+shell_run_name=$(basename $0)
+shell_run_path=$(cd `dirname $0`; pwd)
+
+function Usage(){
+cat << HELP
+${shell_run_name} can use fast init golang project with github
+  Warning must use golang SDK 1.12+
+  now temple is ${temple_url}
+
+default repo setting
+  group/user: ${temple_group}
+  reop host : ${temple_repo_host}
+
+Usage: ${shell_run_name} [newproject] [new group/user] [new host]
+
+Example:
+    ${shell_run_name} newgoprojt
+    ${shell_run_name} newgoprojt sinlov github.com
+HELP
+}
+
+ARG=$1
+if [[ "$ARG" =~ "-h" ]];then
+    Usage
+    exit 0
+fi
+
+checkFuncBack(){
+    if [ ! $? -eq 0 ]; then
+        echo -e "\033[;31mRun [ $1 ] error exit code 1\033[0m"
+        exit 1
+        # else
+        #   echo -e "\033[;30mRun [ $1 ] success\033[0m"
+    fi
+}
+
+checkEnv(){
+    evn_checker=`which $1`
+    checkFuncBack "which $1"
+    if [ ! -n "evn_checker" ]; then
+        echo -e "\033[;31mCheck event [ $1 ] error exit\033[0m"
+        exit 1
+        # else
+        #   echo -e "\033[;32mCli [ $1 ] event check success\033[0m\n-> \033[;34m$1 at Path: ${evn_checker}\033[0m"
+    fi
+}
+
+checkEnv git
+checkEnv go
+
+if [[ $# -lt 1 ]];then
+  echo -e "\033[;31mCLI error!\033[0m see ${shell_run_name} -h"
+  exit 1
+fi
+
+new_project=$1
+if [ ! -n "${new_project}" ]; then
+    echo -e "\033[;31mError you must set new_project at first!\033[0m"
+    exit 1
+fi
+
+if [ -d ${new_project} ]; then
+    echo -e "\033[;31mError new new project is exist -> ${new_project}\033[0m"
+    exit 1
+fi
+
+if [[ -n $2 ]]; then
+    new_repo_group="$2"
+else
+    #   echo "set default repo group: ${temple_group}"
+    new_repo_group=${temple_group}
+fi
+
+if [[ -n $3 ]]; then
+    new_repo_host="$3"
+else
+    #   echo "set default repo host: ${temple_repo_host}"
+    new_repo_host=${temple_repo_host}
+fi
+
+echo -e "=> temple ${temple_url}
+-> new_repo_host:  ${new_repo_host}
+-> new_group:      ${new_repo_group}
+-> new_project:    ${new_project}
+-> new remote url: http://${new_repo_host}/${new_repo_group}/${new_project}
+"
+
+
+echo -e "\033[;34mClone from ${temple_url}\033[0m"
+git clone --depth 1 ${temple_url} ${new_project}
+cd ${new_project}
+rm -rf .git/
+sleep 1
+
+# replace doc
+if [[ "`uname`" -eq "Darwin" ]]; then
+    sed -i "" "s#${temple_repo_host}\/${temple_group}\/${temple_name}#${new_repo_host}\/${new_repo_group}\/${new_project}#g" README.md
+    sed -i "" "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" README.md
+    sed -i "" "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" Dockerfile
+    # sed -i "" "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" go.mod
+    sed -i "" "s#${temple_repo_host}#${new_repo_host}#g" README.md
+    sed -i "" "s#${temple_name}#${new_project}#g" docker-compose.yml
+    sed -i "" "s#${temple_name}#${new_project}#g" Makefile
+else
+    sed -i "s#${temple_repo_host}\/${temple_group}\/${temple_name}#${new_repo_host}\/${new_repo_group}\/${new_project}#g" README.md
+    sed -i "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" README.md
+    sed -i "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" Dockerfile
+    # sed -i "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" go.mod
+    sed -i "s#${temple_repo_host}#${new_repo_host}#g" README.md
+    sed -i "s#${temple_name}#${new_project}#g" docker-compose.yml
+    sed -i "s#${temple_name}#${new_project}#g" Makefile
+fi
+
+# re init go mod
+if [[ -f "go.mod" ]]; then
+  rm -f go.mod
+  rm -f go.sum
+  GO111MODULE=on go mod init
+fi
+# remove shell util
+if [[ -f "temp-golang-base" ]]; then
+  rm -f temp-golang-base
+fi
+
+cd ..
+new_project="$(pwd)/${new_project}"
+echo -e "Finish make ${temple_name} project => \033[;32m${new_project}\033[0m"
+echo -e "\033[;34mFor coding, this path can in \$GOPATH when set PATH GO111MODULE=on\033[0m"

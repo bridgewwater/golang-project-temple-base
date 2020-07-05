@@ -12,6 +12,7 @@
 in go mod project
 
 ```bash
+# warning use privte git host must set
 # global set for once
 # add private git host like github.com to evn GOPRIVATE
 $ go env -w GOPRIVATE='github.com'
@@ -31,19 +32,41 @@ $ git ls-remote -q http://github.com/bridgewwater/golang-project-temple-base.git
 # test depends see full version
 $ go list -v -m -versions github.com/bridgewwater/golang-project-temple-base
 # or use last version add go.mod by script
-$ echo "go mod edit -require=$(go list -m -versions github.com/bridgewwater/golang-project-temple-base.git | awk '{print $1 "@" $NF}')"
+$ echo "go mod edit -require=$(go list -m -versions github.com/bridgewwater/golang-project-temple-base | awk '{print $1 "@" $NF}')"
 $ echo "go mod vendor"
 ```
+
+## evn
+
+- golang sdk 1.13+
 
 ## use
 
 - use to replace
  `bridgewwater/golang-project-temple-base` to you code
 
-- and run
+
+
+# cli tools to init project fast
+
+```
+$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/master/temp-golang-base
+# let temp-golang-base file folder under $PATH
+$ chmod +x temp-golang-base
+# see how to use
+$ temp-golang-base -h
+```
+
+# dev
 
 ```bash
 make init
+```
+
+- test code
+
+```bash
+make test
 ```
 
 add main.go file and run
@@ -51,12 +74,6 @@ add main.go file and run
 ```bash
 make run
 ```
-
-# dev
-
-## evn
-
-- golang sdk 1.13+
 
 ## docker
 
