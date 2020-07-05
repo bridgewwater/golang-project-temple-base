@@ -4,7 +4,7 @@ dist/
 
 ### go mod
 
-go.sum
+!go.sum
 vendor/
 
 ### go test
