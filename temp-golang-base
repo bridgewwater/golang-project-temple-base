@@ -37,6 +37,22 @@ if [[ "$ARG" =~ "-h" ]];then
     exit 0
 fi
 
+pV(){
+    echo -e "\033[;36m$1\033[0m"
+}
+pI(){
+    echo -e "\033[;32mINFO: $1\033[0m"
+}
+pD(){
+    echo -e "\033[;34mDEBUG: $1\033[0m"
+}
+pW(){
+    echo -e "\033[;33mWARN: $1\033[0m"
+}
+pE(){
+    echo -e "\033[;31mERROR: $1\033[0m"
+}
+
 checkFuncBack(){
     if [ ! $? -eq 0 ]; then
         echo -e "\033[;31mRun [ $1 ] error exit code 1\033[0m"
@@ -46,7 +62,7 @@ checkFuncBack(){
     fi
 }
 
-checkEnv(){
+checkBinary(){
     evn_checker=`which $1`
     checkFuncBack "which $1"
     if [ ! -n "evn_checker" ]; then
@@ -57,8 +73,33 @@ checkEnv(){
     fi
 }
 
-checkEnv git
-checkEnv go
+# rpealce file text by regular
+# $1 file
+# $2 regular from
+# $3 regular to
+repaceFileByRegular(){
+    target_file=$1
+    word_from=$2
+    word_to=$3
+    if [[ -z "${word_from}" ]]; then
+        pW "repaceFileByRegular word_from is empty"
+        return
+    fi
+    if [[ -z "${word_to}" ]]; then
+        pW "repaceFileByRegular word_to is empty"
+        return
+    fi
+    if [[ "`uname`" -eq "Darwin" ]]; then
+        # pD "in darwin ; word_from: ${word_from} ; word_to: ${word_to} ; target_file: ${target_file}"
+        sed -i "" "s#${word_from}#${word_to}#g" ${target_file}
+    else
+        # pD "in other ; word_from: ${word_from} ; word_to: ${word_to} ; target_file: ${target_file}"
+        sed -i "s#${word_from}#${word_to}#g" ${target_file}
+    fi
+}
+
+checkBinary git
+checkBinary go
 
 if [[ $# -lt 1 ]];then
   echo -e "\033[;31mCLI error!\033[0m see ${shell_run_name} -h"
@@ -104,24 +145,13 @@ cd ${new_project}
 rm -rf .git/
 sleep 1
 
-# replace doc
-if [[ "`uname`" -eq "Darwin" ]]; then
-    sed -i "" "s#${temple_repo_host}\/${temple_group}\/${temple_name}#${new_repo_host}\/${new_repo_group}\/${new_project}#g" README.md
-    sed -i "" "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" README.md
-    sed -i "" "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" Dockerfile
-    # sed -i "" "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" go.mod
-    sed -i "" "s#${temple_repo_host}#${new_repo_host}#g" README.md
-    sed -i "" "s#${temple_name}#${new_project}#g" docker-compose.yml
-    sed -i "" "s#${temple_name}#${new_project}#g" Makefile
-else
-    sed -i "s#${temple_repo_host}\/${temple_group}\/${temple_name}#${new_repo_host}\/${new_repo_group}\/${new_project}#g" README.md
-    sed -i "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" README.md
-    sed -i "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" Dockerfile
-    # sed -i "s#${temple_group}\/${temple_name}#${new_repo_group}\/${new_project}#g" go.mod
-    sed -i "s#${temple_repo_host}#${new_repo_host}#g" README.md
-    sed -i "s#${temple_name}#${new_project}#g" docker-compose.yml
-    sed -i "s#${temple_name}#${new_project}#g" Makefile
-fi
+# replace code text at file
+repaceFileByRegular README.md ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
+repaceFileByRegular README.md ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+repaceFileByRegular Dockerfile ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+repaceFileByRegular README.md ${temple_repo_host} ${new_repo_host}
+repaceFileByRegular docker-compose.yml ${temple_name} ${new_project}
+repaceFileByRegular Makefile ${temple_name} ${new_project}
 
 # re init go mod
 if [[ -f "go.mod" ]]; then
