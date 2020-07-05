@@ -73,21 +73,22 @@ checkBinary(){
     fi
 }
 
-# rpealce file text by regular
+# repace file text by regular
 # $1 file
 # $2 regular from
 # $3 regular to
+# Error will return 1
 repaceFileByRegular(){
     target_file=$1
     word_from=$2
     word_to=$3
     if [[ -z "${word_from}" ]]; then
         pW "repaceFileByRegular word_from is empty"
-        return
+        return 1
     fi
     if [[ -z "${word_to}" ]]; then
         pW "repaceFileByRegular word_to is empty"
-        return
+        return 1
     fi
     if [[ "`uname`" -eq "Darwin" ]]; then
         # pD "in darwin ; word_from: ${word_from} ; word_to: ${word_to} ; target_file: ${target_file}"
@@ -98,7 +99,51 @@ repaceFileByRegular(){
     fi
 }
 
+# find file list and repace text by regular
+# $1 target_file_regular
+# $2 word_regular_from
+# $3 word_regular_to
+# Error will return 1
+findFileRepaceByRegular() {
+    target_file_regular=$1
+    word_regular_from=$2
+    word_regular_to=$3
+    if [[ -z "${target_file_regular}" ]]; then
+        pW "findFileRepaceByRegular target_file_regular is empty"
+        return 1
+    fi
+    if [[ -z "${word_regular_from}" ]]; then
+        pW "findFileRepaceByRegular word_regular_from is empty"
+        return 1
+    fi
+    if [[ -z "${word_regular_to}" ]]; then
+        pW "findFileRepaceByRegular word_regular_to is empty"
+        return 1
+    fi
+    if [[ "`uname`" -eq "Darwin" ]]; then
+        # pD "in darwin ; target_file_regular: ${target_file_regular} ; word_regular_from: ${word_regular_from} ; word_regular_to: ${word_regular_to}"
+        find . -name "${target_file_regular}" | xargs sed -i "" "s#${word_regular_from}#${word_regular_to}#g"
+    else
+        # pD "in other ; target_file_regular: ${target_file_regular} ; word_regular_from: ${word_regular_from} ; word_regular_to: ${word_regular_to}"
+        find . -name "${target_file_regular}" | xargs sed -i "s#${word_regular_from}#${word_regular_to}#g"
+    fi
+}
+
+# remove file by regular
+# $1 target_file_regular
+# Error will return 1
+removeFileByRegular() {
+    target_file_regular=$1
+    if [[ -z "${target_file_regular}" ]]; then
+        pW "removeFileByRegular target_file_regular is empty"
+        return 1
+    fi
+    pW "removeFileByRegular cli: find . -name ${target_file_regular} | xargs rm -f"
+    find . -name "${target_file_regular}" | xargs rm -f
+}
+
 checkBinary git
+checkBinary make
 checkBinary go
 
 if [[ $# -lt 1 ]];then
@@ -159,10 +204,9 @@ if [[ -f "go.mod" ]]; then
   rm -f go.sum
   GO111MODULE=on go mod init
 fi
+
 # remove shell util
-if [[ -f "temp-golang-base" ]]; then
-  rm -f temp-golang-base
-fi
+removeFileByRegular "temp-golang-base"
 
 cd ..
 new_project="$(pwd)/${new_project}"
