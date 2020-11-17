@@ -1,4 +1,9 @@
-# this file must use as base Makefile
+# this file must use as base Makefile and add
+
+## need open proxy 1 is need 0 is default
+#ENV_NEED_PROXY=1
+## can use as https://goproxy.io/ https://gocenter.io https://mirrors.aliyun.com/goproxy/
+#ENV_GO_PROXY ?= https://goproxy.cn/
 
 modClean:
 	@echo "=> try to clean ./go.sum and ./vendor"
@@ -64,6 +69,7 @@ modFetch:
 	@echo "can fetch last version as"
 	go list -m -versions github.com/gin-gonic/gin | awk '{print $$1 " lastest: " $$NF}'
 
+# print as: $make helpGoMod
 helpGoMod:
 	@echo "Help: MakeGoMod.mk"
 	@echo "this project use go mod, so golang version must 1.12+"
