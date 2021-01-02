@@ -1,8 +1,12 @@
+## <small>1.1.1 (2021-01-02)</small>
+
+* docs: change README.md to workflow right link ([bd98472](https://github.com/bridgewwater/golang-project-temple-base/commit/bd98472))
+
+
 ## 1.1.0 (2021-01-02)
 
 * docs: add auto remove useless document at tools shell ([696b6be](https://github.com/bridgewwater/golang-project-temple-base/commit/696b6be))
 * update go-ubuntu.yml env set ([adf588f](https://github.com/bridgewwater/golang-project-temple-base/commit/adf588f))
-
 
 ## 1.0.0 (2021-01-02)
 
