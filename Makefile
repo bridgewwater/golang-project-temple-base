@@ -24,8 +24,6 @@ ROOT_NAME ?= golang-project-temple-base
 ROOT_TEST_INVERT_MATCH ?= "vendor"
 # set ignore of test case like grep -v -E "vendor|fataloom" to ignore vendor and fataloom package
 ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
-# test max time
-ROOT_TEST_MAX_TIME := 1m
 
 ROOT_BUILD_PATH ?= ./build
 ROOT_DIST ?= ./dist

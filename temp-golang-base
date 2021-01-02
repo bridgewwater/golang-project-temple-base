@@ -5,16 +5,20 @@ temple_url="https://github.com/bridgewwater/golang-project-temple-base.git"
 temple_repo_host="github.com"
 temple_group="bridgewwater"
 temple_name="golang-project-temple-base"
+temple_branch="main"
 
 new_repo_host=${temple_repo_host}
 new_repo_group=${temple_group}
 new_project=
 
 shell_run_name=$(basename $0)
-shell_run_path=$(cd `dirname $0`; pwd)
+shell_run_path=$(
+  cd $(dirname $0)
+  pwd
+)
 
-function Usage(){
-cat << HELP
+function Usage() {
+  cat <<HELP
 ${shell_run_name} can use fast init golang project with github
   Warning must use golang SDK 1.12+
   now temple is ${temple_url}
@@ -32,178 +36,257 @@ HELP
 }
 
 ARG=$1
-if [[ "$ARG" =~ "-h" ]];then
-    Usage
-    exit 0
+if [[ "$ARG" =~ "-h" ]]; then
+  Usage
+  exit 0
 fi
 
-pV(){
-    echo -e "\033[;36m$1\033[0m"
+pV() {
+  echo -e "\033[;36m$1\033[0m"
 }
-pI(){
-    echo -e "\033[;32mINFO: $1\033[0m"
+pI() {
+  echo -e "\033[;32mINFO: $1\033[0m"
 }
-pD(){
-    echo -e "\033[;34mDEBUG: $1\033[0m"
+pD() {
+  echo -e "\033[;34mDEBUG: $1\033[0m"
 }
-pW(){
-    echo -e "\033[;33mWARN: $1\033[0m"
+pW() {
+  echo -e "\033[;33mWARN: $1\033[0m"
 }
-pE(){
-    echo -e "\033[;31mERROR: $1\033[0m"
+pE() {
+  echo -e "\033[;31mERROR: $1\033[0m"
 }
 
-checkFuncBack(){
-    if [ ! $? -eq 0 ]; then
-        echo -e "\033[;31mRun [ $1 ] error exit code 1\033[0m"
-        exit 1
-        # else
-        #   echo -e "\033[;30mRun [ $1 ] success\033[0m"
+checkFuncBack() {
+  if [ ! $? -eq 0 ]; then
+    echo -e "\033[;31mRun [ $1 ] error exit code 1\033[0m"
+    exit 1
+    # else
+    #   echo -e "\033[;30mRun [ $1 ] success\033[0m"
+  fi
+}
+
+checkBinary() {
+  evn_checker=$(which $1)
+  checkFuncBack "which $1"
+  if [ ! -n "$evn_checker" ]; then
+    echo -e "\033[;31mCheck event [ $1 ] error exit\033[0m"
+    exit 1
+    # else
+    #   echo -e "\033[;32mCli [ $1 ] event check success\033[0m\n-> \033[;34m$1 at Path: ${evn_checker}\033[0m"
+  fi
+}
+
+release="unix"
+bit=""
+check_sys() {
+  case "$(uname)" in
+  Darwin*)
+    release="Darwin"
+    ;;
+  *)
+    if [[ -f /etc/redhat-release ]]; then
+      release="centos"
+    elif cat /etc/issue | grep -q -E -i "debian"; then
+      release="debian"
+    elif cat /etc/issue | grep -q -E -i "ubuntu"; then
+      release="ubuntu"
+    elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat"; then
+      release="centos"
+    elif cat /proc/version | grep -q -E -i "debian"; then
+      release="debian"
+    elif cat /proc/version | grep -q -E -i "ubuntu"; then
+      release="ubuntu"
+    elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
+      release="centos"
     fi
+    ;;
+  esac
+  bit=$(uname -m)
 }
+check_sys
 
-checkBinary(){
-    evn_checker=`which $1`
-    checkFuncBack "which $1"
-    if [ ! -n "evn_checker" ]; then
-        echo -e "\033[;31mCheck event [ $1 ] error exit\033[0m"
-        exit 1
-        # else
-        #   echo -e "\033[;32mCli [ $1 ] event check success\033[0m\n-> \033[;34m$1 at Path: ${evn_checker}\033[0m"
-    fi
-}
-
-# repace file text by regular
+# replace file text by regular
 # $1 file
 # $2 regular from
 # $3 regular to
 # Error will return 1
-repaceFileByRegular(){
-    target_file=$1
-    word_from=$2
-    word_to=$3
-    if [[ -z "${word_from}" ]]; then
-        pW "repaceFileByRegular word_from is empty"
-        return 1
-    fi
-    if [[ -z "${word_to}" ]]; then
-        pW "repaceFileByRegular word_to is empty"
-        return 1
-    fi
-    if [[ "`uname`" -eq "Darwin" ]]; then
-        # pD "in darwin ; word_from: ${word_from} ; word_to: ${word_to} ; target_file: ${target_file}"
-        sed -i "" "s#${word_from}#${word_to}#g" ${target_file}
-    else
-        # pD "in other ; word_from: ${word_from} ; word_to: ${word_to} ; target_file: ${target_file}"
-        sed -i "s#${word_from}#${word_to}#g" ${target_file}
-    fi
+replaceFileByRegular() {
+  target_file=$1
+  word_from=$2
+  word_to=$3
+  if [[ -z "${word_from}" ]]; then
+    pW "replaceFileByRegular word_from is empty"
+    return 1
+  fi
+  if [[ -z "${word_to}" ]]; then
+    pW "replaceFileByRegular word_to is empty"
+    return 1
+  fi
+  if [[ "${release}" -eq "Darwin" ]]; then
+    # pD "in darwin ; word_from: ${word_from} ; word_to: ${word_to} ; target_file: ${target_file}"
+    sed -i "" "s#${word_from}#${word_to}#g" ${target_file}
+  else
+    # pD "in other ; word_from: ${word_from} ; word_to: ${word_to} ; target_file: ${target_file}"
+    sed -i "s#${word_from}#${word_to}#g" ${target_file}
+  fi
 }
 
-# find file list and repace text by regular
+# find file list and replace text by regular
 # $1 target_file_regular
 # $2 word_regular_from
 # $3 word_regular_to
 # Error will return 1
-findFileRepaceByRegular() {
-    target_file_regular=$1
-    word_regular_from=$2
-    word_regular_to=$3
-    if [[ -z "${target_file_regular}" ]]; then
-        pW "findFileRepaceByRegular target_file_regular is empty"
-        return 1
-    fi
-    if [[ -z "${word_regular_from}" ]]; then
-        pW "findFileRepaceByRegular word_regular_from is empty"
-        return 1
-    fi
-    if [[ -z "${word_regular_to}" ]]; then
-        pW "findFileRepaceByRegular word_regular_to is empty"
-        return 1
-    fi
-    if [[ "`uname`" -eq "Darwin" ]]; then
-        # pD "in darwin ; target_file_regular: ${target_file_regular} ; word_regular_from: ${word_regular_from} ; word_regular_to: ${word_regular_to}"
-        find . -name "${target_file_regular}" | xargs sed -i "" "s#${word_regular_from}#${word_regular_to}#g"
-    else
-        # pD "in other ; target_file_regular: ${target_file_regular} ; word_regular_from: ${word_regular_from} ; word_regular_to: ${word_regular_to}"
-        find . -name "${target_file_regular}" | xargs sed -i "s#${word_regular_from}#${word_regular_to}#g"
-    fi
+findFileReplaceByRegular() {
+  target_file_regular=$1
+  word_regular_from=$2
+  word_regular_to=$3
+  if [[ -z "${target_file_regular}" ]]; then
+    pW "findFileReplaceByRegular target_file_regular is empty"
+    return 1
+  fi
+  if [[ -z "${word_regular_from}" ]]; then
+    pW "findFileReplaceByRegular word_regular_from is empty"
+    return 1
+  fi
+  if [[ -z "${word_regular_to}" ]]; then
+    pW "findFileReplaceByRegular word_regular_to is empty"
+    return 1
+  fi
+  if [[ "${release}" -eq "Darwin" ]]; then
+    # pD "in darwin ; target_file_regular: ${target_file_regular} ; word_regular_from: ${word_regular_from} ; word_regular_to: ${word_regular_to}"
+    find . -name "${target_file_regular}" | xargs sed -i "" "s#${word_regular_from}#${word_regular_to}#g"
+  else
+    # pD "in other ; target_file_regular: ${target_file_regular} ; word_regular_from: ${word_regular_from} ; word_regular_to: ${word_regular_to}"
+    find . -name "${target_file_regular}" | xargs sed -i "s#${word_regular_from}#${word_regular_to}#g"
+  fi
 }
 
 # remove file by regular
 # $1 target_file_regular
 # Error will return 1
 removeFileByRegular() {
-    target_file_regular=$1
-    if [[ -z "${target_file_regular}" ]]; then
-        pW "removeFileByRegular target_file_regular is empty"
-        return 1
-    fi
-    pW "removeFileByRegular cli: find . -name ${target_file_regular} | xargs rm -f"
-    find . -name "${target_file_regular}" | xargs rm -f
+  target_file_regular=$1
+  if [[ -z "${target_file_regular}" ]]; then
+    pW "removeFileByRegular target_file_regular is empty"
+    return 1
+  fi
+  pW "removeFileByRegular cli: find . -name ${target_file_regular} | xargs rm -f"
+  find . -name "${target_file_regular}" | xargs rm -f
 }
 
 checkBinary git
 checkBinary make
 checkBinary go
 
-if [[ $# -lt 1 ]];then
+if [[ $# -lt 1 ]]; then
   echo -e "\033[;31mCLI error!\033[0m see ${shell_run_name} -h"
   exit 1
 fi
 
 new_project=$1
 if [ ! -n "${new_project}" ]; then
-    echo -e "\033[;31mError you must set new_project at first!\033[0m"
-    exit 1
+  echo -e "\033[;31mError you must set new_project at first!\033[0m"
+  exit 1
 fi
 
 if [ -d ${new_project} ]; then
-    echo -e "\033[;31mError new new project is exist -> ${new_project}\033[0m"
-    exit 1
+  echo -e "\033[;31mError new new project is exist -> ${new_project}\033[0m"
+  exit 1
 fi
 
 if [[ -n $2 ]]; then
-    new_repo_group="$2"
+  new_repo_group="$2"
 else
-    #   echo "set default repo group: ${temple_group}"
-    new_repo_group=${temple_group}
+  #   echo "set default repo group: ${temple_group}"
+  new_repo_group=${temple_group}
 fi
 
 if [[ -n $3 ]]; then
-    new_repo_host="$3"
+  new_repo_host="$3"
 else
-    #   echo "set default repo host: ${temple_repo_host}"
-    new_repo_host=${temple_repo_host}
+  #   echo "set default repo host: ${temple_repo_host}"
+  new_repo_host=${temple_repo_host}
 fi
 
-echo -e "=> temple ${temple_url}
+echo -e "=> temple url: ${temple_url}
+=> temple_branch:  ${temple_branch}
 -> new_repo_host:  ${new_repo_host}
 -> new_group:      ${new_repo_group}
 -> new_project:    ${new_project}
 -> new remote url: http://${new_repo_host}/${new_repo_group}/${new_project}
 "
 
-
-echo -e "\033[;34mClone from ${temple_url}\033[0m"
-git clone --depth 1 ${temple_url} ${new_project}
-cd ${new_project}
-rm -rf .git/
+pI "Clone from ${temple_url}"
+git clone --depth 1 ${temple_url} -b ${temple_branch} ${new_project}
+rm -rf ${new_project}/.git/
 sleep 1
 
 # replace code text at file
-repaceFileByRegular README.md ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
-repaceFileByRegular README.md ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
-repaceFileByRegular Dockerfile ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
-repaceFileByRegular README.md ${temple_repo_host} ${new_repo_host}
-repaceFileByRegular docker-compose.yml ${temple_name} ${new_project}
-repaceFileByRegular Makefile ${temple_name} ${new_project}
+replaceFileByRegular ${new_project}/README.md ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/README.md ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/Dockerfile ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/README.md ${temple_repo_host} ${new_repo_host}
+replaceFileByRegular ${new_project}/docker-compose.yml ${temple_name} ${new_project}
+replaceFileByRegular ${new_project}/Makefile ${temple_name} ${new_project}
 
 # re init go mod
-if [[ -f "go.mod" ]]; then
-  rm -f go.mod
-  rm -f go.sum
-  GO111MODULE=on go mod init
-fi
+#cd ${new_project}
+#if [[ -f "go.mod" ]]; then
+#  rm -f go.mod
+#  rm -f go.sum
+#  GO111MODULE=on go mod init
+#fi
+#cd ..${new_project}
+
+# choose LICENCE
+read -p "Choose licence (default: apache)? [mit] " read_choose_licence
+case ${read_choose_licence} in
+apache*)
+  mv ./${new_project}/LICENCE-MIT ./${new_project}/LICENCE
+  ;;
+*)
+  mv ./${new_project}/LICENCE-APACHE ./${new_project}/LICENCE
+  ;;
+esac
+# move other LICENCE
+removeFileByRegular "LICENCE-*"
+
+read -p "Do you can keep travis CI (default: no)? [y/n] " read_want_keep_travis_ci
+case ${read_want_keep_travis_ci} in
+[nN]*)
+  echo " just remove travis CI"
+  if [[ -f ./${new_project}/.travis.yml ]]; then
+    rm ./${new_project}/.travis.yml
+  fi
+  if [[ ${release} -eq "Darwin" ]]; then
+    sed -i "" '2,3d' ./${new_project}/README.md
+  else
+    sed -i '2,3d' ./${new_project}/README.md
+  fi
+  ;;
+*)
+  echo " now keep travis CI"
+  ;;
+esac
+
+read -p "Do you can remove github action CI (default: no)? [y/n] " read_want_remove_action_ci
+case ${read_want_remove_action_ci} in
+[yY]*)
+  echo " just remove github action CI"
+  if [[ -d ./${new_project}/.github/ ]]; then
+    rm -rf ./${new_project}/.github/
+  fi
+  if [[ ${release} -eq "Darwin" ]]; then
+    sed -i "" '1,2d' ./${new_project}/README.md
+  else
+    sed -i '1,2d' ./${new_project}/README.md
+  fi
+  ;;
+*)
+  echo " now keep action CI"
+  ;;
+esac
 
 # remove shell util
 removeFileByRegular "temp-golang-base"
