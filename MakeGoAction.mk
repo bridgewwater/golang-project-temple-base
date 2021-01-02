@@ -3,7 +3,7 @@
 # test max time
 ROOT_TEST_MAX_TIME := 1m
 
-actionFile:
+actionInfo:
 	@echo "you can use #=> find set"
 	@echo "install:"
 	# - export GO111MODULE=on
@@ -12,31 +12,38 @@ actionFile:
 	# - go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
 
 actionInstall:
-	#=> GOPROXY=$(ENV_GO_PROXY) GO111MODULE=on go get -t -v $(ROOT_TEST_LIST)
-	@GOPROXY=$(ENV_GO_PROXY) GO111MODULE=on go get -t -v $(ROOT_TEST_LIST)
+	GO111MODULE=on go get -t -v $(ROOT_TEST_LIST)
 
 actionTest:
 	GO111MODULE=on go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME)
 
+actionTestBenchmark:
+	GO111MODULE=on go test -test.benchmem $(ROOT_TEST_LIST)
+
 actionTestFail:
 	GO111MODULE=on go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME) | grep FAIL --color
 
-actionConvey:
+actionCoverage:
 	#=> GO111MODULE=on go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
 	@GO111MODULE=on go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
 
-actionConveyLocal:
+actionCoverageLocal:
 	@echo "-> use goconvey at https://github.com/smartystreets/goconvey"
 	@echo "-> see report at http://localhost:8080"
 	which goconvey
 	goconvey -depth=1 -launchBrowser=false -workDir=$$PWD
 
-helpGoTravis:
-	@echo "Help: MakeTravis.mk"
-	@echo "~> make actionFile        - show .action.yml file can right"
-	@echo "~> make actionInstall     - run project to test action"
-	@echo "~> make actionTest        - run project test"
-	@echo "~> make actionTestFail    - run project test fast find FAIL"
-	@echo "~> make actionConvey      - run project convery"
-	@echo "~> make actionConveyLocal - run project convery local as tools https://github.com/smartystreets/goconvey"
+actionCodecovPush: actionCoverage
+	@echo "must set env: CODECOV_TOKEN="
+	bash <(curl -s https://codecov.io/bash)
+
+helpGoAction:
+	@echo "Help: MakeAction.mk"
+	@echo "~> make actionInfo          - show action.yml base info"
+	@echo "~> make actionInstall       - run project to test action"
+	@echo "~> make actionTest          - run project test"
+	@echo "~> make actionTestBenchmark - run project test benchmark"
+	@echo "~> make actionTestFail      - run project test fast find FAIL"
+	@echo "~> make actionCoverage      - run project coverage"
+	@echo "~> make actionCoverageLocal - run project coverage local as tools https://github.com/smartystreets/goconvey"
 	@echo ""

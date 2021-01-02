@@ -9,7 +9,7 @@ TOP_DIR := $(shell pwd)
 # each tag change this
 ENV_DIST_VERSION := v1.0.0
 # need open proxy 1 is need 0 is default
-ENV_NEED_PROXY=1
+#ENV_NEED_PROXY=1
 
 # linux windows darwin  list as: go tool dist list
 ENV_DIST_OS := linux
@@ -35,13 +35,10 @@ ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(ENV_DIST_OS)/test/$(ENV_DIST_VERSION)
 ROOT_REPO_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_VERSION)
 ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release/$(ENV_DIST_VERSION)
 
-# can use as https://goproxy.io/ https://gocenter.io https://mirrors.aliyun.com/goproxy/
-ENV_GO_PROXY ?= https://goproxy.cn/
-
 # include MakeDockerRun.mk for docker run
 include MakeGoMod.mk
 include MakeDockerRun.mk
-include MakeGoTravis.mk
+include MakeGoAction.mk
 
 checkEnvGOPATH:
 ifndef GOPATH
@@ -92,7 +89,7 @@ init:
 	@echo "-> check env golang"
 	go env
 	@echo "~> you can use [ make help ] see more task"
-	-GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod vendor
+	-GO111MODULE=on go mod vendor
 
 buildMain:
 	@echo "-> start build local OS"
@@ -113,9 +110,9 @@ test:
 	#=> go test -test.v $(ROOT_TEST_LIST)
 	@go test -test.v $(ROOT_TEST_LIST)
 
-testBenchmem:
-	@echo "=> run test benchmem start"
-	@go test -test.benchmem
+testBenchmark:
+	@echo "=> run test benchmark start"
+	@go test -test.benchmem $(ROOT_TEST_LIST)
 
 cloc:
 	# https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore
@@ -126,12 +123,12 @@ helpProjectRoot:
 	@echo "-- now build name: $(ROOT_NAME) version: $(ENV_DIST_VERSION)"
 	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_DIST_OS) $(ENV_DIST_ARCH) --"
 	@echo ""
-	@echo "~> make init         - check base env of this project"
-	@echo "~> make clean        - remove binary file and log files"
-	@echo "~> make test         - run test case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
-	@echo "~> make testBenchmem - run go test benchmem case all"
-	@echo "~> make dev          - run as develop"
+	@echo "~> make init          - check base env of this project"
+	@echo "~> make clean         - remove binary file and log files"
+	@echo "~> make test          - run test case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
+	@echo "~> make testBenchmark - run go test benchmark case all"
+	@echo "~> make dev           - run as develop"
 
-help: helpGoMod helpDockerRun helpGoTravis helpProjectRoot
+help: helpGoMod helpDockerRun helpGoAction helpProjectRoot
 	@echo ""
 	@echo "-- more info see Makefile include: MakeGoMod.mk MakeDockerRun.mk --"

@@ -30,7 +30,7 @@ initDockerDevImages:
 	@echo "-> check env golang"
 	go env
 	@echo "~> you can use [ make help ] see more task"
-	-GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod vendor
+	-GO111MODULE=on go mod vendor
 
 dockerLocalImageInit:
 	docker build --tag $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION) .

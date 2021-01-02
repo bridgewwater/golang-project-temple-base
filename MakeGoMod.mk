@@ -1,9 +1,6 @@
 # this file must use as base Makefile and add
 
-## need open proxy 1 is need 0 is default
-#ENV_NEED_PROXY=1
-## can use as https://goproxy.io/ https://gocenter.io https://mirrors.aliyun.com/goproxy/
-#ENV_GO_PROXY ?= https://goproxy.cn/
+## can use as: go env -w GOPROXY=https://goproxy.cn,direct
 
 modClean:
 	@echo "=> try to clean ./go.sum and ./vendor"
@@ -18,52 +15,24 @@ modClean:
 
 modList:
 	@echo "=> show go list -m -json all"
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then GOPROXY="$(ENV_GO_PROXY)" go list -m -json all; \
-	else go list -m -json all; \
-	fi
+	go list -m -json all
 
 modGraphDependencies:
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
-	fi
-	-@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod graph; \
-	else GO111MODULE=on go mod graph; \
-	fi
+	GO111MODULE=on go mod graph
 
 modVerify:
-	# in GOPATH must use [ GO111MODULE=on go mod ] to use
-	# open goproxy to build change Makefile: [ ENV_NEED_PROXY=1 ]
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
-	fi
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod verify; \
-	else GO111MODULE=on go mod verify; \
-	fi
+	# in $$GOPATH must use [ GO111MODULE=on go mod ] to use
+	# open goproxy add env: [ go env -w GOPROXY=https://goproxy.cn,direct ]
+	GO111MODULE=on go mod verify
 
 modDownload:
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
-	fi
-	@echo "=> If error can use [ make modVerify ] to fix"
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod download && GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod vendor; \
-	else GO111MODULE=on go mod download && GO111MODULE=on go mod vendor; \
-	fi
+	GO111MODULE=on go mod download && GO111MODULE=on go mod vendor
 
 modTidy:
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
-	fi
-	-if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod tidy; \
-	else GO111MODULE=on go mod tidy; \
-	fi
+	GO111MODULE=on go mod tidy
 
 dep: modVerify modDownload
-	@echo "-> just check depends below"
+	@echo "-> just check depends finish"
 
 modFetch:
 	@echo "can fetch last version as"
@@ -73,9 +42,6 @@ modFetch:
 helpGoMod:
 	@echo "Help: MakeGoMod.mk"
 	@echo "this project use go mod, so golang version must 1.12+"
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
-	fi
 	@echo "~> make modClean             - will clean ./go.sum and ./vendor"
 	@echo "~> make modList              - list all depends as: go list -m -json all"
 	@echo "~> make modGraphDependencies - see depends graph of this project"
