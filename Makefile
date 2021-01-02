@@ -37,10 +37,6 @@ ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(ENV_DIST_OS)/test/$(ENV_DIST_VERSION)
 ROOT_REPO_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_VERSION)
 ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release/$(ENV_DIST_VERSION)
 
-# change this for ip-v4 get
-ROOT_LOCAL_IP_V4_LINUX = $$(ifconfig enp8s0 | grep inet | grep -v inet6 | cut -d ':' -f2 | cut -d ' ' -f1)
-ROOT_LOCAL_IP_V4_DARWIN = $$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2)
-
 # can use as https://goproxy.io/ https://gocenter.io https://mirrors.aliyun.com/goproxy/
 ENV_GO_PROXY ?= https://goproxy.cn/
 
@@ -122,14 +118,6 @@ test:
 testBenchmem:
 	@echo "=> run test benchmem start"
 	@go test -test.benchmem
-
-localIPLinux:
-	@echo "=> now run as docker with linux"
-	@echo "local ip address is: $(ROOT_LOCAL_IP_V4_LINUX)"
-
-localIPDarwin:
-	@echo "=> now run as docker with darwin"
-	@echo "local ip address is: $(ROOT_LOCAL_IP_V4_DARWIN)"
 
 cloc:
 	# https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore

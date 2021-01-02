@@ -17,7 +17,7 @@ modClean:
 	fi
 
 modList:
-	@echo "// show go list -m -json all"
+	@echo "=> show go list -m -json all"
 	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
 	then GOPROXY="$(ENV_GO_PROXY)" go list -m -json all; \
 	else go list -m -json all; \
@@ -67,7 +67,7 @@ dep: modVerify modDownload
 
 modFetch:
 	@echo "can fetch last version as"
-	go list -m -versions github.com/gin-gonic/gin | awk '{print $$1 " lastest: " $$NF}'
+	go list -m -versions github.com/stretchr/testify | awk '{print $$1 " lastest: " $$NF}'
 
 # print as: $make helpGoMod
 helpGoMod:

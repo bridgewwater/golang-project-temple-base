@@ -1,5 +1,5 @@
 module github.com/bridgewwater/golang-project-temple-base
 
-go 1.13
+go 1.15
 
-require github.com/stretchr/testify v1.4.0
+require github.com/stretchr/testify v1.6.1

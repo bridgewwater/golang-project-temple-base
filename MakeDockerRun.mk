@@ -10,6 +10,18 @@ ROOT_DOCKER_IMAGE_NAME ?= $(ROOT_NAME)
 # can change as local set or read Makefile ENV_DIST_VERSION
 ROOT_DOCKER_IMAGE_TAG ?= $(ENV_DIST_VERSION)
 
+# change this for ip-v4 get
+ROOT_LOCAL_IP_V4_LINUX = $$(ifconfig enp8s0 | grep inet | grep -v inet6 | cut -d ':' -f2 | cut -d ' ' -f1)
+ROOT_LOCAL_IP_V4_DARWIN = $$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2)
+
+localIPLinux:
+	@echo "=> now run as docker with linux"
+	@echo "local ip address is: $(ROOT_LOCAL_IP_V4_LINUX)"
+
+localIPDarwin:
+	@echo "=> now run as docker with darwin"
+	@echo "local ip address is: $(ROOT_LOCAL_IP_V4_DARWIN)"
+
 # For Docker dev images init
 initDockerDevImages:
 	@echo "~> start init this project in docker"
