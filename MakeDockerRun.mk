@@ -4,7 +4,7 @@
 ROOT_DOCKER_CONTAINER ?= $(ROOT_NAME)
 # change this for dockerRun
 ROOT_DOCKER_IMAGE_PARENT_NAME ?= golang
-ROOT_DOCKER_IMAGE_PARENT_TAG ?= 1.13.3-stretch
+ROOT_DOCKER_IMAGE_PARENT_TAG ?= 1.15.6-buster
 # change this for dockerRunLinux or dockerRunDarwin
 ROOT_DOCKER_IMAGE_NAME ?= $(ROOT_NAME)
 # can change as local set or read Makefile ENV_DIST_VERSION
@@ -35,9 +35,11 @@ initDockerDevImages:
 dockerLocalImageInit:
 	docker build --tag $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION) .
 
-dockerLocalImageRebuild:
+dockerLocalImageRemove:
 	docker image rm $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION)
-	docker build --tag $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION) .
+
+dockerLocalImageRebuild: dockerLocalImageRemove dockerLocalImageInit
+	@echo "rebuild local image $(ROOT_DOCKER_IMAGE_NAME):$(ENV_DIST_VERSION)"
 
 dockerRunLinux: localIPLinux
 	@echo "=> check local image as $(ROOT_DOCKER_IMAGE_NAME):$(ROOT_DOCKER_IMAGE_TAG)"
