@@ -229,6 +229,12 @@ replaceFileByRegular ${new_project}/Dockerfile ${temple_group}\/${temple_name} $
 replaceFileByRegular ${new_project}/README.md ${temple_repo_host} ${new_repo_host}
 replaceFileByRegular ${new_project}/docker-compose.yml ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/Makefile ${temple_name} ${new_project}
+# remove README.md last line
+  if [[ ${release} -eq "Darwin" ]]; then
+    sed -i "" '70,84d' ./${new_project}/README.md
+  else
+    sed -i '70,84d' ./${new_project}/README.md
+  fi
 
 # re init go mod
 #cd ${new_project}

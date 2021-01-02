@@ -2,7 +2,7 @@
 [![TravisBuildStatus](https://api.travis-ci.com/bridgewwater/golang-project-temple-base.svg?branch=main)](https://travis-ci.com/bridgewwater/golang-project-temple-base)
 [![GoDoc](https://godoc.org/github.com/bridgewwater/golang-project-temple-base?status.png)](https://godoc.org/github.com/bridgewwater/golang-project-temple-base/)
 [![GoReportCard](https://goreportcard.com/badge/github.com/bridgewwater/golang-project-temple-base)](https://goreportcard.com/report/github.com/bridgewwater/golang-project-temple-base)
-[![codecov](https://codecov.io/gh/bridgewwater/golang-project-temple-base/branch/master/graph/badge.svg)](https://codecov.io/gh/bridgewwater/golang-project-temple-base)
+[![codecov](https://codecov.io/gh/bridgewwater/golang-project-temple-base/branch/main/graph/badge.svg)](https://codecov.io/gh/bridgewwater/golang-project-temple-base)
 
 ## for what
 
@@ -41,23 +41,6 @@ $ echo "go mod vendor"
 
 - golang sdk 1.15+
 
-## use
-
-- use to replace
- `bridgewwater/golang-project-temple-base` to you code
-
-
-
-# cli tools to init project fast
-
-```
-$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/master/temp-golang-base
-# let temp-golang-base file folder under $PATH
-$ chmod +x temp-golang-base
-# see how to use
-$ temp-golang-base -h
-```
-
 # dev
 
 ```bash
@@ -78,4 +61,23 @@ make run
 
 ## docker
 
-base docker file can replace
+```bash
+make helpDockerRun
+```
+
+docker file can replace
+
+## use
+
+- use to replace
+  `bridgewwater/golang-project-temple-base` to you code
+
+### cli tools to init project fast
+
+```
+$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/master/temp-golang-base
+# let temp-golang-base file folder under $PATH
+$ chmod +x temp-golang-base
+# see how to use
+$ temp-golang-base -h
+```
