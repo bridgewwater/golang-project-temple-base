@@ -75,7 +75,7 @@ docker file can replace
 ### cli tools to init project fast
 
 ```
-$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/master/temp-golang-base
+$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/main/temp-golang-base
 # let temp-golang-base file folder under $PATH
 $ chmod +x temp-golang-base
 # see how to use
