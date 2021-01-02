@@ -53,6 +53,7 @@ versionHelp:
 	@git fetch --tags
 	@echo "project base info"
 	@echo " project name         : ${ROOT_NAME}"
+	@echo " if error can fix after git set remote url, then run: npm init"
 	@echo ""
 	@echo "=> please check to change version, now is [ ${ENV_DIST_VERSION} ]"
 	@echo "-> check at: ${ENV_MODULE_MAKE_FILE}:4"
@@ -61,6 +62,7 @@ versionHelp:
 	@echo " $(shell head -n 3 ${ENV_MODULE_MANIFEST} | tail -n 1)"
 
 tagBefore: versionHelp
+	@echo " if error can fix after git set remote url, then run: npm init"
 	@conventional-changelog -i ${ENV_MODULE_CHANGELOG} -s --skip-unstable
 	@echo ""
 	@echo "=> new CHANGELOG.md at: ${ENV_MODULE_CHANGELOG}"

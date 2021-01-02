@@ -295,7 +295,9 @@ case ${read_want_remove_action_ci} in
 esac
 
 # remove shell util
-removeFileByRegular "temp-golang-base"
+rm ./${new_project}/temp-golang-base
+rm ./${new_project}/CHANGELOG.md
+rm ./${new_project}/package.json
 
 cd ..
 new_project="$(pwd)/${new_project}"

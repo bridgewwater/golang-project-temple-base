@@ -1,3 +1,9 @@
+## 1.1.0 (2021-01-02)
+
+* docs: add auto remove useless document at tools shell ([696b6be](https://github.com/bridgewwater/golang-project-temple-base/commit/696b6be))
+* update go-ubuntu.yml env set ([adf588f](https://github.com/bridgewwater/golang-project-temple-base/commit/adf588f))
+
+
 ## 1.0.0 (2021-01-02)
 
 * ci: udpate docker build local ([b87cbcf](https://github.com/bridgewwater/golang-project-temple-base/commit/b87cbcf))
