@@ -34,8 +34,9 @@ actionCoverageLocal:
 	goconvey -depth=1 -launchBrowser=false -workDir=$$PWD
 
 actionCodecovPush: actionCoverage
-	@echo "must set env: CODECOV_TOKEN="
-	bash <(curl -s https://codecov.io/bash)
+	@echo "must finish before CI build"
+	@echo "set env: CODECOV_TOKEN="
+	@echo "add task of run: bash <(curl -s https://codecov.io/bash)"
 
 helpGoAction:
 	@echo "Help: MakeAction.mk"
