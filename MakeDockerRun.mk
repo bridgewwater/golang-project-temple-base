@@ -106,8 +106,6 @@ dockerPrune: dockerStop
 
 helpDockerRun:
 	@echo "Help: MakeDockerRun.mk"
-	@echo "~> make dockerStop      - stop docker-compose container-name at $(ROOT_DOCKER_CONTAINER)"
-	@echo "~> make dockerPrune     - stop docker-compose container-name at $(ROOT_DOCKER_CONTAINER) and try to remove"
 	@echo "Before run this project in docker must use"
 	@echo "~> make dockerLocalImageInit to init Docker image"
 	@echo "or use"
@@ -119,4 +117,6 @@ helpDockerRun:
 	container-name at $(ROOT_DOCKER_CONTAINER) in macOS"
 	@echo "~> make dockerRun       - run image: $(ROOT_DOCKER_IMAGE_PARENT_NAME):$(ROOT_DOCKER_IMAGE_PARENT_TAG) \
 	ROOT_DOCKER_CONTAINER=$(ROOT_DOCKER_CONTAINER)"
+	@echo "~> make dockerStop      - stop docker-compose container-name at $(ROOT_DOCKER_CONTAINER)"
+	@echo "~> make dockerPrune     - stop docker-compose container-name at $(ROOT_DOCKER_CONTAINER) and try to remove"
 	@echo ""

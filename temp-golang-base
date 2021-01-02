@@ -254,7 +254,10 @@ removeFileByRegular "LICENCE-*"
 
 read -p "Do you can keep travis CI (default: no)? [y/n] " read_want_keep_travis_ci
 case ${read_want_keep_travis_ci} in
-[nN]*)
+[yY]*)
+  echo " now keep travis CI"
+  ;;
+*)
   echo " just remove travis CI"
   if [[ -f ./${new_project}/.travis.yml ]]; then
     rm ./${new_project}/.travis.yml
@@ -264,9 +267,6 @@ case ${read_want_keep_travis_ci} in
   else
     sed -i '2,3d' ./${new_project}/README.md
   fi
-  ;;
-*)
-  echo " now keep travis CI"
   ;;
 esac
 
