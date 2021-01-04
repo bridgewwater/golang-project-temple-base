@@ -1,3 +1,8 @@
+## <small>1.1.2 (2021-01-04)</small>
+
+* fix: fix temp-golang-base go mod package init error ([e9ffd77](https://github.com/bridgewwater/golang-project-temple-base/commit/e9ffd77))
+* update README.md ([767d6b1](https://github.com/bridgewwater/golang-project-temple-base/commit/767d6b1))
+
 ## <small>1.1.1 (2021-01-02)</small>
 
 * docs: change README.md to workflow right link ([bd98472](https://github.com/bridgewwater/golang-project-temple-base/commit/bd98472))
