@@ -162,6 +162,21 @@ findFileReplaceByRegular() {
   fi
 }
 
+removeFileExist() {
+  target_file_path=$1
+  if [[ -z "${target_file_path}" ]]; then
+    pW "removeFileByRegular target_file_path is empty"
+    return 1
+  fi
+  if [[ -f "${target_file_path}" ]]; then
+    rm -f ${target_file_path}
+    checkFuncBack "rm -f ${target_file_path}"
+    pI "removeFileExist ${target_file_path}"
+  else
+    pW "want remove file not exist at: ${target_file_path}"
+  fi
+}
+
 # remove file by regular
 # $1 target_file_regular
 # Error will return 1
@@ -224,6 +239,8 @@ sleep 1
 
 # replace code text at file
 replaceFileByRegular ${new_project}/README.md ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/go.mod ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
+removeFileExist ${new_project}/go.sum
 replaceFileByRegular ${new_project}/README.md ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
 replaceFileByRegular ${new_project}/Dockerfile ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
 replaceFileByRegular ${new_project}/README.md ${temple_repo_host} ${new_repo_host}
