@@ -286,9 +286,9 @@ case ${read_want_keep_travis_ci} in
     rm ./${new_project}/.travis.yml
   fi
   if [[ ${release} -eq "Darwin" ]]; then
-    sed -i "" '2,3d' ./${new_project}/README.md
+    sed -i "" '2,2d' ./${new_project}/README.md
   else
-    sed -i '2,3d' ./${new_project}/README.md
+    sed -i '2,2d' ./${new_project}/README.md
   fi
   ;;
 esac
@@ -301,9 +301,9 @@ case ${read_want_remove_action_ci} in
     rm -rf ./${new_project}/.github/
   fi
   if [[ ${release} -eq "Darwin" ]]; then
-    sed -i "" '1,2d' ./${new_project}/README.md
+    sed -i "" '1,1d' ./${new_project}/README.md
   else
-    sed -i '1,2d' ./${new_project}/README.md
+    sed -i '1,1d' ./${new_project}/README.md
   fi
   ;;
 *)
