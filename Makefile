@@ -133,6 +133,10 @@ test:
 	#=> go test -test.v $(ROOT_TEST_LIST)
 	@go test -test.v $(ROOT_TEST_LIST)
 
+testCoverage:
+	@echo "=> run test coverage start"
+	@GO111MODULE=on go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
+
 testBenchmark:
 	@echo "=> run test benchmark start"
 	@go test -test.benchmem $(ROOT_TEST_LIST)
@@ -149,6 +153,7 @@ helpProjectRoot:
 	@echo "~> make init          - check base env of this project"
 	@echo "~> make clean         - remove binary file and log files"
 	@echo "~> make test          - run test case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
+	@echo "~> make testCoverage  - run test coverage case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
 	@echo "~> make testBenchmark - run go test benchmark case all"
 	@echo "~> make dev           - run as develop"
 
