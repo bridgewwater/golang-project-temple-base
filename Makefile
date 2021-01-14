@@ -137,6 +137,9 @@ testCoverage:
 	@echo "=> run test coverage start"
 	@GO111MODULE=on go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
 
+testCoverageBrowser: testCoverage
+	@GO111MODULE=on go tool cover -html=coverage.txt
+
 testBenchmark:
 	@echo "=> run test benchmark start"
 	@go test -test.benchmem $(ROOT_TEST_LIST)
@@ -150,12 +153,13 @@ helpProjectRoot:
 	@echo "-- now build name: $(ROOT_NAME) version: $(ENV_DIST_VERSION)"
 	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_DIST_OS) $(ENV_DIST_ARCH) --"
 	@echo ""
-	@echo "~> make init          - check base env of this project"
-	@echo "~> make clean         - remove binary file and log files"
-	@echo "~> make test          - run test case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
-	@echo "~> make testCoverage  - run test coverage case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
-	@echo "~> make testBenchmark - run go test benchmark case all"
-	@echo "~> make dev           - run as develop"
+	@echo "~> make init                - check base env of this project"
+	@echo "~> make clean               - remove binary file and log files"
+	@echo "~> make test                - run test case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
+	@echo "~> make testCoverage        - run test coverage case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
+	@echo "~> make testCoverageBrowser - see coverage at browser --invert-match $(ROOT_TEST_INVERT_MATCH)"
+	@echo "~> make testBenchmark       - run go test benchmark case all"
+	@echo "~> make dev                 - run as develop"
 
 help: helpGoMod helpDockerRun helpGoAction helpProjectRoot
 	@echo ""
