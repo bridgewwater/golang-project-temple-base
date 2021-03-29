@@ -36,7 +36,7 @@ dep: modVerify modDownload
 
 modFetch:
 	@echo "can fetch last version as"
-	go list -m -versions github.com/stretchr/testify | awk '{print $$1 " lastest: " $$NF}'
+	go list -mod=mod -m -versions github.com/stretchr/testify | awk '{print $$1 " lastest: " $$NF}'
 
 # print as: $make helpGoMod
 helpGoMod:
