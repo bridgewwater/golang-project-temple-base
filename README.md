@@ -44,7 +44,7 @@ $ echo "go mod vendor"
 # dev
 
 ```bash
-make init
+make init && make dep
 ```
 
 - test code

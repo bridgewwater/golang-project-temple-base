@@ -1,14 +1,16 @@
 .PHONY: test check clean build dist all
-TOP_DIR := $(shell pwd)
+#TOP_DIR := $(shell pwd)
 # each tag change this
-ENV_DIST_VERSION := v1.1.2
+ENV_DIST_VERSION := v0.1.2
 
 ROOT_NAME ?= golang-project-temple-base
 
 # ignore used not matching mode
-ROOT_TEST_INVERT_MATCH ?= "vendor"
-# set ignore of test case like grep -v -E "vendor|fataloom" to ignore vendor and fataloom package
-ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
+ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
+# set ignore of test case like grep -v -E "vendor|go_fatal_error" to ignore vendor and go_fatal_error package
+ROOT_TEST_LIST := $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
+# test max time
+ROOT_TEST_MAX_TIME := 1
 
 # linux windows darwin  list as: go tool dist list
 ENV_DIST_OS := linux
@@ -20,6 +22,7 @@ ENV_MODULE_MAKE_FILE ?= ./Makefile
 ENV_MODULE_MANIFEST = ./package.json
 ENV_MODULE_CHANGELOG = ./CHANGELOG.md
 ROOT_BUILD_PATH ?= ./build
+ROOT_BUILD_ENTRANCE ?= main.go
 ROOT_DIST ?= ./dist
 ROOT_REPO ?= ./dist
 ROOT_LOG_PATH ?= ./log
@@ -43,6 +46,21 @@ include MakeGoAction.mk
 #	@echo Environment variable GOPATH is not set
 #	exit 1
 #endif
+
+env:
+	@echo "== project env info start =="
+	@echo ""
+	@echo "ROOT_NAME                         ${ROOT_NAME}"
+	@echo "ENV_DIST_VERSION                  ${ENV_DIST_VERSION}"
+	@echo "ENV_MODULE_CHANGELOG              ${ENV_MODULE_CHANGELOG}"
+	@echo ""
+	@echo "ROOT_BUILD_ENTRANCE               ${ROOT_BUILD_ENTRANCE}"
+	@echo "ROOT_BUILD_PATH                   ${ROOT_BUILD_PATH}"
+	@echo "ENV_DIST_OS                       ${ENV_DIST_OS}"
+	@echo "ENV_DIST_ARCH                     ${ENV_DIST_ARCH}"
+	@echo "ROOT_TEST_DIST_PATH               ${ROOT_TEST_DIST_PATH}"
+	@echo "ROOT_REPO_DIST_PATH               ${ROOT_REPO_DIST_PATH}"
+	@echo "== project env info en =="
 
 utils:
 	node -v
@@ -112,7 +130,7 @@ init:
 	@echo "-> check env golang"
 	go env
 	@echo "~> you can use [ make help ] see more task"
-	-GO111MODULE=on go mod vendor
+	-go mod verify
 
 buildMain:
 	@echo "-> start build local OS"
@@ -135,10 +153,10 @@ test:
 
 testCoverage:
 	@echo "=> run test coverage start"
-	@GO111MODULE=on go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
 
 testCoverageBrowser: testCoverage
-	@GO111MODULE=on go tool cover -html=coverage.txt
+	@go tool cover -html=coverage.txt
 
 testBenchmark:
 	@echo "=> run test benchmark start"
@@ -153,6 +171,7 @@ helpProjectRoot:
 	@echo "-- now build name: $(ROOT_NAME) version: $(ENV_DIST_VERSION)"
 	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_DIST_OS) $(ENV_DIST_ARCH) --"
 	@echo ""
+	@echo "~> make env                 - print env of this project"
 	@echo "~> make init                - check base env of this project"
 	@echo "~> make clean               - remove binary file and log files"
 	@echo "~> make test                - run test case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
