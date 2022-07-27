@@ -3,8 +3,8 @@
 [github.com/stretchr/testify](https://github.com/stretchr/testify)
 
 ```bash
-GO111MODULE=on go mod edit -require='github.com/stretchr/testify@v1.4.0'
-GO111MODULE=on go mod vendor
+go mod edit -require='github.com/stretchr/testify@v1.4.0'
+go mod vendor
 ```
 
 fast use
@@ -42,6 +42,6 @@ func TestSomething(t *testing.T) {
 [github.com/smartystreets/goconvey](https://github.com/smartystreets/goconvey)
 
 ```bash
-GO111MODULE=on go mod edit -require='github.com/smartystreets/goconvey@v1.6.3'
-GO111MODULE=on go mod vendor
+go mod edit -require='github.com/smartystreets/goconvey@v1.6.3'
+go mod vendor
 ```

@@ -21,8 +21,11 @@ ENV_DIST_ARCH_DOCKER ?= amd64
 ENV_MODULE_MAKE_FILE ?= ./Makefile
 ENV_MODULE_MANIFEST = ./package.json
 ENV_MODULE_CHANGELOG = ./CHANGELOG.md
-ROOT_BUILD_PATH ?= ./build
+ROOT_BUILD_PATH ?= build
 ROOT_BUILD_ENTRANCE ?= main.go
+ROOT_BUILD_BIN_NAME ?= main
+ROOT_BUILD_BIN_PATH ?= $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
+ROOT_DIS_BIN_NAME ?= $(ROOT_NAME)
 ROOT_DIST ?= ./dist
 ROOT_REPO ?= ./dist
 ROOT_LOG_PATH ?= ./log
@@ -40,6 +43,7 @@ ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release/$(ENV_DIST_VERSION
 include MakeGoMod.mk
 include MakeDockerRun.mk
 include MakeGoAction.mk
+include MakeDist.mk
 
 #checkEnvGOPATH:
 #ifndef GOPATH
@@ -56,6 +60,7 @@ env:
 	@echo ""
 	@echo "ROOT_BUILD_ENTRANCE               ${ROOT_BUILD_ENTRANCE}"
 	@echo "ROOT_BUILD_PATH                   ${ROOT_BUILD_PATH}"
+	@echo "ROOT_BUILD_BIN_PATH               ${ROOT_BUILD_BIN_PATH}"
 	@echo "ENV_DIST_OS                       ${ENV_DIST_OS}"
 	@echo "ENV_DIST_ARCH                     ${ENV_DIST_ARCH}"
 	@echo "ROOT_TEST_DIST_PATH               ${ROOT_TEST_DIST_PATH}"
@@ -93,12 +98,6 @@ cleanBuild:
 	else echo "~> has cleaned ${ROOT_BUILD_PATH}"; \
 	fi
 
-cleanDist:
-	@if [ -d ${ROOT_DIST} ]; \
-	then rm -rf ${ROOT_DIST} && echo "~> cleaned ${ROOT_DIST}"; \
-	else echo "~> has cleaned ${ROOT_DIST}"; \
-	fi
-
 cleanLog:
 	@if [ -d ${ROOT_LOG_PATH} ]; \
 	then rm -rf ${ROOT_LOG_PATH} && echo "~> cleaned ${ROOT_LOG_PATH}"; \
@@ -107,21 +106,6 @@ cleanLog:
 
 clean: cleanBuild cleanLog
 	@echo "~> clean finish"
-
-checkTestBuildPath:
-	@if [ ! -d ${ROOT_TEST_BUILD_PATH} ]; then mkdir -p ${ROOT_TEST_BUILD_PATH} && echo "~> mkdir ${ROOT_TEST_BUILD_PATH}"; fi
-
-checkTestDistPath:
-	@if [ ! -d ${ROOT_TEST_DIST_PATH} ]; then mkdir -p ${ROOT_TEST_DIST_PATH} && echo "~> mkdir ${ROOT_TEST_DIST_PATH}"; fi
-
-checkTestOSDistPath:
-	@if [ ! -d ${ROOT_TEST_OS_DIST_PATH} ]; then mkdir -p ${ROOT_TEST_OS_DIST_PATH} && echo "~> mkdir ${ROOT_TEST_OS_DIST_PATH}"; fi
-
-checkReleaseDistPath:
-	@if [ ! -d ${ROOT_REPO_DIST_PATH} ]; then mkdir -p ${ROOT_REPO_DIST_PATH} && echo "~> mkdir ${ROOT_REPO_DIST_PATH}"; fi
-
-checkReleaseOSDistPath:
-	@if [ ! -d ${ROOT_REPO_OS_DIST_PATH} ]; then mkdir -p ${ROOT_REPO_OS_DIST_PATH} && echo "~> mkdir ${ROOT_REPO_OS_DIST_PATH}"; fi
 
 init:
 	@echo "~> start init this project"
@@ -134,14 +118,14 @@ init:
 
 buildMain:
 	@echo "-> start build local OS"
-	@go build -o build/main main.go
+	@go build -o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
 
 buildARCH:
 	@echo "-> start build OS:$(ENV_DIST_OS) ARCH:$(ENV_DIST_ARCH)"
-	@GOOS=$(ENV_DIST_OS) GOARCH=$(ENV_DIST_ARCH) go build -o build/main main.go
+	@GOOS=$(ENV_DIST_OS) GOARCH=$(ENV_DIST_ARCH) go build -o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
 
 dev: buildMain
-	-ENV_WEB_AUTO_HOST=true ./build/main
+	-ENV_WEB_AUTO_HOST=true ${ROOT_BUILD_BIN_PATH}
 
 run: dev
 	@echo "=> run start"
@@ -174,12 +158,12 @@ helpProjectRoot:
 	@echo "~> make env                 - print env of this project"
 	@echo "~> make init                - check base env of this project"
 	@echo "~> make clean               - remove binary file and log files"
-	@echo "~> make test                - run test case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
-	@echo "~> make testCoverage        - run test coverage case ignore --invert-match $(ROOT_TEST_INVERT_MATCH)"
-	@echo "~> make testCoverageBrowser - see coverage at browser --invert-match $(ROOT_TEST_INVERT_MATCH)"
+	@echo "~> make test                - run test case ignore --invert-match by config"
+	@echo "~> make testCoverage        - run test coverage case ignore --invert-match by config"
+	@echo "~> make testCoverageBrowser - see coverage at browser --invert-match by config"
 	@echo "~> make testBenchmark       - run go test benchmark case all"
 	@echo "~> make dev                 - run as develop"
 
-help: helpGoMod helpDockerRun helpGoAction helpProjectRoot
+help: helpGoMod helpDockerRun helpGoAction helpDist helpProjectRoot
 	@echo ""
-	@echo "-- more info see Makefile include: MakeGoMod.mk MakeDockerRun.mk --"
+	@echo "-- more info see Makefile include: MakeGoMod.mk MakeDockerRun.mk MakeGoAction.mk MakeDist.mk--"
