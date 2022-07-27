@@ -10,6 +10,10 @@ checkTestDistPath:
 	then mkdir -p ${ROOT_TEST_DIST_PATH} && echo "~> mkdir ${ROOT_TEST_DIST_PATH}"; \
 	fi
 
+distTestTar: distTest
+	@echo "=> start tar test as os local"
+	tar zcvf $(ROOT_DIST)/test/$(ROOT_NAME)-test-$(ENV_DIST_VERSION).tar.gz $(ROOT_TEST_DIST_PATH)
+
 checkTestOSDistPath:
 	@if [ ! -d ${ROOT_TEST_OS_DIST_PATH} ]; \
 	then mkdir -p ${ROOT_TEST_OS_DIST_PATH} && echo "~> mkdir ${ROOT_TEST_OS_DIST_PATH}"; \
@@ -74,6 +78,7 @@ helpDist:
 	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_DIST_OS) $(ENV_DIST_ARCH) --"
 	@echo "~> make cleanAllDist     - clean all dist at $(ROOT_DIST)"
 	@echo "~> make distTest         - build dist at $(ROOT_TEST_DIST_PATH) in local OS"
+	@echo "~> make distTestTar      - build dist at $(ROOT_TEST_DIST_PATH) in local OS and tar"
 	@echo "~> make distTestOS       - build dist at $(ROOT_TEST_OS_DIST_PATH) as: $(ENV_DIST_OS) $(ENV_DIST_ARCH)"
 	@echo "~> make distTestOSTar    - build dist at $(ROOT_TEST_OS_DIST_PATH) as: $(ENV_DIST_OS) $(ENV_DIST_ARCH) and tar"
 	@echo "~> make distRelease      - build dist at $(ROOT_REPO_DIST_PATH) in local OS"
