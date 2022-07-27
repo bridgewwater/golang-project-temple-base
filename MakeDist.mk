@@ -12,7 +12,7 @@ checkTestDistPath:
 
 distTestTar: distTest
 	@echo "=> start tar test as os local"
-	tar zcvf $(ROOT_DIST)/test/$(ROOT_NAME)-test-$(ENV_DIST_VERSION).tar.gz $(ROOT_TEST_DIST_PATH)
+	tar zcvf $(ROOT_DIST)/test/$(ROOT_NAME)-test-$(ENV_DIST_VERSION).tar.gz -C $(ROOT_TEST_DIST_PATH) .
 
 checkTestOSDistPath:
 	@if [ ! -d ${ROOT_TEST_OS_DIST_PATH} ]; \
@@ -50,7 +50,7 @@ distTestOS: dep buildARCH checkTestOSDistPath
 
 distTestOSTar: distTestOS
 	@echo "=> start tar test as os $(ENV_DIST_OS) $(ENV_DIST_ARCH)"
-	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/test/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION).tar.gz $(ROOT_TEST_OS_DIST_PATH)
+	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/test/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION).tar.gz -C $(ROOT_TEST_OS_DIST_PATH) .
 
 distRelease: dep buildMain checkReleaseDistPath
 	@echo "=> distRelease start at: $(ROOT_REPO_DIST_PATH)"
@@ -67,10 +67,10 @@ distReleaseOS: dep buildARCH checkReleaseOSDistPath
 
 distReleaseOSTar: distReleaseOS
 	@echo "=> start tar release as os $(ENV_DIST_OS) $(ENV_DIST_ARCH)"
-	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/release/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION).tar.gz $(ROOT_REPO_OS_DIST_PATH)
+	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/release/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION).tar.gz -C $(ROOT_REPO_OS_DIST_PATH) .
 
 scpDistReleaseOSTar: distReleaseOSTar
-	scp $(ROOT_DIST)/$(ENV_DIST_OS)/release/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION).tar.gz $(SERVER_REPO_SSH_ALIASE):$(SERVER_REPO_FOLDER)
+	scp $(ROOT_DIST)/$(ENV_DIST_OS)/release/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION).tar.gz -C $(SERVER_REPO_SSH_ALIASE):$(SERVER_REPO_FOLDER) .
 	@echo "=> must check below config of set for relase OS Scp"
 
 helpDist:
