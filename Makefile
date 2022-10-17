@@ -1,7 +1,7 @@
 .PHONY: test check clean build dist all
 #TOP_DIR := $(shell pwd)
 # each tag change this
-ENV_DIST_VERSION := v0.1.2
+ENV_DIST_VERSION := v1.15.6
 
 ROOT_NAME ?= golang-project-temple-base
 
