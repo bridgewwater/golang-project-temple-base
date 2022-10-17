@@ -4,28 +4,46 @@ type: docker
 name: default
 
 steps:
-- name: go-test
-  image: golang:1.15.6-buster
+- name: go-init
+  image: golang:1.17.13-buster
   volumes:
     - name: go_cache
       path: /go
   environment:
     GOPATH: /go
     GOPROXY: https://goproxy.cn,direct
-    GOPRIVATE: "*.gitlab.com,*.gitee.com"
+    GOPRIVATE: "*.gitlab.com,*.gitee.com,*.sinlov.cn"
     GO111MODULE: on
     CGO_ENABLED: 0
     GOOS: linux
     GOARCH: amd64
   commands:
     - pwd
+    - make env
     - make init dep
+  when:
+    event:
+      - push
+- name: go-test
+  image: golang:1.17.13-buster
+  volumes:
+    - name: go_cache
+      path: /go
+  environment:
+    GOPATH: /go
+    GOPROXY: https://goproxy.cn,direct
+    GOPRIVATE: "*.gitlab.com,*.gitee.com,*.sinlov.cn"
+    GO111MODULE: on
+    CGO_ENABLED: 0
+    GOOS: linux
+    GOARCH: amd64
+  commands:
     - make test
   when:
     event:
       - push
 - name: go-dist-test
-  image: golang:1.15.6-buster
+  image: golang:1.17.13-buster
   volumes:
     - name: go_cache
       path: /go
@@ -34,20 +52,19 @@ steps:
   environment:
     GOPATH: /go
     GOPROXY: https://goproxy.cn,direct
-    GOPRIVATE: "*.gitlab.com,*.gitee.com"
+    GOPRIVATE: "*.gitlab.com,*.gitee.com,*.sinlov.cn"
     GO111MODULE: on
     CGO_ENABLED: 0
     GOOS: linux
     GOARCH: amd64
   commands:
-    - pwd
     - make cleanAllDist distTestTar
     - cp ./dist/**/**.gz /go_dist_test/
   when:
     event:
       - push
 - name: go-dist-release
-  image: golang:1.15.6-buster
+  image: golang:1.17.13-buster
   volumes:
     - name: go_cache
       path: /go
@@ -62,7 +79,6 @@ steps:
     GOOS: linux
     GOARCH: amd64
   commands:
-    - pwd
     - make cleanAllDist distReleaseTar
     - cp ./dist/**/**.gz /go_dist_release/
   when:
