@@ -31,9 +31,17 @@ ROOT_REPO ?= ./dist
 ROOT_LOG_PATH ?= ./log
 ROOT_TEST_BUILD_PATH ?= $(ROOT_BUILD_PATH)/test/$(ENV_DIST_VERSION)
 ROOT_TEST_DIST_PATH ?= $(ROOT_DIST)/test/$(ENV_DIST_VERSION)
-ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(ENV_DIST_OS)/test/$(ENV_DIST_VERSION)
-ROOT_REPO_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_VERSION)
-ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release/$(ENV_DIST_VERSION)
+ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(ENV_DIST_OS)/test_os/$(ENV_DIST_VERSION)
+ROOT_REPO_DIST_PATH ?= $(ROOT_REPO)/release/$(ENV_DIST_VERSION)
+ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release_os/$(ENV_DIST_VERSION)
+
+ENV_DIST_MARK=
+ifneq ($(strip $(DRONE_COMMIT)),)
+	ENV_DIST_MARK=-${DRONE_COMMIT}# this can change to other mark
+endif
+ifneq ($(strip $(GITHUB_SHA)),)
+	ENV_DIST_MARK=-${GITHUB_SHA}# https://docs.github.com/cn/enterprise-server@2.22/actions/learn-github-actions/environment-variables
+endif
 
 # ifeq ($(FILE), $(wildcard $(FILE)))
 # 	@ echo target file not found
@@ -65,7 +73,8 @@ env:
 	@echo "ENV_DIST_ARCH                     ${ENV_DIST_ARCH}"
 	@echo "ROOT_TEST_DIST_PATH               ${ROOT_TEST_DIST_PATH}"
 	@echo "ROOT_REPO_DIST_PATH               ${ROOT_REPO_DIST_PATH}"
-	@echo "== project env info en =="
+	@echo "ENV_DIST_MARK                     ${ENV_DIST_MARK}"
+	@echo "== project env info end =="
 
 utils:
 	node -v
