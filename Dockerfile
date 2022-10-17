@@ -3,7 +3,7 @@
 # Author: sinlov
 # dockerfile offical document https://docs.docker.com/engine/reference/builder/
 # https://hub.docker.com/_/golang?tab=description
-FROM golang:1.16.14-buster
+FROM golang:1.17.13-buster
 
 COPY $PWD /usr/src/myapp
 WORKDIR /usr/src/myapp
