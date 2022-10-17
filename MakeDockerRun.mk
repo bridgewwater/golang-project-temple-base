@@ -4,7 +4,7 @@
 ROOT_DOCKER_CONTAINER ?= $(ROOT_NAME)
 # change this for dockerRun
 ROOT_DOCKER_IMAGE_PARENT_NAME ?= golang
-ROOT_DOCKER_IMAGE_PARENT_TAG ?= 1.16.1-buster
+ROOT_DOCKER_IMAGE_PARENT_TAG ?= 1.16.14-buster
 # change this for dockerRunLinux or dockerRunDarwin
 ROOT_DOCKER_IMAGE_NAME ?= $(ROOT_NAME)
 # can change as local set or read Makefile ENV_DIST_VERSION
