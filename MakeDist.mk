@@ -10,10 +10,6 @@ checkTestDistPath:
 	then mkdir -p ${ROOT_TEST_DIST_PATH} && echo "~> mkdir ${ROOT_TEST_DIST_PATH}"; \
 	fi
 
-distTestTar: distTest
-	@echo "=> start tar test as os local"
-	tar zcvf $(ROOT_DIST)/test/$(ROOT_NAME)-test-$(ENV_DIST_VERSION).tar.gz -C $(ROOT_TEST_DIST_PATH) .
-
 checkTestOSDistPath:
 	@if [ ! -d ${ROOT_TEST_OS_DIST_PATH} ]; \
 	then mkdir -p ${ROOT_TEST_OS_DIST_PATH} && echo "~> mkdir ${ROOT_TEST_OS_DIST_PATH}"; \
@@ -41,6 +37,10 @@ distTest: dep buildMain checkTestDistPath
 	mv $(ROOT_TEST_DIST_PATH)/$(ROOT_BUILD_BIN_NAME) $(ROOT_TEST_DIST_PATH)/$(ROOT_DIS_BIN_NAME)
 	@echo "=> distTest end at: $(ROOT_TEST_DIST_PATH)"
 
+distTestTar: distTest
+	@echo "=> start tar test as os local"
+	tar zcvf $(ROOT_DIST)/test/$(ROOT_NAME)-test-$(ENV_DIST_VERSION).tar.gz -C $(ROOT_TEST_DIST_PATH) .
+
 distTestOS: dep buildARCH checkTestOSDistPath
 	@echo "=> distTestOS start at: $(ROOT_TEST_OS_DIST_PATH)"
 	@echo "=> Test at: $(ENV_DIST_OS) ARCH as: $(ENV_DIST_ARCH)"
@@ -49,7 +49,7 @@ distTestOS: dep buildARCH checkTestOSDistPath
 	@echo "=> distTestOS end at: $(ROOT_TEST_OS_DIST_PATH)"
 
 distTestOSTar: distTestOS
-	@echo "=> start tar test as os $(ENV_DIST_OS) $(ENV_DIST_ARCH)"
+	@echo "=> start tar test as os local"
 	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/test/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION).tar.gz -C $(ROOT_TEST_OS_DIST_PATH) .
 
 distRelease: dep buildMain checkReleaseDistPath
@@ -57,6 +57,10 @@ distRelease: dep buildMain checkReleaseDistPath
 	cp $(ROOT_BUILD_BIN_PATH) $(ROOT_REPO_DIST_PATH)
 	mv $(ROOT_REPO_DIST_PATH)/$(ROOT_BUILD_BIN_NAME) $(ROOT_REPO_DIST_PATH)/$(ROOT_DIS_BIN_NAME)
 	@echo "=> distRelease end at: $(ROOT_REPO_DIST_PATH)"
+
+distReleaseTar: distRelease
+	@echo "=> start tar test as os local"
+	tar zcvf $(ROOT_DIST)/$(ROOT_NAME)-release-$(ENV_DIST_VERSION).tar.gz -C $(ROOT_REPO_DIST_PATH) .
 
 distReleaseOS: dep buildARCH checkReleaseOSDistPath
 	@echo "=> distReleaseOS start at: $(ROOT_REPO_OS_DIST_PATH)"
