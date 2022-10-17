@@ -1,6 +1,6 @@
 {
   "name": "golang-project-temple-base",
-  "version": "v1.15.6",
+  "version": "v0.1.2",
   "description": "template of golang base",
   "main": "index.js",
   "directories": {

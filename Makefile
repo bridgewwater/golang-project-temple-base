@@ -1,7 +1,7 @@
 .PHONY: test check clean build dist all
 #TOP_DIR := $(shell pwd)
 # each tag change this
-ENV_DIST_VERSION := v1.15.6
+ENV_DIST_VERSION := v0.1.2
 
 ROOT_NAME ?= golang-project-temple-base
 
@@ -37,7 +37,7 @@ ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release_os/$(ENV_DIST_VERS
 
 ENV_DIST_MARK=
 ifneq ($(strip $(DRONE_COMMIT)),)
-	ENV_DIST_MARK=-${DRONE_COMMIT}# this can change to other mark
+	ENV_DIST_MARK=-${DRONE_COMMIT}# this can change to other mark https://docs.drone.io/pipeline/environment/substitution/
 endif
 ifneq ($(strip $(GITHUB_SHA)),)
 	ENV_DIST_MARK=-${GITHUB_SHA}# https://docs.github.com/cn/enterprise-server@2.22/actions/learn-github-actions/environment-variables
