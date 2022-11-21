@@ -262,6 +262,19 @@ replaceFileByRegular ${new_project}/Makefile ${temple_name} ${new_project}
 #fi
 #cd ..${new_project}
 
+read -p "Do you can keep sample code (default: no)? [y/n] " read_want_keep_sample_code
+case ${read_want_keep_sample_code} in
+[yY]*)
+  echo " now keep sample code"
+  ;;
+*)
+  echo " just remove sample code"
+  if [[ -d ./${new_project}/stack ]]; then
+    rm -rf ./${new_project}/stack
+  fi
+  ;;
+esac
+
 # choose LICENCE
 read -p "Choose licence (default: apache)? [mit] " read_choose_licence
 case ${read_choose_licence} in
