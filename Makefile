@@ -13,28 +13,21 @@ ROOT_TEST_LIST := $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
 ROOT_TEST_MAX_TIME := 1
 
 # linux windows darwin  list as: go tool dist list
-ENV_DIST_OS := linux
+ENV_DIST_GO_OS := linux
 # amd64 386
-ENV_DIST_ARCH := amd64
-ENV_DIST_OS_DOCKER ?= linux
-ENV_DIST_ARCH_DOCKER ?= amd64
+ENV_DIST_GO_ARCH := amd64
 ENV_MODULE_MAKE_FILE ?= ./Makefile
 ENV_MODULE_MANIFEST = ./package.json
 ENV_MODULE_CHANGELOG = ./CHANGELOG.md
 ROOT_BUILD_PATH ?= build
-ROOT_BUILD_ENTRANCE ?= main.go
-ROOT_BUILD_BIN_NAME ?= main
-ROOT_BUILD_BIN_PATH ?= $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
-ROOT_DIS_BIN_NAME ?= $(ROOT_NAME)
-ROOT_DIST ?= ./dist
-ROOT_REPO ?= ./dist
 ROOT_LOG_PATH ?= ./log
-ROOT_TEST_BUILD_PATH ?= $(ROOT_BUILD_PATH)/test/$(ENV_DIST_VERSION)
-ROOT_TEST_DIST_PATH ?= $(ROOT_DIST)/test/$(ENV_DIST_VERSION)
-ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(ENV_DIST_OS)/test_os-${ENV_DIST_OS}-${ENV_DIST_ARCH}/$(ENV_DIST_VERSION)
-ROOT_REPO_DIST_PATH ?= $(ROOT_REPO)/release/$(ENV_DIST_VERSION)
-ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release_os-${ENV_DIST_OS}-${ENV_DIST_ARCH}/$(ENV_DIST_VERSION)
+#ROOT_BUILD_ENTRANCE ?= ../
+ROOT_BUILD_ENTRANCE ?= main.go
+ROOT_BUILD_BIN_NAME ?= $(ROOT_NAME)
+ROOT_BUILD_BIN_PATH ?= $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
 
+#ENV_NOW_GIT_COMMIT_ID_SHORT=$(shell git --no-pager rev-parse --short HEAD)
+#ENV_DIST_MARK=-${ENV_NOW_GIT_COMMIT_ID_SHORT}
 ENV_DIST_MARK=
 ifneq ($(strip $(DRONE_COMMIT)),)
 	ENV_DIST_MARK=-${DRONE_COMMIT}# this can change to other mark https://docs.drone.io/pipeline/environment/substitution/
@@ -47,9 +40,12 @@ endif
 # 	@ echo target file not found
 # endif
 
+# MakeGoDist.mk settings
+INFO_ROOT_DIST_PATH ?= ./dist
+
 include MakeGoMod.mk
 include MakeGoAction.mk
-include MakeDist.mk
+include MakeGoDist.mk
 include MakeDocker.mk
 
 #checkEnvGOPATH:
@@ -58,7 +54,7 @@ include MakeDocker.mk
 #	exit 1
 #endif
 
-env:
+env: distEnv
 	@echo "== project env info start =="
 	@echo ""
 	@echo "ROOT_NAME                         ${ROOT_NAME}"
@@ -68,12 +64,8 @@ env:
 	@echo "ROOT_BUILD_ENTRANCE               ${ROOT_BUILD_ENTRANCE}"
 	@echo "ROOT_BUILD_PATH                   ${ROOT_BUILD_PATH}"
 	@echo "ROOT_BUILD_BIN_PATH               ${ROOT_BUILD_BIN_PATH}"
-	@echo "ROOT_TEST_DIST_PATH               ${ROOT_TEST_DIST_PATH}"
-	@echo "ROOT_REPO_DIST_PATH               ${ROOT_REPO_DIST_PATH}"
-	@echo "ENV_DIST_OS                       ${ENV_DIST_OS}"
-	@echo "ENV_DIST_ARCH                     ${ENV_DIST_ARCH}"
-	@echo "ROOT_TEST_OS_DIST_PATH            ${ROOT_TEST_OS_DIST_PATH}"
-	@echo "ROOT_REPO_OS_DIST_PATH            ${ROOT_REPO_OS_DIST_PATH}"
+	@echo "ENV_DIST_GO_OS                    ${ENV_DIST_GO_OS}"
+	@echo "ENV_DIST_GO_ARCH                  ${ENV_DIST_GO_ARCH}"
 	@echo ""
 	@echo "ENV_DIST_MARK                     ${ENV_DIST_MARK}"
 	@echo "== project env info end =="
@@ -104,16 +96,12 @@ tagBefore: versionHelp
 	@echo "$$ git tag -a '${ENV_DIST_VERSION}' -m 'message for this tag'"
 
 cleanBuild:
-	@if [ -d ${ROOT_BUILD_PATH} ]; \
-	then rm -rf ${ROOT_BUILD_PATH} && echo "~> cleaned ${ROOT_BUILD_PATH}"; \
-	else echo "~> has cleaned ${ROOT_BUILD_PATH}"; \
-	fi
+	-@RM -r ${ROOT_BUILD_PATH}
+	@echo "~> finish clean path: ${ROOT_BUILD_PATH}"
 
 cleanLog:
-	@if [ -d ${ROOT_LOG_PATH} ]; \
-	then rm -rf ${ROOT_LOG_PATH} && echo "~> cleaned ${ROOT_LOG_PATH}"; \
-	else echo "~> has cleaned ${ROOT_LOG_PATH}"; \
-	fi
+	-@RM -r ${ROOT_LOG_PATH}
+	@echo "~> finish clean path: ${ROOT_LOG_PATH}"
 
 clean: cleanBuild cleanLog
 	@echo "~> clean finish"
@@ -133,13 +121,20 @@ init:
 buildMain:
 	@echo "-> start build local OS"
 	@go build -o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}"
 
 buildARCH:
-	@echo "-> start build OS:$(ENV_DIST_OS) ARCH:$(ENV_DIST_ARCH)"
-	@GOOS=$(ENV_DIST_OS) GOARCH=$(ENV_DIST_ARCH) go build -o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
+	@echo "-> start build OS:$(ENV_DIST_GO_OS) ARCH:$(ENV_DIST_GO_ARCH)"
+	@GOOS=$(ENV_DIST_GO_OS) GOARCH=$(ENV_DIST_GO_ARCH) go build \
+	-a \
+	-tags netgo \
+	-ldflags '-w -s --extldflags "-static -fpic"' \
+	-o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}"
 
-dev: buildMain
-	-ENV_WEB_AUTO_HOST=true ${ROOT_BUILD_BIN_PATH}
+dev: cleanBuild buildMain
+	ENV_WEB_AUTO_HOST=true \
+	${ROOT_BUILD_BIN_PATH}
 
 run: dev
 	@echo "=> run start"
@@ -167,7 +162,7 @@ cloc:
 helpProjectRoot:
 	@echo "Help: Project root Makefile"
 	@echo "-- now build name: $(ROOT_NAME) version: $(ENV_DIST_VERSION)"
-	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_DIST_OS) $(ENV_DIST_ARCH) --"
+	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_DIST_GO_OS) $(ENV_DIST_GO_ARCH) --"
 	@echo ""
 	@echo "~> make env                 - print env of this project"
 	@echo "~> make init                - check base env of this project"
