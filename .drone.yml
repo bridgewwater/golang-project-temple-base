@@ -1,93 +1,133 @@
 # https://docs.drone.io/pipeline/docker/examples/languages/golang/
 kind: pipeline
 type: docker
-name: default
+name: golang-docker
+
+# platform: # https://docs.drone.io/yaml/docker/#the-platform-object
+#   os: windows
+#   arch: amd64
+
+# node: # https://docs.drone.io/yaml/docker/#the-node-attribute
+#   # DRONE_RUNNER_LABELS https://docs.drone.io/runner/docker/configuration/reference/drone-runner-labels/
+#   role: xxxx # Specify the runner DRONE_RUNNER_LABELS labeled `role:xxxx` to execute the pipeline
+
+# https://docs.drone.io/pipeline/environment/syntax/#per-pipeline
+environment:
+#  GOPROXY: 'https://goproxy.cn,direct'
+  GOPRIVATE: '*.gitlab.com,*.gitee.com'
+  GO111MODULE: on
+  CGO_ENABLED: 0
+  GOOS: linux
+  GOARCH: amd64
 
 steps:
-- name: go-init
-  image: golang:1.17.13-buster
-  pull: if-not-exists # always if-not-exists never
-  volumes:
-    - name: go_cache
-      path: /go
-  environment:
-    GOPATH: /go
-    GOPROXY: https://goproxy.cn,direct
-    GOPRIVATE: "*.gitlab.com,*.gitee.com,*.sinlov.cn"
-    GO111MODULE: on
-    CGO_ENABLED: 0
-    GOOS: linux
-    GOARCH: amd64
-  commands:
-    - pwd
-    - make env
-    - make init dep
-  when:
-    event:
-      - push
-- name: go-test
-  image: golang:1.17.13-buster
-  pull: if-not-exists # always if-not-exists never
-  volumes:
-    - name: go_cache
-      path: /go
-  environment:
-    GOPATH: /go
-    GOPROXY: https://goproxy.cn,direct
-    GOPRIVATE: "*.gitlab.com,*.gitee.com,*.sinlov.cn"
-    GO111MODULE: on
-    CGO_ENABLED: 0
-    GOOS: linux
-    GOARCH: amd64
-  commands:
-    - make test
-  when:
-    event:
-      - push
-- name: go-dist-test
-  image: golang:1.17.13-buster
-  pull: if-not-exists # always if-not-exists never
-  volumes:
-    - name: go_cache
-      path: /go
-    - name: go_dist_test
-      path: /go_dist_test
-  environment:
-    GOPATH: /go
-    GOPROXY: https://goproxy.cn,direct
-    GOPRIVATE: "*.gitlab.com,*.gitee.com,*.sinlov.cn"
-    GO111MODULE: on
-    CGO_ENABLED: 0
-    GOOS: linux
-    GOARCH: amd64
-  commands:
-    - make cleanAllDist distTestTar
-    - cp ./dist/**/**.gz /go_dist_test/
-  when:
-    event:
-      - push
-- name: go-dist-release
-  image: golang:1.17.13-buster
-  pull: if-not-exists # always if-not-exists never
-  volumes:
-    - name: go_cache
-      path: /go
-    - name: go_dist_release
-      path: /go_dist_release
-  environment:
-    GOPATH: /go
-    GOPROXY: https://goproxy.cn,direct
-    GOPRIVATE: "*.gitlab.com,*.gitee.com,*.sinlov.cn"
-    GO111MODULE: on
-    CGO_ENABLED: 0
-    GOOS: linux
-    GOARCH: amd64
-  commands:
-    - make cleanAllDist distReleaseTar
-    - cp ./dist/**/**.gz /go_dist_release/
-  when:
-    event:
-      - tag
+  - name: go-init
+    image: golang:1.17.13-buster
+    pull: if-not-exists
+    volumes:
+      - name: go_cache
+        path: /go
+    environment:
+      GOPATH: /go
+    commands:
+      - pwd
+      - echo "DRONE_REPO_NAME        ${DRONE_REPO_NAME}"
+      - echo "DRONE_REPO_OWNER       ${DRONE_REPO_OWNER}"
+      - echo "DRONE_REPO             ${DRONE_REPO}"
+      - echo "DRONE_BRANCH           ${DRONE_BRANCH/\//-}"
+      - echo "DRONE_COMMIT_SHA short ${DRONE_COMMIT_SHA:0:8}"
+      - echo "DRONE_TAG              ${DRONE_TAG##v}"
+      - go version
+      - go env
+      - go mod verify
+      - go mod tidy
+      - go mod download
+      - go mod vendor
+    when:
+      event:
+        - push
+  - name: go-test
+    image: golang:1.17.13-buster
+    pull: if-not-exists
+    volumes:
+      - name: go_cache
+        path: /go
+    environment:
+      GOPATH: /go
+    commands:
+      - make test
+      # - go test -test.v .
+    when:
+      event:
+        - push
+  - name: go-dist-test
+    image: golang:1.17.13-buster
+    pull: if-not-exists
+    volumes:
+      - name: go_cache
+        path: /go
+      - name: go_dist_test
+        path: /go_dist_test
+    environment:
+      GOPATH: /go
+    commands:
+      - make cleanAllDist distTestTar
+      - cp ./dist/**/**.gz /go_dist_test/
+    when:
+      event:
+        - push
+  - name: go-dist-release
+    image: golang:1.17.13-buster
+    pull: if-not-exists
+    volumes:
+      - name: go_cache
+        path: /go
+      - name: go_dist_release
+        path: /go_dist_release
+    environment:
+      GOPATH: /go
+    commands:
+      - make cleanAllDist distReleaseTar
+      - cp ./dist/**/**.gz /go_dist_release/
+    when:
+      event:
+        - tag
+  - name: notify-docker-email # must drone orgsecret add keys
+    image: drillster/drone-email # https://github.com/Drillster/drone-email
+    pull: if-not-exists
+    environment:
+      PLUGIN_FROM_ADDRESS:
+        from_secret: email_from_address
+      PLUGIN_FROM_NAME:
+        from_secret: email_from_name
+      PLUGIN_HOST:
+        from_secret: email_smtp_host
+      PLUGIN_PORT:
+        from_secret: email_smtp_port
+      PLUGIN_USERNAME:
+        from_secret: email_smtp_user_name
+      PLUGIN_PASSWORD:
+        from_secret: email_smtp_password
+    settings:
+      recipients: #  List of recipients to send this mail to (besides the commit author)
+        - sinlovgmppt@gmail.com
+    when:
+      event: # https://docs.drone.io/pipeline/exec/syntax/conditions/#by-event
+        - promote
+        - rollback
+        - push
+        - pull_request
+        - tag
+      status: # only support failure/success,  both open will send anything
+        - failure
+        # - success
+
+trigger:
+  branch:
+    - main
+  event: # if use trigger.event tag , trigger.branch are invalid
+    - pull_request # will use trigger.branch
+    - push
 
 volumes: # need admin open Trusted
   - name: go_cache
