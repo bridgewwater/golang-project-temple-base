@@ -62,10 +62,14 @@ make run
 ## docker
 
 ```bash
-make helpDockerRun
-```
+# then test build as test/Dockerfile
+$ make dockerTestRestartLatest
+# clean test build
+$ make dockerTestPruneLatest
 
-docker file can replace
+# more info see
+$ make helpDocker
+```
 
 ## use
 

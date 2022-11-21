@@ -31,9 +31,9 @@ ROOT_REPO ?= ./dist
 ROOT_LOG_PATH ?= ./log
 ROOT_TEST_BUILD_PATH ?= $(ROOT_BUILD_PATH)/test/$(ENV_DIST_VERSION)
 ROOT_TEST_DIST_PATH ?= $(ROOT_DIST)/test/$(ENV_DIST_VERSION)
-ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(ENV_DIST_OS)/test_os/$(ENV_DIST_VERSION)
+ROOT_TEST_OS_DIST_PATH ?= $(ROOT_DIST)/$(ENV_DIST_OS)/test_os-${ENV_DIST_OS}-${ENV_DIST_ARCH}/$(ENV_DIST_VERSION)
 ROOT_REPO_DIST_PATH ?= $(ROOT_REPO)/release/$(ENV_DIST_VERSION)
-ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release_os/$(ENV_DIST_VERSION)
+ROOT_REPO_OS_DIST_PATH ?= $(ROOT_REPO)/$(ENV_DIST_OS)/release_os-${ENV_DIST_OS}-${ENV_DIST_ARCH}/$(ENV_DIST_VERSION)
 
 ENV_DIST_MARK=
 ifneq ($(strip $(DRONE_COMMIT)),)
@@ -47,11 +47,10 @@ endif
 # 	@ echo target file not found
 # endif
 
-# include MakeDockerRun.mk for docker run
 include MakeGoMod.mk
-include MakeDockerRun.mk
 include MakeGoAction.mk
 include MakeDist.mk
+include MakeDocker.mk
 
 #checkEnvGOPATH:
 #ifndef GOPATH
@@ -119,6 +118,9 @@ cleanLog:
 clean: cleanBuild cleanLog
 	@echo "~> clean finish"
 
+cleanAll: clean cleanAllDist
+	@echo "~> clean all finish"
+
 init:
 	@echo "~> start init this project"
 	@echo "-> check version"
@@ -176,6 +178,6 @@ helpProjectRoot:
 	@echo "~> make testBenchmark       - run go test benchmark case all"
 	@echo "~> make dev                 - run as develop"
 
-help: helpGoMod helpDockerRun helpGoAction helpDist helpProjectRoot
+help: helpGoMod helpDocker helpGoAction helpDist helpProjectRoot
 	@echo ""
 	@echo "-- more info see Makefile include: MakeGoMod.mk MakeDockerRun.mk MakeGoAction.mk MakeDist.mk--"

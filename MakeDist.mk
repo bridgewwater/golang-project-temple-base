@@ -1,8 +1,8 @@
 # this file must use as base Makefile job must has [ dep buildMain buildARCH ]
 
-SERVER_TEST_SSH_ALIASE = aliyun-ecs
+SERVER_TEST_SSH_ALIAS = aliyun-ecs
 SERVER_TEST_FOLDER = /home/work/Document/
-SERVER_REPO_SSH_ALIASE = golang-project-temple-base
+SERVER_REPO_SSH_ALIAS = golang-project-temple-base
 SERVER_REPO_FOLDER = /home/ubuntu/$(ROOT_NAME)
 
 checkTestDistPath:
@@ -50,7 +50,7 @@ distTestOS: dep buildARCH checkTestOSDistPath
 
 distTestOSTar: distTestOS
 	@echo "=> start tar test as os local"
-	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/test_os/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION)${ENV_DIST_MARK}.tar.gz -C $(ROOT_TEST_OS_DIST_PATH) .
+	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/test_os-${ENV_DIST_OS}-${ENV_DIST_ARCH}/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION)${ENV_DIST_MARK}.tar.gz -C $(ROOT_TEST_OS_DIST_PATH) .
 
 distRelease: dep buildMain checkReleaseDistPath
 	@echo "=> distRelease start at: $(ROOT_REPO_DIST_PATH)"
@@ -71,7 +71,7 @@ distReleaseOS: dep buildARCH checkReleaseOSDistPath
 
 distReleaseOSTar: distReleaseOS
 	@echo "=> start tar release as os $(ENV_DIST_OS) $(ENV_DIST_ARCH)"
-	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/release_os/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION)${ENV_DIST_MARK}.tar.gz -C $(ROOT_REPO_OS_DIST_PATH) .
+	tar zcvf $(ROOT_DIST)/$(ENV_DIST_OS)/release_os-${ENV_DIST_OS}-${ENV_DIST_ARCH}/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION)${ENV_DIST_MARK}.tar.gz -C $(ROOT_REPO_OS_DIST_PATH) .
 
 scpDistReleaseOSTar: distReleaseOSTar
 	scp $(ROOT_DIST)/$(ENV_DIST_OS)/release_os/$(ROOT_NAME)-$(ENV_DIST_OS)-$(ENV_DIST_ARCH)-$(ENV_DIST_VERSION)${ENV_DIST_MARK}.tar.gz -C $(SERVER_REPO_SSH_ALIASE):$(SERVER_REPO_FOLDER) .
