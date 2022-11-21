@@ -83,5 +83,5 @@ $ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-t
 # let temp-golang-base file folder under $PATH
 $ chmod +x temp-golang-base
 # see how to use
-$ temp-golang-base -h
+$ golang-project-temple-base -h
 ```
