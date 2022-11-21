@@ -131,6 +131,15 @@ distScpReleaseOSTar: distReleaseOSTar
 	#scp ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_BIN_NAME}-${INFO_DIST_GO_OS}-${INFO_DIST_GO_ARCH}-${INFO_DIST_ENV_RELEASE_NAME}-${INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${SERVER_REPO_SSH_ALIAS}:${SERVER_REPO_FOLDER}
 	@echo "=> must check below config of set for release OS Scp"
 
+distAllLocalTar: distTestTar distReleaseTar
+	@echo "=> all dist as os tar finish"
+
+distAllOsTar: distTestOSTar distReleaseOSTar
+	@echo "=> all dist as os tar finish"
+
+distAllTar: distAllLocalTar distAllOsTar
+	@echo "=> all dist tar has finish"
+
 helpDist:
 	@echo "Help: helpDist.mk"
 	@echo "-- distTestOS or distReleaseOS will out abi as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH) --"
@@ -143,4 +152,5 @@ helpDist:
 	@echo "~> make distReleaseTar   - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_RELEASE_NAME} in local OS and tar"
 	@echo "~> make distReleaseOS    - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_RELEASE_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH)"
 	@echo "~> make distReleaseOSTar - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_RELEASE_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH) and tar"
+	@echo "~> make distAllTar       - build all tar to dist"
 	@echo ""
