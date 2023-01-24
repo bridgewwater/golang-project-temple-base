@@ -3,3 +3,4 @@
 ## https://docs.codecov.io/docs/ignoring-paths
 ignore:
   - "**/*_test.go"
+  - "main.go"
