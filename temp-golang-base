@@ -186,7 +186,7 @@ removeFileByRegular() {
     pW "removeFileByRegular target_file_regular is empty"
     return 1
   fi
-  pW "removeFileByRegular cli: find . -name ${target_file_regular} | xargs rm -f"
+  # pW "removeFileByRegular cli: find . -name ${target_file_regular} | xargs rm -f"
   find . -name "${target_file_regular}" | xargs rm -f
 }
 
@@ -237,15 +237,26 @@ git clone --depth 1 ${temple_url} -b ${temple_branch} ${new_project}
 rm -rf ${new_project}/.git/
 sleep 1
 
+removeFileExist ${new_project}/temp-golang-base
+removeFileExist ${new_project}/go.sum
+removeFileExist ${new_project}/CHANGELOG.md
 # replace code text at file
 replaceFileByRegular ${new_project}/README.md ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
 replaceFileByRegular ${new_project}/go.mod ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
-removeFileExist ${new_project}/go.sum
 replaceFileByRegular ${new_project}/README.md ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
 replaceFileByRegular ${new_project}/Dockerfile ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/Dockerfile ${temple_name} ${new_project}
+replaceFileByRegular ${new_project}/Dockerfile.s6 ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/Dockerfile.s6 ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/README.md ${temple_repo_host} ${new_repo_host}
+replaceFileByRegular ${new_project}/README.md ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/docker-compose.yml ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/Makefile ${temple_name} ${new_project}
+replaceFileByRegular ${new_project}/MakeGoDist.mk ${temple_name} ${new_project}
+replaceFileByRegular ${new_project}/MakeDocker.mk ${temple_group} ${new_repo_group}
+replaceFileByRegular ${new_project}/package.json ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/package.json ${temple_name} ${new_project}
+
 # remove README.md last line
   if [[ ${release} -eq "Darwin" ]]; then
     sed -i "" '70,84d' ./${new_project}/README.md
@@ -278,7 +289,7 @@ esac
 # choose LICENCE
 read -p "Choose licence (default: apache)? [mit] " read_choose_licence
 case ${read_choose_licence} in
-apache*)
+mit*)
   mv ./${new_project}/LICENCE-MIT ./${new_project}/LICENCE
   ;;
 *)
@@ -326,8 +337,6 @@ esac
 
 # remove shell util
 rm ./${new_project}/temp-golang-base
-rm ./${new_project}/CHANGELOG.md
-rm ./${new_project}/package.json
 
 cd ..
 new_project="$(pwd)/${new_project}"
