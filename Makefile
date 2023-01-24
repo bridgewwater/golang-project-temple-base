@@ -4,6 +4,7 @@
 ENV_DIST_VERSION := v0.1.2
 
 ROOT_NAME ?= golang-project-temple-base
+RUN_ARGS = -h
 
 # ignore used not matching mode
 ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
@@ -134,7 +135,7 @@ buildARCH:
 
 dev: cleanBuild buildMain
 	ENV_WEB_AUTO_HOST=true \
-	${ROOT_BUILD_BIN_PATH}
+	${ROOT_BUILD_BIN_PATH} ${RUN_ARGS}
 
 run: dev
 	@echo "=> run start"
