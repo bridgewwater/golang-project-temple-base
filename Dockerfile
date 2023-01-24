@@ -11,10 +11,6 @@ WORKDIR ${GO_PATH_SOURCE_DIR}
 RUN mkdir -p ${GO_PATH_SOURCE_DIR}/github.com/bridgewwater/golang-project-temple-base
 COPY $PWD ${GO_PATH_SOURCE_DIR}/github.com/bridgewwater/golang-project-temple-base
 
-# proxy golang
-RUN go env -w "GOPROXY=https://goproxy.cn,direct"
-RUN go env -w "GOPRIVATE='*.gitlab.com,*.gitee.com"
-
 RUN cd ${GO_PATH_SOURCE_DIR}/github.com/bridgewwater/golang-project-temple-base && \
     go mod download -x
 
