@@ -18,7 +18,7 @@ actionTest:
 	go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME)
 
 actionTestBenchmark:
-	go test -test.benchmem $(ROOT_TEST_LIST)
+	go test -bench=. -test.benchmem $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME)
 
 actionTestFail:
 	go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME) | grep FAIL --color
