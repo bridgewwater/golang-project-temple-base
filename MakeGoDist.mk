@@ -40,6 +40,7 @@ define dist_tar_with_source
 	@tar zcvf $(3)/${INFO_DIST_BIN_NAME}-$(2)-${INFO_DIST_VERSION}${INFO_DIST_MARK}.tar.gz -C $(1) .
 	@echo "-> check as: tar -tf $(3)/${INFO_DIST_BIN_NAME}-$(2)-${INFO_DIST_VERSION}${INFO_DIST_MARK}.tar.gz"
 	@echo "~> tar ${INFO_DIST_VERSION}${INFO_DIST_MARK} at: $(3)/${INFO_DIST_BIN_NAME}-$(2)-${INFO_DIST_VERSION}${INFO_DIST_MARK}.tar.gz"
+	@shasum -a 256 $(3)/${INFO_DIST_BIN_NAME}-$(2)-${INFO_DIST_VERSION}${INFO_DIST_MARK}.tar.gz > $(3)/${INFO_DIST_BIN_NAME}-$(2)-${INFO_DIST_VERSION}${INFO_DIST_MARK}.tar.gz.sha256
 endef
 
 distEnv:
