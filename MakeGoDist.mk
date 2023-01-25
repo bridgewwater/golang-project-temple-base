@@ -140,17 +140,102 @@ distAllOsTar: distTestOSTar distReleaseOSTar
 distAllTar: distAllLocalTar distAllOsTar
 	@echo "=> all dist tar has finish"
 
+distPlatformTarWinAmd64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME}.exe,windows,amd64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/windows/amd64/${INFO_DIST_ENV_RELEASE_NAME},windows-amd64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarWin386:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME}.exe,windows,386)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/windows/386/${INFO_DIST_ENV_RELEASE_NAME},windows-386-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarWinArm64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME}.exe,windows,arm64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/windows/arm64/${INFO_DIST_ENV_RELEASE_NAME},windows-arm64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarWinArm:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME}.exe,windows,arm)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/windows/arm/${INFO_DIST_ENV_RELEASE_NAME},windows-arm-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarAllWindows: distPlatformTarWinAmd64 distPlatformTarWin386 distPlatformTarWinArm64 distPlatformTarWinArm
+
+distPlatformTarLinuxAmd64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},linux,amd64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/linux/amd64/${INFO_DIST_ENV_RELEASE_NAME},linux-amd64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarLinux386:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},linux,386)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/linux/386/${INFO_DIST_ENV_RELEASE_NAME},linux-386-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarLinuxArm64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},linux,arm64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/linux/arm64/${INFO_DIST_ENV_RELEASE_NAME},linux-arm64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarLinuxArm:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},linux,arm)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/linux/arm/${INFO_DIST_ENV_RELEASE_NAME},linux-arm-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarAllLinux: distPlatformTarLinuxAmd64 distPlatformTarLinux386 distPlatformTarLinuxArm64 distPlatformTarLinuxArm
+
+distPlatformTarMacosAmd64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},darwin,amd64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/darwin/amd64/${INFO_DIST_ENV_RELEASE_NAME},darwin-amd64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarMacosArm64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},darwin,arm64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/darwin/arm64/${INFO_DIST_ENV_RELEASE_NAME},darwin-arm64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarAllMacos: distPlatformTarMacosAmd64 distPlatformTarMacosArm64
+
+distPlatformTarFreebsdAmd64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},freebsd,amd64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/freebsd/amd64/${INFO_DIST_ENV_RELEASE_NAME},freebsd-amd64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarFreebsd386:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},freebsd,386)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/freebsd/386/${INFO_DIST_ENV_RELEASE_NAME},freebsd-386-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarFreebsdArm64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},freebsd,arm64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/freebsd/arm64/${INFO_DIST_ENV_RELEASE_NAME},freebsd-arm64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarFreebsdArm:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},freebsd,arm)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/freebsd/arm/${INFO_DIST_ENV_RELEASE_NAME},freebsd-arm-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarAllFreebsd: distPlatformTarFreebsdAmd64 distPlatformTarFreebsd386 distPlatformTarFreebsdArm64 distPlatformTarFreebsdArm
+
+distPlatformTarOpenbsdAmd64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},openbsd,amd64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/openbsd/amd64/${INFO_DIST_ENV_RELEASE_NAME},openbsd-amd64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarOpenbsd386:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},openbsd,386)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/openbsd/386/${INFO_DIST_ENV_RELEASE_NAME},openbsd-386-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarOpenbsdArm64:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},openbsd,arm64)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/openbsd/arm64/${INFO_DIST_ENV_RELEASE_NAME},openbsd-arm64-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarOpenbsdArm:
+	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${INFO_DIST_ENV_RELEASE_NAME},${INFO_DIST_BIN_NAME},openbsd,arm)
+	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/openbsd/arm/${INFO_DIST_ENV_RELEASE_NAME},openbsd-arm-${INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+
+distPlatformTarAllOpenbsd: distPlatformTarOpenbsdAmd64 distPlatformTarOpenbsd386 distPlatformTarOpenbsdArm64 distPlatformTarOpenbsdArm
+
+distPlatformTarAll: distPlatformTarAllLinux distPlatformTarAllMacos distPlatformTarAllWindows distPlatformTarAllFreebsd distPlatformTarAllOpenbsd
+
 helpDist:
 	@echo "Help: helpDist.mk"
 	@echo "-- distTestOS or distReleaseOS will out abi as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH) --"
-	@echo "~> make cleanAllDist     - clean all dist at $(INFO_ROOT_DIST_PATH)"
-	@echo "~> make distTest         - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_TEST_NAME} in local OS"
-	@echo "~> make distTestTar      - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_TEST_NAME} in local OS and tar"
-	@echo "~> make distTestOS       - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_TEST_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH)"
-	@echo "~> make distTestOSTar    - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_TEST_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH) and tar"
-	@echo "~> make distRelease      - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_RELEASE_NAME} in local OS"
-	@echo "~> make distReleaseTar   - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_RELEASE_NAME} in local OS and tar"
-	@echo "~> make distReleaseOS    - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_RELEASE_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH)"
-	@echo "~> make distReleaseOSTar - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_RELEASE_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH) and tar"
-	@echo "~> make distAllTar       - build all tar to dist"
+	@echo "~> make cleanAllDist       - clean all dist at $(INFO_ROOT_DIST_PATH)"
+	@echo "~> make distTest           - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_TEST_NAME} in local OS"
+	@echo "~> make distTestTar        - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_TEST_NAME} in local OS and tar"
+	@echo "~> make distTestOS         - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_TEST_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH)"
+	@echo "~> make distTestOSTar      - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_TEST_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH) and tar"
+	@echo "~> make distRelease        - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_RELEASE_NAME} in local OS"
+	@echo "~> make distReleaseTar     - build dist at ${INFO_ROOT_DIST_PATH}/local/${INFO_DIST_ENV_RELEASE_NAME} in local OS and tar"
+	@echo "~> make distReleaseOS      - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_RELEASE_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH)"
+	@echo "~> make distReleaseOSTar   - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_RELEASE_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH) and tar"
+	@echo "~> make distAllTar         - build all tar to dist"
+	@echo "~> make distPlatformTarAll - build all platform tar to dist and tar"
 	@echo ""
