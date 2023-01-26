@@ -133,14 +133,20 @@ replaceFileByRegular() {
 }
 
 # find file list and replace text by regular
-# $1 target_file_regular
-# $2 word_regular_from
-# $3 word_regular_to
+# $1 target_file_root use . or folder
+# $2 target_file_regular
+# $3 word_regular_from
+# $4 word_regular_to
 # Error will return 1
 findFileReplaceByRegular() {
-  target_file_regular=$1
-  word_regular_from=$2
-  word_regular_to=$3
+  target_file_root=$1
+  target_file_regular=$2
+  word_regular_from=$3
+  word_regular_to=$4
+  if [[ -z "${target_file_root}" ]]; then
+    pW "findFileReplaceByRegular target_file_regular is empty"
+    return 1
+  fi
   if [[ -z "${target_file_regular}" ]]; then
     pW "findFileReplaceByRegular target_file_regular is empty"
     return 1
@@ -155,12 +161,13 @@ findFileReplaceByRegular() {
   fi
   if [[ "${release}" -eq "Darwin" ]]; then
     # pD "in darwin ; target_file_regular: ${target_file_regular} ; word_regular_from: ${word_regular_from} ; word_regular_to: ${word_regular_to}"
-    find . -name "${target_file_regular}" | xargs sed -i "" "s#${word_regular_from}#${word_regular_to}#g"
+    find "${target_file_root}" -name "${target_file_regular}" | xargs sed -i "" "s#${word_regular_from}#${word_regular_to}#g"
   else
     # pD "in other ; target_file_regular: ${target_file_regular} ; word_regular_from: ${word_regular_from} ; word_regular_to: ${word_regular_to}"
-    find . -name "${target_file_regular}" | xargs sed -i "s#${word_regular_from}#${word_regular_to}#g"
+    find "${target_file_root}" -name "${target_file_regular}" | xargs sed -i "s#${word_regular_from}#${word_regular_to}#g"
   fi
 }
+
 
 removeFileExist() {
   target_file_path=$1
@@ -237,7 +244,7 @@ git clone --depth 1 ${temple_url} -b ${temple_branch} ${new_project}
 rm -rf ${new_project}/.git/
 sleep 1
 
-removeFileExist ${new_project}/temp-golang-base
+removeFileExist ${new_project}/${shell_run_name}
 removeFileExist ${new_project}/go.sum
 removeFileExist ${new_project}/CHANGELOG.md
 # replace code text at file
@@ -245,8 +252,10 @@ replaceFileByRegular ${new_project}/README.md ${temple_repo_host}\/${temple_grou
 replaceFileByRegular ${new_project}/go.mod ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
 replaceFileByRegular ${new_project}/README.md ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
 replaceFileByRegular ${new_project}/Dockerfile ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/Dockerfile ${temple_group} ${new_repo_group}
 replaceFileByRegular ${new_project}/Dockerfile ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/Dockerfile.s6 ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
+replaceFileByRegular ${new_project}/Dockerfile.s6 ${temple_group} ${new_repo_group}
 replaceFileByRegular ${new_project}/Dockerfile.s6 ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/README.md ${temple_repo_host} ${new_repo_host}
 replaceFileByRegular ${new_project}/README.md ${temple_name} ${new_project}
@@ -256,6 +265,15 @@ replaceFileByRegular ${new_project}/MakeGoDist.mk ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/MakeDocker.mk ${temple_group} ${new_repo_group}
 replaceFileByRegular ${new_project}/package.json ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
 replaceFileByRegular ${new_project}/package.json ${temple_name} ${new_project}
+# replace code at folder
+findFileReplaceByRegular ${new_project} "*.go" ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
+findFileReplaceByRegular ${new_project} "*.go" ${temple_group} ${new_repo_group}
+findFileReplaceByRegular ${new_project} "*.go" ${temple_name} ${new_project}
+findFileReplaceByRegular ${new_project} "*.mk" ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
+findFileReplaceByRegular ${new_project} "*.mk" ${temple_group} ${new_repo_group}
+findFileReplaceByRegular ${new_project} "*.mk" ${temple_name} ${new_project}
+findFileReplaceByRegular ${new_project} "*.md" ${temple_group} ${new_repo_group}
+findFileReplaceByRegular ${new_project} "*.md" ${temple_name} ${new_project}
 
 # remove README.md last line
   if [[ ${release} -eq "Darwin" ]]; then
