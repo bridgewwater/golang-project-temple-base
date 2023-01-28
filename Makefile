@@ -33,7 +33,7 @@ ENV_DIST_MARK=
 
 # this can change to other mark https://docs.drone.io/pipeline/environment/substitution/
 ifneq ($(strip $(DRONE_TAG)),)
-    ENV_DIST_MARK=-${DRONE_TAG}
+    ENV_DIST_MARK=-tag.${DRONE_TAG}
 else
     ifneq ($(strip $(DRONE_COMMIT)),)
         ENV_DIST_MARK=-${DRONE_COMMIT}
