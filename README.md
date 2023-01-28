@@ -39,7 +39,7 @@ $ echo "go mod vendor"
 
 ## evn
 
-- golang sdk 1.15+
+- golang sdk 1.17+
 
 # dev
 
