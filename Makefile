@@ -30,11 +30,17 @@ ROOT_BUILD_BIN_PATH ?= $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
 #ENV_NOW_GIT_COMMIT_ID_SHORT=$(shell git --no-pager rev-parse --short HEAD)
 #ENV_DIST_MARK=-${ENV_NOW_GIT_COMMIT_ID_SHORT}
 ENV_DIST_MARK=
-ifneq ($(strip $(DRONE_COMMIT)),)
-	ENV_DIST_MARK=-${DRONE_COMMIT}# this can change to other mark https://docs.drone.io/pipeline/environment/substitution/
+
+# this can change to other mark https://docs.drone.io/pipeline/environment/substitution/
+ifneq ($(strip $(DRONE_TAG)),)
+    ENV_DIST_MARK=-${DRONE_TAG}
+else
+    ifneq ($(strip $(DRONE_COMMIT)),)
+        ENV_DIST_MARK=-${DRONE_COMMIT}
+    endif
 endif
 ifneq ($(strip $(GITHUB_SHA)),)
-	ENV_DIST_MARK=-${GITHUB_SHA}# https://docs.github.com/cn/enterprise-server@2.22/actions/learn-github-actions/environment-variables
+    ENV_DIST_MARK=-${GITHUB_SHA}# https://docs.github.com/cn/enterprise-server@2.22/actions/learn-github-actions/environment-variables
 endif
 
 # ifeq ($(FILE), $(wildcard $(FILE)))
