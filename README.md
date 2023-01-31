@@ -31,7 +31,7 @@ $ git config --global url."ssh://github.com/".insteadOf "https://github.com/"
 $ git ls-remote -q http://github.com/bridgewwater/golang-project-temple-base.git
 
 # test depends see full version
-$ go list -v -m -versions github.com/bridgewwater/golang-project-temple-base
+$ go list -mod=readonly -v -m -versions github.com/bridgewwater/golang-project-temple-base
 # or use last version add go.mod by script
 $ echo "go mod edit -require=$(go list -m -versions github.com/bridgewwater/golang-project-temple-base | awk '{print $1 "@" $NF}')"
 $ echo "go mod vendor"
