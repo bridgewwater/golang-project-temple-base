@@ -153,7 +153,7 @@ test:
 
 testCoverage:
 	@echo "=> run test coverage start"
-	@go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ROOT_TEST_LIST)
 
 testCoverageBrowser: testCoverage
 	@go tool cover -html=coverage.txt

@@ -24,8 +24,11 @@ actionTestFail:
 	go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME) | grep FAIL --color
 
 actionCoverage:
-	#=> go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
-	@go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
+	#=> go test -cover -coverprofile=coverage.txt -covermode=aomic -coverpkg ./... -v $(ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ROOT_TEST_LIST)
+
+actionCoverageBrowserLocal: actionCoverage
+	@go tool cover -html=coverage.txt
 
 actionCoverageLocal:
 	@echo "-> use goconvey at https://github.com/smartystreets/goconvey"
