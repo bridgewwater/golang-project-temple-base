@@ -223,6 +223,8 @@ distPlatformTarOpenbsdArm:
 
 distPlatformTarAllOpenbsd: distPlatformTarOpenbsdAmd64 distPlatformTarOpenbsd386 distPlatformTarOpenbsdArm64 distPlatformTarOpenbsdArm
 
+distPlatformTarCommonUse: distPlatformTarLinuxAmd64 distPlatformTarWinAmd64 distPlatformTarMacosAmd64 distPlatformTarMacosArm64
+
 distPlatformTarAll: distPlatformTarAllLinux distPlatformTarAllMacos distPlatformTarAllWindows distPlatformTarAllFreebsd distPlatformTarAllOpenbsd
 
 helpDist:
@@ -238,5 +240,6 @@ helpDist:
 	@echo "~> make distReleaseOS      - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_RELEASE_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH)"
 	@echo "~> make distReleaseOSTar   - build dist at ${INFO_ROOT_DIST_PATH}/os/${INFO_DIST_GO_OS}/${INFO_DIST_GO_ARCH}/${INFO_DIST_ENV_RELEASE_NAME} as: $(INFO_DIST_GO_OS) $(INFO_DIST_GO_ARCH) and tar"
 	@echo "~> make distAllTar         - build all tar to dist"
-	@echo "~> make distPlatformTarAll - build all platform tar to dist and tar"
+	@echo "~> make distPlatformTarCommonUse - build tar to dist linux-amd64 win-amd64 macOS-amd64 macOS-arm64"
+	@echo "~> make distPlatformTarAll       - build all platform tar to dist and tar"
 	@echo ""
