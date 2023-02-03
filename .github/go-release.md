@@ -1,3 +1,10 @@
+## config-file
+
+`go-release.yml`
+
+## config
+
+```yml
 name: go Create release and push binary
 
 on:
@@ -34,3 +41,5 @@ jobs:
           **/*.tar.gz
           **/*.sha256
 
+
+```
