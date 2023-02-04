@@ -21,8 +21,6 @@ modGraphDependencies:
 	go mod graph
 
 modVerify:
-	# in GOPATH must use [ GO111MODULE=on go mod ] to use
-	# open goproxy add env: [ go env -w GOPROXY=https://goproxy.cn,direct ]
 	go mod verify
 
 modDownload:
