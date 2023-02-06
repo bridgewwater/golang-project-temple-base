@@ -211,7 +211,7 @@ testCoverageBrowser: testCoverage
 
 testBenchmark:
 	@echo "=> run test benchmark start"
-	@go test -test.benchmem $(ROOT_TEST_LIST)
+	@go test -bench=. -test.benchmem $(ROOT_TEST_LIST)
 
 cloc:
 	@echo "see: https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore"
