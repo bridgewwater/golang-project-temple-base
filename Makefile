@@ -1,7 +1,10 @@
 .PHONY: test check clean build dist all
 #TOP_DIR := $(shell pwd)
-# each tag change this
-ENV_DIST_VERSION := v0.1.2
+# can change this by env:ENV_CI_DIST_VERSION use to CI/CD
+ENV_DIST_VERSION = v0.1.2
+ifneq ($(strip $(ENV_CI_DIST_VERSION)),)
+    ENV_DIST_VERSION=${ENV_CI_DIST_VERSION}
+endif
 
 ROOT_NAME ?= golang-project-temple-base
 RUN_INFO_HELP_ARGS= -h
