@@ -46,7 +46,7 @@ endef
 distEnv:
 	@echo "== MakeGoDist info start =="
 	@echo ""
-	@echo "INFO_ROOT_DIST_PATH                   ${INFO_ROOT_DIST_PATH}"
+	@echo "INFO_ROOT_DIST_PATH                       ${INFO_ROOT_DIST_PATH}"
 	@echo "ENV_INFO_DIST_VERSION                     ${ENV_INFO_DIST_VERSION}"
 	@echo "ENV_INFO_DIST_BIN_NAME                    ${ENV_INFO_DIST_BIN_NAME}"
 	@echo "ENV_INFO_DIST_MARK                        ${ENV_INFO_DIST_MARK}"

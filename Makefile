@@ -74,23 +74,23 @@ env: distEnv
 	@echo "== project env info start =="
 	@echo ""
 	@echo "test info"
-	@echo "ENV_ROOT_TEST_LIST                    ${ENV_ROOT_TEST_LIST}"
+	@echo "ENV_ROOT_TEST_LIST                        ${ENV_ROOT_TEST_LIST}"
 	@echo ""
-	@echo "ROOT_NAME                             ${ROOT_NAME}"
-	@echo "ENV_DIST_VERSION                      ${ENV_DIST_VERSION}"
-	@echo "ENV_ROOT_CHANGELOG_PATH               ${ENV_ROOT_CHANGELOG_PATH}"
+	@echo "ROOT_NAME                                 ${ROOT_NAME}"
+	@echo "ENV_DIST_VERSION                          ${ENV_DIST_VERSION}"
+	@echo "ENV_ROOT_CHANGELOG_PATH                   ${ENV_ROOT_CHANGELOG_PATH}"
 	@echo ""
-	@echo "ENV_ROOT_BUILD_ENTRANCE               ${ENV_ROOT_BUILD_ENTRANCE}"
-	@echo "ENV_ROOT_BUILD_PATH                   ${ENV_ROOT_BUILD_PATH}"
+	@echo "ENV_ROOT_BUILD_ENTRANCE                   ${ENV_ROOT_BUILD_ENTRANCE}"
+	@echo "ENV_ROOT_BUILD_PATH                       ${ENV_ROOT_BUILD_PATH}"
 ifeq ($(OS),Windows_NT)
-	@echo "ENV_ROOT_BUILD_BIN_PATH               $(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe"
+	@echo "ENV_ROOT_BUILD_BIN_PATH                   $(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe"
 else
-	@echo "ENV_ROOT_BUILD_BIN_PATH               ${ENV_ROOT_BUILD_BIN_PATH}"
+	@echo "ENV_ROOT_BUILD_BIN_PATH                   ${ENV_ROOT_BUILD_BIN_PATH}"
 endif
-	@echo "ENV_DIST_GO_OS                        ${ENV_DIST_GO_OS}"
-	@echo "ENV_DIST_GO_ARCH                      ${ENV_DIST_GO_ARCH}"
+	@echo "ENV_DIST_GO_OS                            ${ENV_DIST_GO_OS}"
+	@echo "ENV_DIST_GO_ARCH                          ${ENV_DIST_GO_ARCH}"
 	@echo ""
-	@echo "ENV_DIST_MARK                         ${ENV_DIST_MARK}"
+	@echo "ENV_DIST_MARK                             ${ENV_DIST_MARK}"
 	@echo "== project env info end =="
 
 versionUtils:
@@ -213,7 +213,7 @@ else
 endif
 
 run: export ENV_WEB_AUTO_HOST=false
-run: cleanBuild buildMain
+run:  cleanBuild buildMain
 	@echo "=> run start"
 ifeq ($(OS),windows)
 	$(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe ${ENV_RUN_INFO_ARGS}
