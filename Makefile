@@ -164,7 +164,7 @@ endif
 testCoverage:
 	@echo "=> run test coverage start"
 ifeq ($(OS),Windows_NT)
-	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./...
 else
 	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
 endif
@@ -174,7 +174,11 @@ testCoverageBrowser: testCoverage
 
 testBenchmark:
 	@echo "=> run test benchmark start"
-	@go test -bench=. -test.benchmem $(ENV_ROOT_TEST_LIST)
+ifeq ($(OS),Windows_NT)
+	@go test -bench=. -test.benchmem ./...
+else
+	@go test -bench=. -test.benchmem -v $(ENV_ROOT_TEST_LIST)
+endif
 
 buildMain:
 	@echo "-> start build local OS"
