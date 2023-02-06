@@ -31,11 +31,6 @@ ROOT_BUILD_ENTRANCE = main.go
 ROOT_BUILD_BIN_NAME = $(ROOT_NAME)
 ROOT_BUILD_BIN_PATH = $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
 
-ifeq ($(OS),Windows_NT)
-ROOT_LOG_PATH = $(subst /,\,${ROOT_LOG_PATH})
-ROOT_BUILD_BIN_PATH = $(subst /,\,${ROOT_BUILD_BIN_PATH})
-endif
-
 #ENV_NOW_GIT_COMMIT_ID_SHORT=$(shell git --no-pager rev-parse --short HEAD)
 #ENV_DIST_MARK=-${ENV_NOW_GIT_COMMIT_ID_SHORT}
 ENV_DIST_MARK=
@@ -82,7 +77,11 @@ env: distEnv
 	@echo ""
 	@echo "ROOT_BUILD_ENTRANCE               ${ROOT_BUILD_ENTRANCE}"
 	@echo "ROOT_BUILD_PATH                   ${ROOT_BUILD_PATH}"
+ifeq ($(OS),Windows_NT)
+	@echo "ROOT_BUILD_BIN_PATH               $(subst /,\,${ROOT_BUILD_BIN_PATH})"
+else
 	@echo "ROOT_BUILD_BIN_PATH               ${ROOT_BUILD_BIN_PATH}"
+endif
 	@echo "ENV_DIST_GO_OS                    ${ENV_DIST_GO_OS}"
 	@echo "ENV_DIST_GO_ARCH                  ${ENV_DIST_GO_ARCH}"
 	@echo ""
