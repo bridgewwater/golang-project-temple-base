@@ -9,7 +9,11 @@ RUN_ARGS = -h
 # ignore used not matching mode
 ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
 # set ignore of test case like grep -v -E "vendor|go_fatal_error" to ignore vendor and go_fatal_error package
+ifeq ($(OS),Windows_NT)
+ROOT_TEST_LIST := $$(go list ./... | findstr /V $(ROOT_TEST_INVERT_MATCH))
+else
 ROOT_TEST_LIST := $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
+endif
 # test max time
 ROOT_TEST_MAX_TIME := 1
 
@@ -63,6 +67,9 @@ include MakeDocker.mk
 
 env: distEnv
 	@echo "== project env info start =="
+	@echo ""
+	@echo "test info"
+	@echo "ROOT_TEST_LIST                    ${ROOT_TEST_LIST}"
 	@echo ""
 	@echo "ROOT_NAME                         ${ROOT_NAME}"
 	@echo "ENV_DIST_VERSION                  ${ENV_DIST_VERSION}"
