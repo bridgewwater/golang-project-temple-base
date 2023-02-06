@@ -4,7 +4,8 @@
 ENV_DIST_VERSION := v0.1.2
 
 ROOT_NAME ?= golang-project-temple-base
-RUN_ARGS = -h
+RUN_INFO_HELP_ARGS= -h
+RUN_INFO_ARGS=
 
 # ignore used not matching mode
 # set ignore of test case like grep -v -E "vendor|go_fatal_error" to ignore vendor and go_fatal_error package
@@ -172,17 +173,22 @@ else
 	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}"
 endif
 
+dev: export ENV_WEB_AUTO_HOST=true
 dev: cleanBuild buildMain
 ifeq ($(OS),windows)
-	ENV_WEB_AUTO_HOST=true \
-	$(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${RUN_ARGS}
+	$(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${RUN_INFO_HELP_ARGS}
 else
-	ENV_WEB_AUTO_HOST=true \
-	${ROOT_BUILD_BIN_PATH} ${RUN_ARGS}
+	${ROOT_BUILD_BIN_PATH} ${RUN_INFO_HELP_ARGS}
 endif
 
-run: dev
+run: export ENV_WEB_AUTO_HOST=false
+run:
 	@echo "=> run start"
+ifeq ($(OS),windows)
+	$(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${RUN_INFO_ARGS}
+else
+	${ROOT_BUILD_BIN_PATH} ${RUN_INFO_ARGS}
+endif
 
 test:
 	@echo "=> run test start"
