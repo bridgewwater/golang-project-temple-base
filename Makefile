@@ -7,11 +7,11 @@ ROOT_NAME ?= golang-project-temple-base
 RUN_ARGS = -h
 
 # ignore used not matching mode
-ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
 # set ignore of test case like grep -v -E "vendor|go_fatal_error" to ignore vendor and go_fatal_error package
 ifeq ($(OS),Windows_NT)
-ROOT_TEST_LIST := $$(go list ./... | findstr /V $(ROOT_TEST_INVERT_MATCH))
+ROOT_TEST_LIST := ./...
 else
+ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
 ROOT_TEST_LIST := $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
 endif
 # test max time
@@ -155,12 +155,19 @@ run: dev
 
 test:
 	@echo "=> run test start"
-	#=> go test -test.v $(ROOT_TEST_LIST)
+ifeq ($(OS),Windows_NT)
+	@go test -v $(ROOT_TEST_LIST)
+else
 	@go test -test.v $(ROOT_TEST_LIST)
+endif
 
 testCoverage:
 	@echo "=> run test coverage start"
+ifeq ($(OS),Windows_NT)
 	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ROOT_TEST_LIST)
+else
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ROOT_TEST_LIST)
+endif
 
 testCoverageBrowser: testCoverage
 	@go tool cover -html=coverage.txt
@@ -170,7 +177,7 @@ testBenchmark:
 	@go test -test.benchmem $(ROOT_TEST_LIST)
 
 cloc:
-	# https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore
+	@echo "see: https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore"
 	cloc --exclude-list-file=.clocignore .
 
 helpProjectRoot:
