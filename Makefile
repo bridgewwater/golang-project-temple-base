@@ -12,8 +12,8 @@ ENV_RUN_INFO_ARGS=
 # change to other build enterance
 ENV_ROOT_BUILD_ENTRANCE = main.go
 ENV_ROOT_BUILD_BIN_NAME = $(ROOT_NAME)
-ENV_ROOT_BUILD_BIN_PATH = $(ENV_ENV_ROOT_BUILD_PATH)/$(ENV_ROOT_BUILD_BIN_NAME)
-ENV_ENV_ROOT_BUILD_PATH = build/
+ENV_ROOT_BUILD_PATH = build
+ENV_ROOT_BUILD_BIN_PATH = $(ENV_ROOT_BUILD_PATH)/$(ENV_ROOT_BUILD_BIN_NAME)
 ENV_ROOT_LOG_PATH = log/
 
 # ignore used not matching mode
@@ -81,7 +81,7 @@ env: distEnv
 	@echo "ENV_ROOT_CHANGELOG_PATH               ${ENV_ROOT_CHANGELOG_PATH}"
 	@echo ""
 	@echo "ENV_ROOT_BUILD_ENTRANCE               ${ENV_ROOT_BUILD_ENTRANCE}"
-	@echo "ENV_ENV_ROOT_BUILD_PATH                   ${ENV_ENV_ROOT_BUILD_PATH}"
+	@echo "ENV_ROOT_BUILD_PATH                   ${ENV_ROOT_BUILD_PATH}"
 ifeq ($(OS),Windows_NT)
 	@echo "ENV_ROOT_BUILD_BIN_PATH               $(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe"
 else
@@ -126,9 +126,13 @@ tagBefore: versionHelp
 	@echo "place check all file, then can add tag like this!"
 	@echo "$$ git tag -a '${ENV_DIST_VERSION}' -m 'message for this tag'"
 
+cloc:
+	@echo "see: https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore"
+	cloc --exclude-list-file=.clocignore .
+
 cleanBuild:
-	-@RM -r ${ENV_ENV_ROOT_BUILD_PATH}
-	@echo "~> finish clean path: ${ENV_ENV_ROOT_BUILD_PATH}"
+	-@RM -r ${ENV_ROOT_BUILD_PATH}
+	@echo "~> finish clean path: ${ENV_ROOT_BUILD_PATH}"
 
 cleanLog:
 	-@RM -r ${ENV_ROOT_LOG_PATH}
@@ -148,6 +152,29 @@ init:
 	go env
 	@echo "~> you can use [ make help ] see more task"
 	-go mod verify
+
+test:
+	@echo "=> run test start"
+ifeq ($(OS),Windows_NT)
+	@go test -v $(ENV_ROOT_TEST_LIST)
+else
+	@go test -test.v $(ENV_ROOT_TEST_LIST)
+endif
+
+testCoverage:
+	@echo "=> run test coverage start"
+ifeq ($(OS),Windows_NT)
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
+else
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
+endif
+
+testCoverageBrowser: testCoverage
+	@go tool cover -html=coverage.txt
+
+testBenchmark:
+	@echo "=> run test benchmark start"
+	@go test -bench=. -test.benchmem $(ENV_ROOT_TEST_LIST)
 
 buildMain:
 	@echo "-> start build local OS"
@@ -186,40 +213,13 @@ else
 endif
 
 run: export ENV_WEB_AUTO_HOST=false
-run:
+run: cleanBuild buildMain
 	@echo "=> run start"
 ifeq ($(OS),windows)
 	$(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe ${ENV_RUN_INFO_ARGS}
 else
 	${ENV_ROOT_BUILD_BIN_PATH} ${ENV_RUN_INFO_ARGS}
 endif
-
-test:
-	@echo "=> run test start"
-ifeq ($(OS),Windows_NT)
-	@go test -v $(ENV_ROOT_TEST_LIST)
-else
-	@go test -test.v $(ENV_ROOT_TEST_LIST)
-endif
-
-testCoverage:
-	@echo "=> run test coverage start"
-ifeq ($(OS),Windows_NT)
-	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
-else
-	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
-endif
-
-testCoverageBrowser: testCoverage
-	@go tool cover -html=coverage.txt
-
-testBenchmark:
-	@echo "=> run test benchmark start"
-	@go test -bench=. -test.benchmem $(ENV_ROOT_TEST_LIST)
-
-cloc:
-	@echo "see: https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore"
-	cloc --exclude-list-file=.clocignore .
 
 helpProjectRoot:
 	@echo "Help: Project root Makefile"
