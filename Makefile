@@ -8,32 +8,32 @@ RUN_ARGS = -h
 
 # ignore used not matching mode
 # set ignore of test case like grep -v -E "vendor|go_fatal_error" to ignore vendor and go_fatal_error package
-ifeq ($(OS),Windows_NT)
-ROOT_TEST_LIST := ./...
-else
 ROOT_TEST_INVERT_MATCH ?= "vendor|pkgJson|go_fatal_error|robotn|shirou|go_robot"
-ROOT_TEST_LIST := $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
+ifeq ($(OS),Windows_NT)
+ROOT_TEST_LIST ?= ./...
+else
+ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
 endif
 # test max time
 ROOT_TEST_MAX_TIME := 1
 
 # linux windows darwin  list as: go tool dist list
-ENV_DIST_GO_OS := linux
+ENV_DIST_GO_OS = linux
 # amd64 386
-ENV_DIST_GO_ARCH := amd64
+ENV_DIST_GO_ARCH = amd64
 ENV_MODULE_MAKE_FILE ?= Makefile
-ENV_MODULE_MANIFEST = package.json
-ENV_MODULE_CHANGELOG = CHANGELOG.md
-ROOT_BUILD_PATH ?= build
-ROOT_LOG_PATH ?= log/
+ENV_MODULE_MANIFEST ?= package.json
+ENV_MODULE_CHANGELOG ?= CHANGELOG.md
+ROOT_BUILD_PATH = build
+ROOT_LOG_PATH = log/
 #ROOT_BUILD_ENTRANCE ?= ../
-ROOT_BUILD_ENTRANCE ?= main.go
-ROOT_BUILD_BIN_NAME ?= $(ROOT_NAME)
-ROOT_BUILD_BIN_PATH ?= $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
+ROOT_BUILD_ENTRANCE = main.go
+ROOT_BUILD_BIN_NAME = $(ROOT_NAME)
+ROOT_BUILD_BIN_PATH = $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
 
 ifeq ($(OS),Windows_NT)
-ROOT_LOG_PATH ?= $(subst /,\,${ROOT_LOG_PATH})
-ROOT_BUILD_BIN_PATH ?= $(subst /,\,${ROOT_BUILD_BIN_PATH})
+ROOT_LOG_PATH = $(subst /,\,${ROOT_LOG_PATH})
+ROOT_BUILD_BIN_PATH = $(subst /,\,${ROOT_BUILD_BIN_PATH})
 endif
 
 #ENV_NOW_GIT_COMMIT_ID_SHORT=$(shell git --no-pager rev-parse --short HEAD)
