@@ -3,15 +3,9 @@
 ## can use as: go env -w GOPROXY=https://goproxy.cn,direct
 
 modClean:
-	@echo "=> try to clean ./go.sum and ./vendor"
-	@if [ -f ./go.sum ]; \
-	then rm -f ./go.sum && echo "~> cleaned file ./go.sum"; \
-	else echo "~> has cleaned file ./go.sum"; \
-	fi
-	@if [ -d ./vendor ]; \
-	then rm -rf ./vendor && echo "~> cleaned folder ./vendor";\
-	else echo "~> has cleaned folder ./vendor"; \
-	fi
+	@echo "=> try to clean go.sum and vendor/"
+	-@RM go.sum
+	-@RM -r vendor/
 
 modList:
 	@echo "=> show go list -m -json all"
@@ -34,13 +28,17 @@ dep: modVerify modTidy modDownload
 
 modFetch:
 	@echo "each mod like [ github.com/stretchr/testify ] fetch last version as"
+ifeq ($(OS),Windows_NT)
+	@go list -mod=readonly -m -versions github.com/stretchr/testify
+else
 	go list -mod=readonly -m -versions github.com/stretchr/testify | awk '{print $$1 " lastest: " $$NF}'
+endif
 
 # print as: $make helpGoMod
 helpGoMod:
 	@echo "Help: MakeGoMod.mk"
 	@echo "this project use go mod, so golang version must 1.12+"
-	@echo "~> make modClean             - will clean ./go.sum and ./vendor"
+	@echo "~> make modClean             - will clean go.sum and vendor/"
 	@echo "~> make modList              - list all depends as: go list -m -json all"
 	@echo "~> make modGraphDependencies - see depends graph of this project"
 	@echo "~> make modVerify            - verify as: go mod verify"
