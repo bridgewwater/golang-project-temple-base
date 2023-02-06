@@ -27,10 +27,10 @@ actionTestFail:
 	go test -test.v $(ENV_ROOT_TEST_LIST) -timeout $(ENV_ROOT_TEST_MAX_TIME) | grep FAIL --color
 
 actionCoverage:
-	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=count -v $(ENV_ROOT_TEST_LIST)
 
 actionCoverageAtomic:
-	@go test -cover -coverprofile=coverage.txt -covermode=atomic -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ENV_ROOT_TEST_LIST)
 
 actionCoverageBrowserLocal: actionCoverage
 	@go tool cover -html=coverage.txt
