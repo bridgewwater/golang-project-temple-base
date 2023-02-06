@@ -11,7 +11,7 @@ RUN_ARGS = -h
 ifeq ($(OS),Windows_NT)
 ROOT_TEST_LIST := ./...
 else
-ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
+ROOT_TEST_INVERT_MATCH ?= "vendor|pkgJson|go_fatal_error|robotn|shirou|go_robot"
 ROOT_TEST_LIST := $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
 endif
 # test max time
@@ -21,15 +21,20 @@ ROOT_TEST_MAX_TIME := 1
 ENV_DIST_GO_OS := linux
 # amd64 386
 ENV_DIST_GO_ARCH := amd64
-ENV_MODULE_MAKE_FILE ?= ./Makefile
-ENV_MODULE_MANIFEST = ./package.json
-ENV_MODULE_CHANGELOG = ./CHANGELOG.md
+ENV_MODULE_MAKE_FILE ?= Makefile
+ENV_MODULE_MANIFEST = package.json
+ENV_MODULE_CHANGELOG = CHANGELOG.md
 ROOT_BUILD_PATH ?= build
-ROOT_LOG_PATH ?= ./log
+ROOT_LOG_PATH ?= log/
 #ROOT_BUILD_ENTRANCE ?= ../
 ROOT_BUILD_ENTRANCE ?= main.go
 ROOT_BUILD_BIN_NAME ?= $(ROOT_NAME)
 ROOT_BUILD_BIN_PATH ?= $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
+
+ifeq ($(OS),Windows_NT)
+ROOT_LOG_PATH ?= $(subst /,\,${ROOT_LOG_PATH})
+ROOT_BUILD_BIN_PATH ?= $(subst /,\,${ROOT_BUILD_BIN_PATH})
+endif
 
 #ENV_NOW_GIT_COMMIT_ID_SHORT=$(shell git --no-pager rev-parse --short HEAD)
 #ENV_DIST_MARK=-${ENV_NOW_GIT_COMMIT_ID_SHORT}
@@ -97,9 +102,17 @@ versionHelp:
 	@echo ""
 	@echo "=> please check to change version, now is [ ${ENV_DIST_VERSION} ]"
 	@echo "-> check at: ${ENV_MODULE_MAKE_FILE}:4"
+ifeq ($(OS),Windows_NT)
+	@echo " $(shell head -n 4 ${ENV_MODULE_MAKE_FILE} | findstr ${ENV_DIST_VERSION})"
+else
 	@echo " $(shell head -n 4 ${ENV_MODULE_MAKE_FILE} | tail -n 1)"
+endif
 	@echo "-> check at: ${ENV_MODULE_MANIFEST}:3"
+ifeq ($(OS),Windows_NT)
+	@echo " $(shell head -n 3 ${ENV_MODULE_MANIFEST} | findstr ${ENV_DIST_VERSION})"
+else
 	@echo " $(shell head -n 3 ${ENV_MODULE_MANIFEST} | tail -n 1)"
+endif
 
 tagBefore: versionHelp
 	@echo " if error can fix after git set remote url, then run: npm init"
@@ -134,21 +147,40 @@ init:
 
 buildMain:
 	@echo "-> start build local OS"
+ifeq ($(OS),Windows_NT)
+	@go build -o ${ROOT_BUILD_BIN_PATH}.exe ${ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}.exe"
+else
 	@go build -o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
 	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}"
+endif
 
 buildARCH:
 	@echo "-> start build OS:$(ENV_DIST_GO_OS) ARCH:$(ENV_DIST_GO_ARCH)"
+ifeq ($(ENV_DIST_GO_OS),windows)
+	@GOOS=$(ENV_DIST_GO_OS) GOARCH=$(ENV_DIST_GO_ARCH) go build \
+	-a \
+	-tags netgo \
+	-ldflags '-w -s --extldflags "-static -fpic"' \
+	-o ${ROOT_BUILD_BIN_PATH}.exe ${ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}.exe"
+else
 	@GOOS=$(ENV_DIST_GO_OS) GOARCH=$(ENV_DIST_GO_ARCH) go build \
 	-a \
 	-tags netgo \
 	-ldflags '-w -s --extldflags "-static -fpic"' \
 	-o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
 	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}"
+endif
 
 dev: cleanBuild buildMain
+ifeq ($(OS),windows)
+	ENV_WEB_AUTO_HOST=true \
+	${ROOT_BUILD_BIN_PATH}.exe ${RUN_ARGS}
+else
 	ENV_WEB_AUTO_HOST=true \
 	${ROOT_BUILD_BIN_PATH} ${RUN_ARGS}
+endif
 
 run: dev
 	@echo "=> run start"
