@@ -6,10 +6,13 @@ ROOT_TEST_MAX_TIME := 1m
 actionInfo:
 	@echo "you can use #=> find set"
 	@echo "install:"
-	# - export
-	# - go get -t -v $(ROOT_TEST_LIST)
-	@echo "script:"
-	# - go test -cover -coverprofile=coverage.txt -covermode=atomic -v $(ROOT_TEST_LIST)
+	@echo "go get -t -v ${ROOT_TEST_LIST}"
+	@echo "cover script set:"
+	@echo "go test -cover -coverprofile=coverage.txt -covermode=set -coverpkg ./... -v ${ROOT_TEST_LIST}"
+	@echo "cover script count:"
+	@echo "go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v ${ROOT_TEST_LIST}"
+	@echo "cover script atomic:"
+	@echo "go test -cover -coverprofile=coverage.txt -covermode=atomic -coverpkg ./... -v ${ROOT_TEST_LIST}"
 
 actionInstall:
 	go get -t -v $(ROOT_TEST_LIST)
@@ -24,8 +27,10 @@ actionTestFail:
 	go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME) | grep FAIL --color
 
 actionCoverage:
-	#=> go test -cover -coverprofile=coverage.txt -covermode=aomic -coverpkg ./... -v $(ROOT_TEST_LIST)
 	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ROOT_TEST_LIST)
+
+actionCoverageAtomic:
+	@go test -cover -coverprofile=coverage.txt -covermode=atomic -coverpkg ./... -v $(ROOT_TEST_LIST)
 
 actionCoverageBrowserLocal: actionCoverage
 	@go tool cover -html=coverage.txt
@@ -43,11 +48,13 @@ actionCodecovPush: actionCoverage
 
 helpGoAction:
 	@echo "Help: MakeAction.mk"
-	@echo "~> make actionInfo          - show action.yml base info"
-	@echo "~> make actionInstall       - run project to test action"
-	@echo "~> make actionTest          - run project test"
-	@echo "~> make actionTestBenchmark - run project test benchmark"
-	@echo "~> make actionTestFail      - run project test fast find FAIL"
-	@echo "~> make actionCoverage      - run project coverage"
-	@echo "~> make actionCoverageLocal - run project coverage local as tools https://github.com/smartystreets/goconvey"
+	@echo "~> make actionInfo                  - show action.yml base info"
+	@echo "~> make actionInstall               - run project to test action"
+	@echo "~> make actionTest                  - run project test"
+	@echo "~> make actionTestBenchmark         - run project test benchmark"
+	@echo "~> make actionTestFail              - run project test fast find FAIL"
+	@echo "~> make actionCoverage              - run project coverage"
+	@echo "~> make actionCoverageAtomic        - run project coverage as atomic"
+	@echo "~> make actionCoverageBrowserLocal  - run project coverage and see at browser"
+	@echo "~> make actionCoverageLocal         - run project coverage local as tools https://github.com/smartystreets/goconvey"
 	@echo ""

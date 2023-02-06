@@ -1,4 +1,4 @@
-# this file must use as base Makefile and add
+# this file must use as base Makefile and install golang-sdk at https://go.dev/dl/
 
 ## can use as: go env -w GOPROXY=https://goproxy.cn,direct
 

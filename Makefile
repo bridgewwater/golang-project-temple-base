@@ -77,7 +77,7 @@ env: distEnv
 	@echo "ENV_DIST_MARK                     ${ENV_DIST_MARK}"
 	@echo "== project env info end =="
 
-utils:
+versionUtils:
 	node -v
 	npm -v
 	npm install -g commitizen cz-conventional-changelog conventional-changelog-cli
