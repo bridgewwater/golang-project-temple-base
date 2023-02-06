@@ -52,7 +52,7 @@ endif
 # endif
 
 # MakeGoDist.mk settings
-INFO_ROOT_DIST_PATH ?= ./dist
+INFO_ROOT_DIST_PATH ?= dist
 
 include MakeGoMod.mk
 include MakeGoAction.mk
@@ -78,7 +78,7 @@ env: distEnv
 	@echo "ROOT_BUILD_ENTRANCE               ${ROOT_BUILD_ENTRANCE}"
 	@echo "ROOT_BUILD_PATH                   ${ROOT_BUILD_PATH}"
 ifeq ($(OS),Windows_NT)
-	@echo "ROOT_BUILD_BIN_PATH               $(subst /,\,${ROOT_BUILD_BIN_PATH})"
+	@echo "ROOT_BUILD_BIN_PATH               $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe"
 else
 	@echo "ROOT_BUILD_BIN_PATH               ${ROOT_BUILD_BIN_PATH}"
 endif
@@ -147,8 +147,8 @@ init:
 buildMain:
 	@echo "-> start build local OS"
 ifeq ($(OS),Windows_NT)
-	@go build -o ${ROOT_BUILD_BIN_PATH}.exe ${ROOT_BUILD_ENTRANCE}
-	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}.exe"
+	@go build -o $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe"
 else
 	@go build -o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
 	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}"
@@ -161,8 +161,8 @@ ifeq ($(ENV_DIST_GO_OS),windows)
 	-a \
 	-tags netgo \
 	-ldflags '-w -s --extldflags "-static -fpic"' \
-	-o ${ROOT_BUILD_BIN_PATH}.exe ${ROOT_BUILD_ENTRANCE}
-	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}.exe"
+	-o $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe"
 else
 	@GOOS=$(ENV_DIST_GO_OS) GOARCH=$(ENV_DIST_GO_ARCH) go build \
 	-a \
@@ -175,7 +175,7 @@ endif
 dev: cleanBuild buildMain
 ifeq ($(OS),windows)
 	ENV_WEB_AUTO_HOST=true \
-	${ROOT_BUILD_BIN_PATH}.exe ${RUN_ARGS}
+	$(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${RUN_ARGS}
 else
 	ENV_WEB_AUTO_HOST=true \
 	${ROOT_BUILD_BIN_PATH} ${RUN_ARGS}
