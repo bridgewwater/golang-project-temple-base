@@ -41,7 +41,7 @@
 * update MakeGoTravis.mk new travisFile task for show travis file ([47c3d7b](https://github.com/bridgewwater/golang-project-temple-base/commit/47c3d7b))
 * update README.md ([d1e4ae4](https://github.com/bridgewwater/golang-project-temple-base/commit/d1e4ae4))
 * update README.md depends settings at private git ([fff6b87](https://github.com/bridgewwater/golang-project-temple-base/commit/fff6b87))
-* update temple for test-case set by ROOT_TEST_INVERT_MATCH ([a0a456a](https://github.com/bridgewwater/golang-project-temple-base/commit/a0a456a))
+* update temple for test-case set by ENV_ROOT_TEST_INVERT_MATCH ([a0a456a](https://github.com/bridgewwater/golang-project-temple-base/commit/a0a456a))
 * feat: add temp-golang-base for fast init golang project ([93d16b3](https://github.com/bridgewwater/golang-project-temple-base/commit/93d16b3))
 * feat: change ignore clear for management lib version ([bc47d29](https://github.com/bridgewwater/golang-project-temple-base/commit/bc47d29))
 * feat: change to travis-ci.com ([85b8d51](https://github.com/bridgewwater/golang-project-temple-base/commit/85b8d51))

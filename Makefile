@@ -7,33 +7,30 @@ ifneq ($(strip $(ENV_CI_DIST_VERSION)),)
 endif
 
 ROOT_NAME ?= golang-project-temple-base
-RUN_INFO_HELP_ARGS= -h
-RUN_INFO_ARGS=
+ENV_RUN_INFO_HELP_ARGS= -h
+ENV_RUN_INFO_ARGS=
+# change to other build enterance
+ENV_ROOT_BUILD_ENTRANCE = main.go
+ENV_ROOT_BUILD_BIN_NAME = $(ROOT_NAME)
+ENV_ROOT_BUILD_BIN_PATH = $(ENV_ENV_ROOT_BUILD_PATH)/$(ENV_ROOT_BUILD_BIN_NAME)
+ENV_ENV_ROOT_BUILD_PATH = build/
+ENV_ROOT_LOG_PATH = log/
 
 # ignore used not matching mode
 # set ignore of test case like grep -v -E "vendor|go_fatal_error" to ignore vendor and go_fatal_error package
-ROOT_TEST_INVERT_MATCH ?= "vendor|pkgJson|go_fatal_error|robotn|shirou|go_robot"
+ENV_ROOT_TEST_INVERT_MATCH ?= "vendor|pkgJson|go_fatal_error|robotn|shirou|go_robot"
 ifeq ($(OS),Windows_NT)
-ROOT_TEST_LIST ?= ./...
+ENV_ROOT_TEST_LIST ?= ./...
 else
-ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E $(ROOT_TEST_INVERT_MATCH))
+ENV_ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E $(ENV_ROOT_TEST_INVERT_MATCH))
 endif
 # test max time
-ROOT_TEST_MAX_TIME := 1
+ENV_ROOT_TEST_MAX_TIME := 1
 
 # linux windows darwin  list as: go tool dist list
 ENV_DIST_GO_OS = linux
 # amd64 386
 ENV_DIST_GO_ARCH = amd64
-ENV_MODULE_MAKE_FILE ?= Makefile
-ENV_MODULE_MANIFEST ?= package.json
-ENV_MODULE_CHANGELOG ?= CHANGELOG.md
-ROOT_BUILD_PATH = build
-ROOT_LOG_PATH = log/
-#ROOT_BUILD_ENTRANCE ?= ../
-ROOT_BUILD_ENTRANCE = main.go
-ROOT_BUILD_BIN_NAME = $(ROOT_NAME)
-ROOT_BUILD_BIN_PATH = $(ROOT_BUILD_PATH)/$(ROOT_BUILD_BIN_NAME)
 
 #ENV_NOW_GIT_COMMIT_ID_SHORT=$(shell git --no-pager rev-parse --short HEAD)
 #ENV_DIST_MARK=-${ENV_NOW_GIT_COMMIT_ID_SHORT}
@@ -69,27 +66,31 @@ include MakeDocker.mk
 #	exit 1
 #endif
 
+ENV_ROOT_MAKE_FILE ?= Makefile
+ENV_ROOT_MANIFEST_PKG_JSON ?= package.json
+ENV_ROOT_CHANGELOG_PATH ?= CHANGELOG.md
+
 env: distEnv
 	@echo "== project env info start =="
 	@echo ""
 	@echo "test info"
-	@echo "ROOT_TEST_LIST                    ${ROOT_TEST_LIST}"
+	@echo "ENV_ROOT_TEST_LIST                    ${ENV_ROOT_TEST_LIST}"
 	@echo ""
-	@echo "ROOT_NAME                         ${ROOT_NAME}"
-	@echo "ENV_DIST_VERSION                  ${ENV_DIST_VERSION}"
-	@echo "ENV_MODULE_CHANGELOG              ${ENV_MODULE_CHANGELOG}"
+	@echo "ROOT_NAME                             ${ROOT_NAME}"
+	@echo "ENV_DIST_VERSION                      ${ENV_DIST_VERSION}"
+	@echo "ENV_ROOT_CHANGELOG_PATH               ${ENV_ROOT_CHANGELOG_PATH}"
 	@echo ""
-	@echo "ROOT_BUILD_ENTRANCE               ${ROOT_BUILD_ENTRANCE}"
-	@echo "ROOT_BUILD_PATH                   ${ROOT_BUILD_PATH}"
+	@echo "ENV_ROOT_BUILD_ENTRANCE               ${ENV_ROOT_BUILD_ENTRANCE}"
+	@echo "ENV_ENV_ROOT_BUILD_PATH                   ${ENV_ENV_ROOT_BUILD_PATH}"
 ifeq ($(OS),Windows_NT)
-	@echo "ROOT_BUILD_BIN_PATH               $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe"
+	@echo "ENV_ROOT_BUILD_BIN_PATH               $(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe"
 else
-	@echo "ROOT_BUILD_BIN_PATH               ${ROOT_BUILD_BIN_PATH}"
+	@echo "ENV_ROOT_BUILD_BIN_PATH               ${ENV_ROOT_BUILD_BIN_PATH}"
 endif
-	@echo "ENV_DIST_GO_OS                    ${ENV_DIST_GO_OS}"
-	@echo "ENV_DIST_GO_ARCH                  ${ENV_DIST_GO_ARCH}"
+	@echo "ENV_DIST_GO_OS                        ${ENV_DIST_GO_OS}"
+	@echo "ENV_DIST_GO_ARCH                      ${ENV_DIST_GO_ARCH}"
 	@echo ""
-	@echo "ENV_DIST_MARK                     ${ENV_DIST_MARK}"
+	@echo "ENV_DIST_MARK                         ${ENV_DIST_MARK}"
 	@echo "== project env info end =="
 
 versionUtils:
@@ -104,34 +105,34 @@ versionHelp:
 	@echo " if error can fix after git set remote url, then run: npm init"
 	@echo ""
 	@echo "=> please check to change version, now is [ ${ENV_DIST_VERSION} ]"
-	@echo "-> check at: ${ENV_MODULE_MAKE_FILE}:4"
+	@echo "-> check at: ${ENV_ROOT_MAKE_FILE}:4"
 ifeq ($(OS),Windows_NT)
-	@echo " $(shell head -n 4 ${ENV_MODULE_MAKE_FILE} | findstr ${ENV_DIST_VERSION})"
+	@echo " $(shell head -n 4 ${ENV_ROOT_MAKE_FILE} | findstr ${ENV_DIST_VERSION})"
 else
-	@echo " $(shell head -n 4 ${ENV_MODULE_MAKE_FILE} | tail -n 1)"
+	@echo " $(shell head -n 4 ${ENV_ROOT_MAKE_FILE} | tail -n 1)"
 endif
-	@echo "-> check at: ${ENV_MODULE_MANIFEST}:3"
+	@echo "-> check at: ${ENV_ROOT_MANIFEST_PKG_JSON}:3"
 ifeq ($(OS),Windows_NT)
-	@echo " $(shell head -n 3 ${ENV_MODULE_MANIFEST} | findstr ${ENV_DIST_VERSION})"
+	@echo " $(shell head -n 3 ${ENV_ROOT_MANIFEST_PKG_JSON} | findstr ${ENV_DIST_VERSION})"
 else
-	@echo " $(shell head -n 3 ${ENV_MODULE_MANIFEST} | tail -n 1)"
+	@echo " $(shell head -n 3 ${ENV_ROOT_MANIFEST_PKG_JSON} | tail -n 1)"
 endif
 
 tagBefore: versionHelp
 	@echo " if error can fix after git set remote url, then run: npm init"
-	@conventional-changelog -i ${ENV_MODULE_CHANGELOG} -s --skip-unstable
+	@conventional-changelog -i ${ENV_ROOT_CHANGELOG_PATH} -s --skip-unstable
 	@echo ""
-	@echo "=> new CHANGELOG.md at: ${ENV_MODULE_CHANGELOG}"
+	@echo "=> new CHANGELOG.md at: ${ENV_ROOT_CHANGELOG_PATH}"
 	@echo "place check all file, then can add tag like this!"
 	@echo "$$ git tag -a '${ENV_DIST_VERSION}' -m 'message for this tag'"
 
 cleanBuild:
-	-@RM -r ${ROOT_BUILD_PATH}
-	@echo "~> finish clean path: ${ROOT_BUILD_PATH}"
+	-@RM -r ${ENV_ENV_ROOT_BUILD_PATH}
+	@echo "~> finish clean path: ${ENV_ENV_ROOT_BUILD_PATH}"
 
 cleanLog:
-	-@RM -r ${ROOT_LOG_PATH}
-	@echo "~> finish clean path: ${ROOT_LOG_PATH}"
+	-@RM -r ${ENV_ROOT_LOG_PATH}
+	@echo "~> finish clean path: ${ENV_ROOT_LOG_PATH}"
 
 clean: cleanBuild cleanLog
 	@echo "~> clean finish"
@@ -151,11 +152,11 @@ init:
 buildMain:
 	@echo "-> start build local OS"
 ifeq ($(OS),Windows_NT)
-	@go build -o $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${ROOT_BUILD_ENTRANCE}
-	@echo "-> finish build out path: $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe"
+	@go build -o $(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe ${ENV_ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: $(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe"
 else
-	@go build -o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
-	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}"
+	@go build -o ${ENV_ROOT_BUILD_BIN_PATH} ${ENV_ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: ${ENV_ROOT_BUILD_BIN_PATH}"
 endif
 
 buildARCH:
@@ -165,48 +166,48 @@ ifeq ($(ENV_DIST_GO_OS),windows)
 	-a \
 	-tags netgo \
 	-ldflags '-w -s --extldflags "-static -fpic"' \
-	-o $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${ROOT_BUILD_ENTRANCE}
-	@echo "-> finish build out path: $(subst /,\,${ROOT_BUILD_BIN_PATH}).exe"
+	-o $(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe ${ENV_ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: $(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe"
 else
 	@GOOS=$(ENV_DIST_GO_OS) GOARCH=$(ENV_DIST_GO_ARCH) go build \
 	-a \
 	-tags netgo \
 	-ldflags '-w -s --extldflags "-static -fpic"' \
-	-o ${ROOT_BUILD_BIN_PATH} ${ROOT_BUILD_ENTRANCE}
-	@echo "-> finish build out path: ${ROOT_BUILD_BIN_PATH}"
+	-o ${ENV_ROOT_BUILD_BIN_PATH} ${ENV_ROOT_BUILD_ENTRANCE}
+	@echo "-> finish build out path: ${ENV_ROOT_BUILD_BIN_PATH}"
 endif
 
 dev: export ENV_WEB_AUTO_HOST=true
 dev: cleanBuild buildMain
 ifeq ($(OS),windows)
-	$(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${RUN_INFO_HELP_ARGS}
+	$(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe ${ENV_RUN_INFO_HELP_ARGS}
 else
-	${ROOT_BUILD_BIN_PATH} ${RUN_INFO_HELP_ARGS}
+	${ENV_ROOT_BUILD_BIN_PATH} ${ENV_RUN_INFO_HELP_ARGS}
 endif
 
 run: export ENV_WEB_AUTO_HOST=false
 run:
 	@echo "=> run start"
 ifeq ($(OS),windows)
-	$(subst /,\,${ROOT_BUILD_BIN_PATH}).exe ${RUN_INFO_ARGS}
+	$(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe ${ENV_RUN_INFO_ARGS}
 else
-	${ROOT_BUILD_BIN_PATH} ${RUN_INFO_ARGS}
+	${ENV_ROOT_BUILD_BIN_PATH} ${ENV_RUN_INFO_ARGS}
 endif
 
 test:
 	@echo "=> run test start"
 ifeq ($(OS),Windows_NT)
-	@go test -v $(ROOT_TEST_LIST)
+	@go test -v $(ENV_ROOT_TEST_LIST)
 else
-	@go test -test.v $(ROOT_TEST_LIST)
+	@go test -test.v $(ENV_ROOT_TEST_LIST)
 endif
 
 testCoverage:
 	@echo "=> run test coverage start"
 ifeq ($(OS),Windows_NT)
-	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
 else
-	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
 endif
 
 testCoverageBrowser: testCoverage
@@ -214,7 +215,7 @@ testCoverageBrowser: testCoverage
 
 testBenchmark:
 	@echo "=> run test benchmark start"
-	@go test -bench=. -test.benchmem $(ROOT_TEST_LIST)
+	@go test -bench=. -test.benchmem $(ENV_ROOT_TEST_LIST)
 
 cloc:
 	@echo "see: https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore"

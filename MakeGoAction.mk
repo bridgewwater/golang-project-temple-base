@@ -1,36 +1,36 @@
 # this file must use as base Makefile
 
 # test max time
-ROOT_TEST_MAX_TIME := 1m
+ENV_ROOT_TEST_MAX_TIME := 1m
 
 actionInfo:
 	@echo "you can use #=> find set"
 	@echo "install:"
-	@echo "go get -t -v ${ROOT_TEST_LIST}"
+	@echo "go get -t -v ${ENV_ROOT_TEST_LIST}"
 	@echo "cover script set:"
-	@echo "go test -cover -coverprofile=coverage.txt -covermode=set -coverpkg ./... -v ${ROOT_TEST_LIST}"
+	@echo "go test -cover -coverprofile=coverage.txt -covermode=set -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}"
 	@echo "cover script count:"
-	@echo "go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v ${ROOT_TEST_LIST}"
+	@echo "go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}"
 	@echo "cover script atomic:"
-	@echo "go test -cover -coverprofile=coverage.txt -covermode=atomic -coverpkg ./... -v ${ROOT_TEST_LIST}"
+	@echo "go test -cover -coverprofile=coverage.txt -covermode=atomic -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}"
 
 actionInstall:
-	go get -t -v $(ROOT_TEST_LIST)
+	go get -t -v $(ENV_ROOT_TEST_LIST)
 
 actionTest:
-	go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME)
+	go test -test.v $(ENV_ROOT_TEST_LIST) -timeout $(ENV_ROOT_TEST_MAX_TIME)
 
 actionTestBenchmark:
-	go test -bench=. -test.benchmem $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME)
+	go test -bench=. -test.benchmem $(ENV_ROOT_TEST_LIST) -timeout $(ENV_ROOT_TEST_MAX_TIME)
 
 actionTestFail:
-	go test -test.v $(ROOT_TEST_LIST) -timeout $(ROOT_TEST_MAX_TIME) | grep FAIL --color
+	go test -test.v $(ENV_ROOT_TEST_LIST) -timeout $(ENV_ROOT_TEST_MAX_TIME) | grep FAIL --color
 
 actionCoverage:
-	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
 
 actionCoverageAtomic:
-	@go test -cover -coverprofile=coverage.txt -covermode=atomic -coverpkg ./... -v $(ROOT_TEST_LIST)
+	@go test -cover -coverprofile=coverage.txt -covermode=atomic -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
 
 actionCoverageBrowserLocal: actionCoverage
 	@go tool cover -html=coverage.txt
