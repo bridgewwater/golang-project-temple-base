@@ -156,7 +156,7 @@ init:
 test:
 	@echo "=> run test start"
 ifeq ($(OS),Windows_NT)
-	@go test -v $(ENV_ROOT_TEST_LIST)
+	@go test -test.v $(ENV_ROOT_TEST_LIST)
 else
 	@go test -test.v $(ENV_ROOT_TEST_LIST)
 endif
@@ -164,7 +164,7 @@ endif
 testCoverage:
 	@echo "=> run test coverage start"
 ifeq ($(OS),Windows_NT)
-	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./...
+	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
 else
 	@go test -cover -coverprofile=coverage.txt -covermode=count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
 endif

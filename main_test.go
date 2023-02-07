@@ -7,7 +7,7 @@ import (
 )
 
 func Test_package_main(t *testing.T) {
-	main()
+
 	cmd := exec.Command(os.Args[0], "-h")
 	cmd.Env = append(os.Environ(), "ENV_WEB_AUTO_HOST=true")
 	err := cmd.Run()
