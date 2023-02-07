@@ -128,6 +128,13 @@ endif
 distTestOS: pathCheckRootDistOs
 ifeq ($(OS),Windows_NT)
 	$(warning "windows not support make shell to cross compiling")
+	$(info "can try as")
+	@echo "GOOS=${ENV_INFO_DIST_GO_OS} GOARCH=${ENV_INFO_DIST_GO_ARCH} go build \
+	-a \
+	-tags netgo \
+	-ldflags '-w -s \
+	-o $(subst /,\${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}.exe) ${ENV_INFO_DIST_BUILD_ENTRANCE} \
+	"
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
