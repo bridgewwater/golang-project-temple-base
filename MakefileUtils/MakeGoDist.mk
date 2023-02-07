@@ -111,7 +111,7 @@ $(warning "-> windows make shell cross compiling may be take mistake")
 	-tags netgo \
 	-ldflags '-w -s --extldflags "-static"' \
 	-o $(strip $(6)).exe $(strip ${ENV_INFO_DIST_BUILD_ENTRANCE})
-	@echo "=> end $(strip $(6))"
+	@echo "=> end $(strip $(6)).exe"
 endef
 
 distTest: cleanRootDistLocalTest pathCheckRootDistLocalTest
