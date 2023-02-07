@@ -95,6 +95,25 @@ define go_static_binary_dist
 	@echo "=> end $(strip $(6))"
 endef
 
+define go_static_binary_windows_dist
+	@echo "=> start $(0)"
+$(warning "-> windows make shell cross compiling may be take mistake")
+	@echo " want build out at path        : $(strip $(1))"
+	@echo "      build mark run env       : $(strip $(2))"
+	@echo "      build out binary         : $(strip $(3))"
+	@echo "      build GOOS               : $(strip $(4))"
+	@echo "      build GOARCH             : $(strip $(5))"
+	@echo "      build entrance           : $(strip ${ENV_INFO_DIST_BUILD_ENTRANCE})"
+	@echo "      DIST_BUILD_BIN_PATH      : $(strip $(6))"
+	@echo "-> start build OS:$(strip $(4)) ARCH:$(strip $(5))"
+	set GOOS=$(strip $(4)); set GOARCH=$(strip $(5)); go build \
+	-a \
+	-tags netgo \
+	-ldflags '-w -s --extldflags "-static"' \
+	-o $(strip $(6)).exe $(strip ${ENV_INFO_DIST_BUILD_ENTRANCE})
+	@echo "=> end $(strip $(6))"
+endef
+
 distTest: cleanRootDistLocalTest pathCheckRootDistLocalTest
 ifeq ($(OS),Windows_NT)
 	$(call go_local_binary_dist,\
@@ -127,14 +146,14 @@ endif
 
 distTestOS: pathCheckRootDistOs
 ifeq ($(OS),Windows_NT)
-	$(warning "windows not support make shell to cross compiling")
-	$(info "can try as")
-	@echo "GOOS=${ENV_INFO_DIST_GO_OS} GOARCH=${ENV_INFO_DIST_GO_ARCH} go build \
-	-a \
-	-tags netgo \
-	-ldflags '-w -s \
-	-o $(subst /,\${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}.exe) ${ENV_INFO_DIST_BUILD_ENTRANCE} \
-	"
+	$(call go_static_binary_windows_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_TEST_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME})\
+	)
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
