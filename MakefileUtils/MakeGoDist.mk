@@ -1,4 +1,7 @@
 # this file must use as base Makefile job must has variate
+#
+# must as some include MakeDistTools.mk
+#
 # INFO_ROOT_DIST_PATH for set make go dist path
 # ENV_ROOT_BUILD_BIN_NAME for set go binary file name
 # ENV_DIST_VERSION for set dist version name
@@ -14,67 +17,68 @@ ENV_SERVER_TEST_FOLDER = /home/work/Document/
 ENV_SERVER_REPO_SSH_ALIAS = golang-project-temple-base
 ENV_SERVER_REPO_FOLDER = /home/ubuntu/$(ROOT_NAME)
 
-ENV_INFO_DIST_BUILD_ENTRANCE=${ENV_ROOT_BUILD_ENTRANCE}
 ENV_INFO_DIST_BIN_NAME=${ENV_ROOT_BUILD_BIN_NAME}
 ENV_INFO_DIST_VERSION=${ENV_DIST_VERSION}
 ENV_INFO_DIST_MARK=${ENV_DIST_MARK}
+ENV_INFO_DIST_BUILD_ENTRANCE=${ENV_ROOT_BUILD_ENTRANCE}
 ENV_INFO_DIST_GO_OS=${ENV_DIST_GO_OS}
 ENV_INFO_DIST_GO_ARCH=${ENV_DIST_GO_ARCH}
 ENV_INFO_DIST_ENV_TEST_NAME=test
 ENV_INFO_DIST_ENV_RELEASE_NAME=release
 
+
 define dist_tar_with_source
 	@echo "=> start $(0)"
-	@echo " want tar target folder   : $(1)"
+ifeq ($(OS),Windows_NT)
+	target_tar_folder=$(subst /,\,$(1))
+	target_tar_gz_path=$(subst /,\,$(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}).tar.gz
+	target_tar_sum_path=$(subst /,\,$(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}).tar.gz.sha256
+else
+	target_tar_folder=$(1)
+	target_tar_gz_path=$(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz
+	target_tar_sum_path=$(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz.sha256
+endif
+	@echo " want tar target folder   : ${target_tar_folder}"
 	@echo "      tar env string      : $(2)"
-	@echo "      tar source folder   : $(3)"
+	@echo "      tar source folder   : $(subst /,\,$(3))"
 	@echo ""
 	@echo " if cp source can change here"
 	@echo ""
-	@echo " want tar as: ${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
-	@if [ -f $(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz ]; \
-	then rm -f $(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz && \
-	echo "~> remove old $(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"; \
-	fi
-	@echo ""
-	@tar zcvf $(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz -C $(1) .
-	@echo "-> check as: tar -tf $(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
-	@echo "~> tar ${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK} at: $(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
-	@shasum -a 256 $(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz > $(3)/${ENV_INFO_DIST_BIN_NAME}-$(2)-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz.sha256
+	@echo " want  tar as: ${target_tar_gz_path}"
+	@echo " check tar as ${target_tar_sum_path}"
+
+	@tar zcvf ${target_tar_gz_path} -C ${target_tar_folder} .
+	@shasum -a 256 ${target_tar_gz_path} > ${target_tar_sum_path}
+	@echo "-> check as: tar -tf ${target_tar_gz_path}"
+	@echo "~> tar ${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK} at: ${target_tar_gz_path}"
 endef
 
 distEnv:
 	@echo "== MakeGoDist info start =="
 	@echo ""
-	@echo "INFO_ROOT_DIST_PATH                       ${INFO_ROOT_DIST_PATH}"
-	@echo "ENV_INFO_DIST_VERSION                     ${ENV_INFO_DIST_VERSION}"
+	@echo "ENV_PATH_INFO_ROOT_DIST                   ${ENV_PATH_INFO_ROOT_DIST}"
 	@echo "ENV_INFO_DIST_BIN_NAME                    ${ENV_INFO_DIST_BIN_NAME}"
+	@echo "ENV_INFO_DIST_VERSION                     ${ENV_INFO_DIST_VERSION}"
 	@echo "ENV_INFO_DIST_MARK                        ${ENV_INFO_DIST_MARK}"
 	@echo "ENV_INFO_DIST_BUILD_ENTRANCE              ${ENV_INFO_DIST_BUILD_ENTRANCE}"
+	@echo ""
 	@echo "ENV_INFO_DIST_GO_OS                       ${ENV_INFO_DIST_GO_OS}"
 	@echo "ENV_INFO_DIST_GO_ARCH                     ${ENV_INFO_DIST_GO_ARCH}"
 	@echo ""
 	@echo "== MakeGoDist info end   =="
 	@echo ""
 
-cleanAllDist:
-	-@RM -r ${INFO_ROOT_DIST_PATH}
-	@echo "~> finish clean path: ${INFO_ROOT_DIST_PATH}"
+cleanAllDist: cleanDistAll
+	@echo "~> finish clean path: ${ENV_PATH_INFO_ROOT_DIST}"
 
 define go_local_binary_dist
 	@echo "=> start $(0)"
-	@echo " want build out at path    : $(1)"
-	@echo "      build mark run env   : $(2)"
-	@echo "      build out binary     : $(3)"
-	@echo "      build entrance       : ${ENV_INFO_DIST_BUILD_ENTRANCE}"
-	@echo "      DIST_BUILD_BIN_PATH  : $(1)/local/$(2)/$(3)"
-	@if [ ! -d $(1)/local/$(2) ]; \
-	then mkdir -p $(1)/local/$(2) && echo "~> mkdir $(1)/local/$(2)"; \
-	else \
-	rm -rf $(1)/local/$(2)/* ; \
-	fi
-	go build -o $(1)/local/$(2)/$(3) ${ENV_INFO_DIST_BUILD_ENTRANCE}
-	@echo "go local binary out at: $(1)/local/$(2)/$(3)"
+	@echo " want build mark run env       : ${1}"
+	@echo "      build out at path        : ${2}"
+	@echo "      build out binary path    : ${3}"
+	@echo "      build entrance           : ${4}"
+	go build -o ${3} ${4}
+	@echo "go local binary out at: ${3}"
 endef
 
 define go_static_binary_dist
@@ -100,8 +104,20 @@ define go_static_binary_dist
 	@echo "=> end $(1)/os/$(4)/$(5)/$(2)/$(3)"
 endef
 
-distTest:
-	$(call go_local_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_TEST_NAME},${ENV_INFO_DIST_BIN_NAME})
+distTest: cleanRootDistLocalTest pathCheckRootDistLocalTest
+ifeq ($(OS),Windows_NT)
+	$(call go_local_binary_dist,\
+	${ENV_INFO_DIST_ENV_TEST_NAME},\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST}/${ENV_INFO_DIST_BIN_NAME}.exe),\
+	${ENV_INFO_DIST_BUILD_ENTRANCE})
+else
+	$(call go_local_binary_dist,\
+	${ENV_INFO_DIST_ENV_TEST_NAME},\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST},\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST}/${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BUILD_ENTRANCE})
+endif
 
 distTestTar: distTest
 	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/local/${ENV_INFO_DIST_ENV_TEST_NAME},${ENV_INFO_DIST_ENV_TEST_NAME},${INFO_ROOT_DIST_PATH}/local)
