@@ -106,7 +106,9 @@ $(warning "-> windows make shell cross compiling may be take mistake")
 	@echo "      build entrance           : $(strip ${ENV_INFO_DIST_BUILD_ENTRANCE})"
 	@echo "      DIST_BUILD_BIN_PATH      : $(strip $(6))"
 	@echo "-> start build OS:$(strip $(4)) ARCH:$(strip $(5))"
-	set GOOS=$(strip $(4)); set GOARCH=$(strip $(5)); go build \
+	set GOOS=$(strip $(4))
+	set GOARCH=$(strip $(5))
+	go build \
 	-a \
 	-tags netgo \
 	-ldflags '-w -s --extldflags "-static"' \
