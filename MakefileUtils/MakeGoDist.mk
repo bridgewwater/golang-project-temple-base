@@ -35,7 +35,7 @@ define dist_tar_with_source
 	@echo "=> start $(0)"
 	@echo " want tar source folder     : $(strip ${1})"
 	@echo "      tar file full folder  : $(strip ${2})"
-	@echo "      tar file env          : $(strip ${3})"
+	@echo "      tar file env mark     : $(strip ${3})"
 	@echo "      tar file full path    : $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
 	@echo "      ENV_INFO_DIST_VERSION : ${ENV_INFO_DIST_VERSION}"
 	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
@@ -169,14 +169,14 @@ distTestOSTar: distTestOS
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}),\
-	${ENV_INFO_DIST_ENV_TEST_NAME}\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
 	)
 else
 	$(call dist_tar_with_source,\
 	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH},\
-	${ENV_PATH_INFO_ROOT_DIST_OS},\
-	${ENV_INFO_DIST_ENV_TEST_NAME}\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
+	${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
 	)
 endif
 
