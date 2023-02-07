@@ -40,7 +40,7 @@ define dist_tar_with_source
 	@echo "      ENV_INFO_DIST_VERSION : ${ENV_INFO_DIST_VERSION}"
 	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
 	@echo ""
-	@echo " if cp source can change here"
+	$(warning if cp source can change here)
 	@echo ""
 
 	tar -zcvf $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz -C $(strip ${1}) "."
@@ -183,7 +183,8 @@ else
 endif
 
 distScpTestOSTar: distTestOSTar
-	#scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_TEST_SSH_ALIAS}:${ENV_SERVER_TEST_FOLDER}
+	$(info => can send file:)
+	$(info scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_TEST_SSH_ALIAS}:${ENV_SERVER_TEST_FOLDER})
 	@echo "=> must check below config of set for release OS Scp"
 
 distRelease: cleanRootDistLocalRelease pathCheckRootDistLocalRelease
@@ -253,7 +254,8 @@ else
 endif
 
 distScpReleaseOSTar: distReleaseOSTar
-	#scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_REPO_SSH_ALIAS}:${ENV_SERVER_REPO_FOLDER}
+	$(info => can send file:)
+	$(info scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_REPO_SSH_ALIAS}:${ENV_SERVER_REPO_FOLDER})
 	@echo "=> must check below config of set for release OS Scp"
 
 distAllLocalTar: distTestTar distReleaseTar
