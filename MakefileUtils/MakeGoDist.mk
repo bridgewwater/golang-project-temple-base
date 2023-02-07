@@ -2,6 +2,10 @@
 #
 # must as some include MakeDistTools.mk
 #
+# windows use must install tools
+# https://scoop.sh/#/apps?q=busybox&s=0&d=1&o=true
+# scoop install shasum
+#
 # INFO_ROOT_DIST_PATH for set make go dist path
 # ENV_ROOT_BUILD_BIN_NAME for set go binary file name
 # ENV_DIST_VERSION for set dist version name
@@ -39,7 +43,7 @@ define dist_tar_with_source
 	@echo " if cp source can change here"
 	@echo ""
 
-	tar -v -z -c -f $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz -C $(strip ${1}) .
+	tar -zsvf $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz -C $(strip ${1}) "."
 	shasum -a 256 $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz > $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz.sha256
 	@echo "-> check as: tar -tf $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
 	@echo "~> tar ${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK} at: $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
