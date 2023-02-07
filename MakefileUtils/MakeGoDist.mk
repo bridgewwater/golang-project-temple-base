@@ -33,12 +33,12 @@ ENV_INFO_DIST_ENV_RELEASE_NAME=release
 
 define dist_tar_with_source
 	@echo "=> start $(0)"
-	@echo " want tar source folder     : |$(strip ${1})|"
-	@echo "      tar file full folder  : |$(strip ${2})|"
-	@echo "      tar file env          : |$(strip ${3})|"
-	@echo "      tar file full path    : |$(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz|"
-	@echo "      ENV_INFO_DIST_VERSION : |${ENV_INFO_DIST_VERSION}|"
-	@echo "      ENV_INFO_DIST_MARK    : |${ENV_INFO_DIST_MARK}|"
+	@echo " want tar source folder     : $(strip ${1})"
+	@echo "      tar file full folder  : $(strip ${2})"
+	@echo "      tar file env          : $(strip ${3})"
+	@echo "      tar file full path    : $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
+	@echo "      ENV_INFO_DIST_VERSION : ${ENV_INFO_DIST_VERSION}"
+	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
 	@echo ""
 	@echo " if cp source can change here"
 	@echo ""
@@ -69,35 +69,30 @@ cleanAllDist: cleanDistAll
 
 define go_local_binary_dist
 	@echo "=> start $(0)"
-	@echo " want build mark run env       : |${1}|"
-	@echo "      build out at path        : |${2}|"
-	@echo "      build out binary path    : |${3}|"
-	@echo "      build entrance           : |${4}|"
-	go build -o ${3} ${4}
-	@echo "go local binary out at: ${3}"
+	@echo " want build mark run env       : $(${1})"
+	@echo "      build out at path        : $(${2})"
+	@echo "      build out binary path    : $(${3})"
+	@echo "      build entrance           : $(strip ${4})"
+	go build -o $(strip ${3}) $(strip ${4})
+	@echo "go local binary out at: $(strip ${3})"
 endef
 
 define go_static_binary_dist
 	@echo "=> start $(0)"
-	@echo " want build out at path        : |$(1)|"
-	@echo "      build mark run env       : |$(2)|"
-	@echo "      build out binary         : |$(3)|"
-	@echo "      build GOOS               : |$(4)|"
-	@echo "      build GOARCH             : |$(5)|"
-	@echo "      build entrance           : ${ENV_INFO_DIST_BUILD_ENTRANCE}"
-	@echo "      DIST_BUILD_BIN_PATH      : $(1)/os/$(4)/$(5)/$(2)/$(3)"
-	@if [ ! -d $(1)/os/$(4)/$(5)/$(2) ]; \
-	then mkdir -p $(1)/os/$(4)/$(5)/$(2) && echo "~> mkdir $(1)/os/$(4)/$(5)/$(2)"; \
-	else \
-	rm -rf $(1)/os/$(4)/$(5)/$(2)/* ; \
-	fi
-	@echo "-> start build OS:$(4) ARCH:$(5)"
-	GOOS=$(4) GOARCH=$(5) go build \
+	@echo " want build out at path        : $(strip $(1))"
+	@echo "      build mark run env       : $(strip $(2))"
+	@echo "      build out binary         : $(strip $(3))"
+	@echo "      build GOOS               : $(strip $(4))"
+	@echo "      build GOARCH             : $(strip $(5))"
+	@echo "      build entrance           : $(strip ${ENV_INFO_DIST_BUILD_ENTRANCE})"
+	@echo "      DIST_BUILD_BIN_PATH      : $(strip $(6))"
+	@echo "-> start build OS:$(strip $(4)) ARCH:$(strip $(5))"
+	GOOS=$(strip $(4)) GOARCH=$(strip $(5)) go build \
 	-a \
 	-tags netgo \
 	-ldflags '-w -s --extldflags "-static -fpic"' \
-	-o $(1)/os/$(4)/$(5)/$(2)/$(3) ${ENV_INFO_DIST_BUILD_ENTRANCE}
-	@echo "=> end $(1)/os/$(4)/$(5)/$(2)/$(3)"
+	-o $(strip $(6)) $(strip ${ENV_INFO_DIST_BUILD_ENTRANCE})
+	@echo "=> end $(strip $(6))"
 endef
 
 distTest: cleanRootDistLocalTest pathCheckRootDistLocalTest
@@ -130,14 +125,44 @@ else
 	)
 endif
 
-distTestOS:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_TEST_NAME},${ENV_INFO_DIST_BIN_NAME},${ENV_INFO_DIST_GO_OS},${ENV_INFO_DIST_GO_ARCH})
+distTestOS: pathCheckRootDistOs
+ifeq ($(OS),Windows_NT)
+	$(call go_static_binary_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_TEST_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}.exe)\
+	)
+else
+	$(call go_static_binary_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_TEST_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}\
+	)
+endif
 
 distTestOSTar: distTestOS
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_ENV_TEST_NAME},${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_ENV_TEST_NAME},${INFO_ROOT_DIST_PATH}/os)
+ifeq ($(OS),Windows_NT)
+	$(call dist_tar_with_source,\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}),\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}),\
+	${ENV_INFO_DIST_ENV_TEST_NAME}\
+	)
+else
+	$(call dist_tar_with_source,\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH},\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_TEST_NAME}\
+	)
+endif
 
 distScpTestOSTar: distTestOSTar
-	#scp ${INFO_ROOT_DIST_PATH}/os/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_TEST_SSH_ALIAS}:${ENV_SERVER_TEST_FOLDER}
+	#scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_TEST_SSH_ALIAS}:${ENV_SERVER_TEST_FOLDER}
 	@echo "=> must check below config of set for release OS Scp"
 
 distRelease:
