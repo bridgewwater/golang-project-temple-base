@@ -127,14 +127,7 @@ endif
 
 distTestOS: pathCheckRootDistOs
 ifeq ($(OS),Windows_NT)
-	$(call go_static_binary_dist,\
-	${ENV_PATH_INFO_ROOT_DIST_OS},\
-	${ENV_INFO_DIST_ENV_TEST_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
-	${ENV_INFO_DIST_GO_OS},\
-	${ENV_INFO_DIST_GO_ARCH},\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}.exe)\
-	)
+	$(warning "windows not support make shell to cross compiling")
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
