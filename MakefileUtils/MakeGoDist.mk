@@ -69,9 +69,9 @@ cleanAllDist: cleanDistAll
 
 define go_local_binary_dist
 	@echo "=> start $(0)"
-	@echo " want build mark run env       : $(${1})"
-	@echo "      build out at path        : $(${2})"
-	@echo "      build out binary path    : $(${3})"
+	@echo " want build mark run env       : $(strip ${1})"
+	@echo "      build out at path        : $(strip ${2})"
+	@echo "      build out binary path    : $(strip ${3})"
 	@echo "      build entrance           : $(strip ${4})"
 	go build -o $(strip ${3}) $(strip ${4})
 	@echo "go local binary out at: $(strip ${3})"
@@ -181,23 +181,77 @@ else
 endif
 
 distScpTestOSTar: distTestOSTar
-	#scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_TEST_SSH_ALIAS}:${ENV_SERVER_TEST_FOLDER}
+	#scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_TEST_SSH_ALIAS}:${ENV_SERVER_TEST_FOLDER}
 	@echo "=> must check below config of set for release OS Scp"
 
-distRelease:
-	$(call go_local_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME})
+distRelease: cleanRootDistLocalRelease pathCheckRootDistLocalRelease
+ifeq ($(OS),Windows_NT)
+	$(call go_local_binary_dist,\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}/${ENV_INFO_DIST_BIN_NAME}.exe),\
+	${ENV_INFO_DIST_BUILD_ENTRANCE})
+else
+	$(call go_local_binary_dist,\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE},\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}/${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BUILD_ENTRANCE})
+endif
 
 distReleaseTar: distRelease
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/local/${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/local)
+ifeq ($(OS),Windows_NT)
+	$(call dist_tar_with_source,\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}/),\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL}/),\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME}\
+	)
+else
+	$(call dist_tar_with_source,\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}/,\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL}/,\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME}\
+	)
+endif
 
-distReleaseOS:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},${ENV_INFO_DIST_GO_OS},${ENV_INFO_DIST_GO_ARCH})
+distReleaseOS: pathCheckRootDistOs
+ifeq ($(OS),Windows_NT)
+	$(call go_static_binary_windows_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME})\
+	)
+else
+	$(call go_static_binary_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}\
+	)
+endif
 
 distReleaseOSTar: distReleaseOS
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+ifeq ($(OS),Windows_NT)
+	$(call dist_tar_with_source,\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}),\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
+	)
+else
+	$(call dist_tar_with_source,\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
+	)
+endif
 
 distScpReleaseOSTar: distReleaseOSTar
-	#scp ${INFO_ROOT_DIST_PATH}/os/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_REPO_SSH_ALIAS}:${ENV_SERVER_REPO_FOLDER}
+	#scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_REPO_SSH_ALIAS}:${ENV_SERVER_REPO_FOLDER}
 	@echo "=> must check below config of set for release OS Scp"
 
 distAllLocalTar: distTestTar distReleaseTar
