@@ -7,7 +7,17 @@ ifneq ($(strip $(ENV_CI_DIST_VERSION)),)
 endif
 
 ROOT_NAME?=golang-project-temple-base
+# MakeDocker.mk settings start
 ROOT_OWNER?=bridgewwater
+ROOT_PARENT_SWITCH_TAG=1.17.13-buster
+# for image local build
+INFO_TEST_BUILD_DOCKER_PARENT_IMAGE=golang
+# for image running
+INFO_BUILD_DOCKER_FROM_IMAGE=alpine:3.17
+INFO_BUILD_DOCKER_FILE=Dockerfile
+INFO_TEST_BUILD_DOCKER_FILE=Dockerfile.s6
+# MakeDocker.mk settings end
+
 ENV_RUN_INFO_HELP_ARGS= -h
 ENV_RUN_INFO_ARGS=
 # change to other build entrance
