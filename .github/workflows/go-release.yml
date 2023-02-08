@@ -1,4 +1,4 @@
-name: go Create release and push binary
+name: go Create release by ENV_CI_DIST_VERSION and push binary
 
 on:
   push:
@@ -20,6 +20,11 @@ jobs:
     - name: Build Release binary
       run: |
         make dep
+        # ref get version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        # replace v chat at tag
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+        ENV_CI_DIST_VERSION=v${VERSION}
         make cleanAllDist distPlatformTarAll
     - uses: softprops/action-gh-release@master
       name: Create Release
