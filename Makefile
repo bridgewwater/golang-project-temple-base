@@ -47,6 +47,10 @@ endif
 ifneq ($(strip $(GITHUB_SHA)),)
     ENV_DIST_MARK=-${GITHUB_SHA}# https://docs.github.com/cn/enterprise-server@2.22/actions/learn-github-actions/environment-variables
 endif
+ifeq ($(strip $(ENV_DIST_MARK)),)
+$(info -> change ENV_DIST_MARK by git)
+    ENV_DIST_MARK=-$(strip $(shell git --no-pager rev-parse --short HEAD))
+endif
 
 # ifeq ($(FILE), $(wildcard $(FILE)))
 # 	@ echo target file not found
