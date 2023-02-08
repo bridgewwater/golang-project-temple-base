@@ -58,7 +58,7 @@ dockerCleanPruneAll:
 
 dockerRunContainerParentBuild:
 	@echo "run rm container image: ${ENV_INFO_TEST_BUILD_DOCKER_PARENT_IMAGE}"
-	# docker run -d --rm --name ${ENV_INFO_TEST_BUILD_DOCKER_PARENT_CONTAINER} ${ENV_INFO_TEST_BUILD_DOCKER_PARENT_IMAGE}
+	$(info docker run -d --rm --name ${ENV_INFO_TEST_BUILD_DOCKER_PARENT_CONTAINER} ${ENV_INFO_TEST_BUILD_DOCKER_PARENT_IMAGE})
 	docker run -d --rm --name ${ENV_INFO_TEST_BUILD_DOCKER_PARENT_CONTAINER} ${ENV_INFO_TEST_BUILD_DOCKER_PARENT_IMAGE} tail -f /dev/null
 	@echo ""
 	@echo "-> run rm container name: ${ENV_INFO_TEST_BUILD_DOCKER_PARENT_CONTAINER}"
@@ -78,8 +78,8 @@ dockerTestRunLatest:
 	-docker run --rm --name ${ENV_INFO_TEST_TAG_BUILD_DOCKER_CONTAINER_NAME} \
 	-e RUN_MODE=dev \
 	${ENV_INFO_BUILD_DOCKER_SOURCE_IMAGE}:${ENV_INFO_BUILD_DOCKER_TAG}
-	# for inner check can use like this
-	# docker run -it -d --entrypoint /bin/sh --name ${ENV_INFO_TEST_TAG_BUILD_DOCKER_CONTAINER_NAME} ${ENV_INFO_BUILD_DOCKER_SOURCE_IMAGE}:${ENV_INFO_BUILD_DOCKER_TAG}
+	$(info for inner check can use like this)
+	$(info docker run -it -d --entrypoint /bin/sh --name ${ENV_INFO_TEST_TAG_BUILD_DOCKER_CONTAINER_NAME} ${ENV_INFO_BUILD_DOCKER_SOURCE_IMAGE}:${ENV_INFO_BUILD_DOCKER_TAG})
 	-docker inspect --format='{{ .State.Status}}' ${ENV_INFO_TEST_TAG_BUILD_DOCKER_CONTAINER_NAME}
 
 dockerTestLogLatest:
@@ -89,11 +89,7 @@ dockerTestRmLatest:
 	-docker rm -f ${ENV_INFO_TEST_TAG_BUILD_DOCKER_CONTAINER_NAME}
 
 dockerTestRmiLatest:
-	-INFO_TEST_TAG_BUILD_CONTAINER_NAME=$(ENV_INFO_TEST_TAG_BUILD_DOCKER_CONTAINER_NAME) \
-	INFO_BUILD_DOCKER_SOURCE_IMAGE=$(ENV_INFO_BUILD_DOCKER_SOURCE_IMAGE) \
-	ROOT_DOCKER_IMAGE_TAG=$(ENV_INFO_BUILD_DOCKER_TAG) \
-	INFO_BUILD_DOCKER_TAG=${ENV_INFO_BUILD_DOCKER_TAG} \
-	docker rmi -f ${ENV_INFO_BUILD_DOCKER_SOURCE_IMAGE}:${ENV_INFO_BUILD_DOCKER_TAG}
+	-docker rmi -f ${ENV_INFO_BUILD_DOCKER_SOURCE_IMAGE}:${ENV_INFO_BUILD_DOCKER_TAG}
 
 dockerTestRestartLatest: dockerTestRmLatest dockerTestRmiLatest dockerTestBuildLatest dockerTestRunLatest
 	@echo "restart ${ENV_INFO_TEST_TAG_BUILD_DOCKER_CONTAINER_NAME} ${ENV_INFO_BUILD_DOCKER_SOURCE_IMAGE}:${ENV_INFO_BUILD_DOCKER_TAG}"
