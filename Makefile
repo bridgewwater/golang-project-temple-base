@@ -6,7 +6,8 @@ ifneq ($(strip $(ENV_CI_DIST_VERSION)),)
     ENV_DIST_VERSION=${ENV_CI_DIST_VERSION}
 endif
 
-ROOT_NAME ?= golang-project-temple-base
+ROOT_NAME?=golang-project-temple-base
+ROOT_OWNER?=bridgewwater
 ENV_RUN_INFO_HELP_ARGS= -h
 ENV_RUN_INFO_ARGS=
 # change to other build entrance
@@ -55,9 +56,6 @@ endif
 # ifeq ($(FILE), $(wildcard $(FILE)))
 # 	@ echo target file not found
 # endif
-
-# MakeGoDist.mk settings
-INFO_ROOT_DIST_PATH ?= dist
 
 include z-MakefileUtils/MakeGoMod.mk
 include z-MakefileUtils/MakeGoAction.mk

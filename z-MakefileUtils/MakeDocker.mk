@@ -1,8 +1,13 @@
+# this file must use as base Makefile
+# need var:
+# ROOT_NAME is this project name
+# ROOT_OWNER is this project owner
+
 #ENV_INFO_BUILD_DOCKER_TAG = ${ENV_DIST_VERSION}
-ENV_INFO_BUILD_DOCKER_TAG = latest
-ENV_INFO_BUILD_DOCKER_FILE = Dockerfile
+ENV_INFO_BUILD_DOCKER_TAG=latest
+ENV_INFO_BUILD_DOCKER_FILE=Dockerfile
 ENV_INFO_DOCKER_REPOSITORY=${ROOT_NAME}
-ENV_INFO_DOCKER_OWNER=bridgewwater
+ENV_INFO_DOCKER_OWNER=${ROOT_OWNER}
 # if set ENV_INFO_PRIVATE_DOCKER_REGISTRY= will push to hub.docker.com
 # private docker registry use harbor must create project name as ${ENV_INFO_DOCKER_OWNER}
 #ENV_INFO_PRIVATE_DOCKER_REGISTRY=harbor.xxx.com/
