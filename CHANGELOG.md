@@ -1,12 +1,74 @@
-## <small>1.1.2 (2021-01-04)</small>
+# Changelog
 
-* fix: fix temp-golang-base go mod package init error ([e9ffd77](https://github.com/bridgewwater/golang-project-temple-base/commit/e9ffd77))
-* update README.md ([767d6b1](https://github.com/bridgewwater/golang-project-temple-base/commit/767d6b1))
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## <small>1.1.1 (2021-01-02)</small>
+## [2.0.0](https://github.com/bridgewwater/golang-project-temple-base/compare/v1.17.13...v2.0.0) (2023-02-08)
 
-* docs: change README.md to workflow right link ([bd98472](https://github.com/bridgewwater/golang-project-temple-base/commit/bd98472))
 
+### Features
+
+* add .gitattributes ([d4d2082](https://github.com/bridgewwater/golang-project-temple-base/commit/d4d20828cb3e7b87965ff9d30bb1b947b2d64985))
+* add diffetent platform support of windows building as tar file ([6dc4841](https://github.com/bridgewwater/golang-project-temple-base/commit/6dc4841e06e86658efd2586e5bc3a73d968c651c))
+* add dist_tar_with_windows_source for windows support ([d21f4d0](https://github.com/bridgewwater/golang-project-temple-base/commit/d21f4d0561178847e97672c116f4600d64b222fd))
+* add distPlatformTarCommonUse at MakeGoDist.mk ([e47ef6d](https://github.com/bridgewwater/golang-project-temple-base/commit/e47ef6dc7122ba98dc4464357dc2adeadbd18627))
+* add distTestTar task ([41f1264](https://github.com/bridgewwater/golang-project-temple-base/commit/41f1264e0362a4ca44017fae053ac242ffe50e6e))
+* add ENV_CI_DIST_VERSION to change ENV_DIST_VERSION ([3648604](https://github.com/bridgewwater/golang-project-temple-base/commit/364860403d149c72ff0fe6566e70babec593f30f))
+* add github action template ([fca7c13](https://github.com/bridgewwater/golang-project-temple-base/commit/fca7c13002e0c6b2e4748b9919638b23a7caa1f3))
+* add go_static_binary_windows_dist to try build at windows ([0e715f9](https://github.com/bridgewwater/golang-project-temple-base/commit/0e715f941b3d3cd0058a82290579da174e46f699))
+* add more clear make script ([18440b4](https://github.com/bridgewwater/golang-project-temple-base/commit/18440b4a202c146d2aa43c34fa7f4360589ddb2e))
+* add more info winodws show distTestOS ([14de258](https://github.com/bridgewwater/golang-project-temple-base/commit/14de25878824454d933c131365e45e1948adaea2))
+* add packageJson.go use embed load package.json ([390b41e](https://github.com/bridgewwater/golang-project-temple-base/commit/390b41edcd09b361ca5e2cdbabfc529460a602dd))
+* add sha256 check at dist tar ([7a521db](https://github.com/bridgewwater/golang-project-temple-base/commit/7a521db1bfafcaa03d1353779c1c457935728ccb))
+* add warning distTestOS ([01542a1](https://github.com/bridgewwater/golang-project-temple-base/commit/01542a1d31dbfb1187c973429180d79af2768013))
+* change main version use const ([c7ccaea](https://github.com/bridgewwater/golang-project-temple-base/commit/c7ccaea61adbf56d7ff38aa9b74318131198fe84))
+* change to z-MakefileUtils to reduce the impact on the project directory ([fd265a4](https://github.com/bridgewwater/golang-project-temple-base/commit/fd265a4ff6b67dc8f36f8fcc739eaf58fd140b1a))
+* format env as show ([d732b65](https://github.com/bridgewwater/golang-project-temple-base/commit/d732b655b00dbb910e6dbcccdcab00e5bd1da34a))
+* let all var as ENV_ prefix ([7865a79](https://github.com/bridgewwater/golang-project-temple-base/commit/7865a799df273109ebc50b7d933f9f2f23629d2e))
+* let dist os support os info to show ([f515ab6](https://github.com/bridgewwater/golang-project-temple-base/commit/f515ab605ffd4012b984207847701486ef1e1808))
+* let distRelease be ok ([c278013](https://github.com/bridgewwater/golang-project-temple-base/commit/c27801380c015e2c22e0b0d12a87d2f807cf8986))
+* let distScpTestOSTar support windows ([08ab8c0](https://github.com/bridgewwater/golang-project-temple-base/commit/08ab8c09e5a750e86d25d05ed12b5de62fa22279))
+* let env show as windows ([d442140](https://github.com/bridgewwater/golang-project-temple-base/commit/d442140497c55999c86b5747c29ba40d8357bf3f))
+* let go_static_binary_windows_dist can use ([1b53a22](https://github.com/bridgewwater/golang-project-temple-base/commit/1b53a221d515a739d37ce24e14e36ae26e96a379))
+* makefile support windows path ([9c3e71f](https://github.com/bridgewwater/golang-project-temple-base/commit/9c3e71fe5f8a26bbb1172aa6c08d59dcc795c49a))
+* remove # proxy golang setting at Dockerfile ([62d45a6](https://github.com/bridgewwater/golang-project-temple-base/commit/62d45a6ab8be04da55fec91921d0806afbd006e1))
+* support windows use docker build ([fe3162d](https://github.com/bridgewwater/golang-project-temple-base/commit/fe3162dcdfbf72d08c359e2ebf8ac2447c34f015))
+* try to change testCoverage at windows ([8dc8a04](https://github.com/bridgewwater/golang-project-temple-base/commit/8dc8a0487029e1bb3f21b04987c70eda427f7991))
+* update .drone.yml ([e289ccc](https://github.com/bridgewwater/golang-project-temple-base/commit/e289ccc8b361834ecd0579f10fc1bd1b122472dc))
+* update actionTestBenchmark task ([5b015ac](https://github.com/bridgewwater/golang-project-temple-base/commit/5b015acbe60330e10404a09e3ed5919c686cd63e))
+* update build as docker in drone ([7c8f666](https://github.com/bridgewwater/golang-project-temple-base/commit/7c8f666c8fbc8d3fc3c4e93c2e57968527d0035f))
+* update codecov/codecov-action@v3.1.1 ([963c801](https://github.com/bridgewwater/golang-project-temple-base/commit/963c8016e1293c5ba0e9d6be021fb760836e1c84))
+* update config at codecov ([8ad0e1e](https://github.com/bridgewwater/golang-project-temple-base/commit/8ad0e1ee7af3565e45615b416da758f8cd970a33))
+* update ENV_DIST_MARK can change by tag ([b86a50e](https://github.com/bridgewwater/golang-project-temple-base/commit/b86a50e4e88b80afc6b45234d4bb7f14c7df681b))
+* update github action golang build version error ([f57ee3f](https://github.com/bridgewwater/golang-project-temple-base/commit/f57ee3f5f2fa21b3f167fb22bbd90f6ee727657a))
+* update make dev and run args ([5c834fc](https://github.com/bridgewwater/golang-project-temple-base/commit/5c834fcf913719f2ecf167389188e96d66f84a55))
+* update make dist_tar_with_source support windows ([de5576e](https://github.com/bridgewwater/golang-project-temple-base/commit/de5576ead522c6f81108ad1f50558d7bb6452f74))
+* update make distTest ([97a65ab](https://github.com/bridgewwater/golang-project-temple-base/commit/97a65ab52009e8f92ca7032de567102428e24693))
+* update make env show test info ([28228fe](https://github.com/bridgewwater/golang-project-temple-base/commit/28228fe3d4be12665f1eb4b7b128a98ed34d21ae))
+* update make testBenchmark ([f908f0a](https://github.com/bridgewwater/golang-project-temple-base/commit/f908f0a544c44b1fae60ba1e574aab6af2cce515))
+* update makefile dev task ([e15af68](https://github.com/bridgewwater/golang-project-temple-base/commit/e15af6808fd64033600021b452a7262cb0dd2c70))
+* update makefile for show env ([396016b](https://github.com/bridgewwater/golang-project-temple-base/commit/396016bf0132ab1f2b7d76ce59759b1bc21f5b5d))
+* update makefile template ([ac4bbb9](https://github.com/bridgewwater/golang-project-temple-base/commit/ac4bbb98109259234ae96c3881c61a55331dab75))
+* update Makefile test at Windows_NT ([c0a3554](https://github.com/bridgewwater/golang-project-temple-base/commit/c0a3554d8120e44adfb946a8d79f810de74be043))
+* update Makefile to support windows makefile ([7dd4dd3](https://github.com/bridgewwater/golang-project-temple-base/commit/7dd4dd3b0948304bcff9a0560b1cc6bbdb424d28))
+* update MakeGoAction ([150db67](https://github.com/bridgewwater/golang-project-temple-base/commit/150db6719acce704b3cfb35788d2690a7ecd2ccd))
+* update MakeGoAction.mk ([b0d01b4](https://github.com/bridgewwater/golang-project-temple-base/commit/b0d01b4c05603e2ad1eb97f538ebec30152baf8d))
+* update MakeGoDist to add distPlatformTarAll and fix MakeDocker run error ([d3d9be9](https://github.com/bridgewwater/golang-project-temple-base/commit/d3d9be944cb95b030168de66c76547da4ffd4ac6))
+* update MakeGoDist.mk distAllTar ([992c262](https://github.com/bridgewwater/golang-project-temple-base/commit/992c262ba702642a81dc3538db3144c5f96234e6))
+* update MakeGoMod.mk ([16b3678](https://github.com/bridgewwater/golang-project-temple-base/commit/16b36785ca76518b9f61fca4bbb27bb4d7b15378))
+* update temp-golang-base ([f2e6501](https://github.com/bridgewwater/golang-project-temple-base/commit/f2e6501369ad417ad27f95e858ad51121573a441))
+* update temp-golang-base for build ([b471830](https://github.com/bridgewwater/golang-project-temple-base/commit/b471830944107e0d66c7afa66847a9564e1e7437))
+* update test case of function main() ([a76816b](https://github.com/bridgewwater/golang-project-temple-base/commit/a76816b9f2d2c4bc451119c63de01d6eca8816cd))
+* update testCoverage task ([dd7c6ba](https://github.com/bridgewwater/golang-project-temple-base/commit/dd7c6ba6fd29b7977cc4bf6b0107d3696f7dfa9f))
+* version 2.0.0 change build pipline support windows ([0f97753](https://github.com/bridgewwater/golang-project-temple-base/commit/0f977533d15fc713b6b4ddd1eed629cad54103c8))
+
+
+### Bug Fixes
+
+* fix build info not support windows ([6b8141e](https://github.com/bridgewwater/golang-project-temple-base/commit/6b8141e47c641394b3fe48b8002837587c77e796))
+* fix tar commond error ([0daf347](https://github.com/bridgewwater/golang-project-temple-base/commit/0daf347dd7b87409f42d65dc0df0b9c0af2d65e2))
+* fix temp-golang-base not support new makefile for build ([226abd6](https://github.com/bridgewwater/golang-project-temple-base/commit/226abd6c241b4d7545ae876e16717abd5619c180))
+* fix windows can not use tar and shasum error ([46c0968](https://github.com/bridgewwater/golang-project-temple-base/commit/46c0968f156f45da0826ec038d71b5e735732805))
+* fix windows not support ; to run ([6aedb96](https://github.com/bridgewwater/golang-project-temple-base/commit/6aedb96755afc185bcd96be378fcafe5a291e326))
 
 ## 1.1.0 (2021-01-02)
 
@@ -47,4 +109,3 @@
 * feat: change to travis-ci.com ([85b8d51](https://github.com/bridgewwater/golang-project-temple-base/commit/85b8d51))
 * feat: update temp-golang-base ([d56783e](https://github.com/bridgewwater/golang-project-temple-base/commit/d56783e))
 * feat: update temp-golang-base for support more case ([a2f9f17](https://github.com/bridgewwater/golang-project-temple-base/commit/a2f9f17))
-
