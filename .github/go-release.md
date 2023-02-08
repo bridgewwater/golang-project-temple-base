@@ -27,7 +27,7 @@ jobs:
     - name: Build Release binary
       run: |
         make dep
-        make distPlatformTarAll
+        make cleanAllDist distPlatformTarAll
     - uses: softprops/action-gh-release@master
       name: Create Release
       if: startsWith(github.ref, 'refs/tags/')

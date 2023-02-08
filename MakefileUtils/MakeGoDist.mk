@@ -139,7 +139,7 @@ $(warning "-> windows make shell cross compiling may be take mistake")
 	@echo "=> end $(strip $(6)).exe"
 endef
 
-distTest: pathCheckRootDistLocalTest
+distTest: cleanRootDistLocalTest pathCheckRootDistLocalTest
 ifeq ($(OS),Windows_NT)
 	$(call go_local_binary_dist,\
 	${ENV_INFO_DIST_ENV_TEST_NAME},\
@@ -169,7 +169,7 @@ else
 	)
 endif
 
-distTestOS: pathCheckRootDistOs
+distTestOS: cleanRootDistOs pathCheckRootDistOs
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -240,7 +240,7 @@ else
 	)
 endif
 
-distReleaseOS: pathCheckRootDistOs
+distReleaseOS: cleanRootDistOs pathCheckRootDistOs
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -283,12 +283,6 @@ distScpReleaseOSTar: distReleaseOSTar
 
 distAllLocalTar: distTestTar distReleaseTar
 	@echo "=> all dist as os tar finish"
-
-distAllOsTar: distTestOSTar distReleaseOSTar
-	@echo "=> all dist as os tar finish"
-
-distAllTar: distAllLocalTar distAllOsTar
-	@echo "=> all dist tar has finish"
 
 distPlatformTarWinAmd64: cleanRootDistPlatformWinAmd64 pathCheckRootDistPlatformWinAmd64
 ifeq ($(OS),Windows_NT)
@@ -572,31 +566,31 @@ ifeq ($(OS),Windows_NT)
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
 	${ENV_INFO_DIST_BIN_NAME},\
-	${EENV_INFO_PLATFORM_OS_MACOS},\
+	${ENV_INFO_PLATFORM_OS_MACOS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME})\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME})\
 	)
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
 	${ENV_INFO_DIST_BIN_NAME},\
-	${EENV_INFO_PLATFORM_OS_MACOS},\
+	${ENV_INFO_PLATFORM_OS_MACOS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}\
 	)
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
-	${EENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
 	)
 else
 	$(call dist_tar_with_source,\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
 	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
-	${EENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
 	)
 endif
 
@@ -606,75 +600,39 @@ ifeq ($(OS),Windows_NT)
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
 	${ENV_INFO_DIST_BIN_NAME},\
-	${EENV_INFO_PLATFORM_OS_MACOS},\
+	${ENV_INFO_PLATFORM_OS_MACOS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME})\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME})\
 	)
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
 	${ENV_INFO_DIST_BIN_NAME},\
-	${EENV_INFO_PLATFORM_OS_MACOS},\
+	${ENV_INFO_PLATFORM_OS_MACOS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}\
 	)
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
-	${EENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
 	)
 else
 	$(call dist_tar_with_source,\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
 	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
-	${EENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
 	)
 endif
 
 distPlatformTarAllMacos: distPlatformTarMacosAmd64 distPlatformTarMacosArm64
 
-distPlatformTarFreebsdAmd64:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},freebsd,amd64)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/freebsd/amd64/${ENV_INFO_DIST_ENV_RELEASE_NAME},freebsd-amd64-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
-
-distPlatformTarFreebsd386:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},freebsd,386)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/freebsd/386/${ENV_INFO_DIST_ENV_RELEASE_NAME},freebsd-386-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
-
-distPlatformTarFreebsdArm64:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},freebsd,arm64)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/freebsd/arm64/${ENV_INFO_DIST_ENV_RELEASE_NAME},freebsd-arm64-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
-
-distPlatformTarFreebsdArm:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},freebsd,arm)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/freebsd/arm/${ENV_INFO_DIST_ENV_RELEASE_NAME},freebsd-arm-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
-
-distPlatformTarAllFreebsd: distPlatformTarFreebsdAmd64 distPlatformTarFreebsd386 distPlatformTarFreebsdArm64 distPlatformTarFreebsdArm
-
-distPlatformTarOpenbsdAmd64:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},openbsd,amd64)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/openbsd/amd64/${ENV_INFO_DIST_ENV_RELEASE_NAME},openbsd-amd64-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
-
-distPlatformTarOpenbsd386:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},openbsd,386)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/openbsd/386/${ENV_INFO_DIST_ENV_RELEASE_NAME},openbsd-386-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
-
-distPlatformTarOpenbsdArm64:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},openbsd,arm64)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/openbsd/arm64/${ENV_INFO_DIST_ENV_RELEASE_NAME},openbsd-arm64-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
-
-distPlatformTarOpenbsdArm:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},openbsd,arm)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/openbsd/arm/${ENV_INFO_DIST_ENV_RELEASE_NAME},openbsd-arm-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
-
-distPlatformTarAllOpenbsd: distPlatformTarOpenbsdAmd64 distPlatformTarOpenbsd386 distPlatformTarOpenbsdArm64 distPlatformTarOpenbsdArm
-
 distPlatformTarCommonUse: distPlatformTarLinuxAmd64 distPlatformTarWinAmd64 distPlatformTarMacosAmd64 distPlatformTarMacosArm64
 
-distPlatformTarAll: distPlatformTarAllLinux distPlatformTarAllMacos distPlatformTarAllWindows distPlatformTarAllFreebsd distPlatformTarAllOpenbsd
+distPlatformTarAll: distPlatformTarAllLinux distPlatformTarAllMacos distPlatformTarAllWindows
 
 helpDist:
 	@echo "Help: helpDist.mk"
@@ -688,7 +646,7 @@ helpDist:
 	@echo "~> make distReleaseTar           - build dist at ${INFO_ROOT_DIST_PATH}/local/${ENV_INFO_DIST_ENV_RELEASE_NAME} in local OS and tar"
 	@echo "~> make distReleaseOS            - build dist at ${INFO_ROOT_DIST_PATH}/os/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_ENV_RELEASE_NAME} as: $(ENV_INFO_DIST_GO_OS) $(ENV_INFO_DIST_GO_ARCH)"
 	@echo "~> make distReleaseOSTar         - build dist at ${INFO_ROOT_DIST_PATH}/os/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_ENV_RELEASE_NAME} as: $(ENV_INFO_DIST_GO_OS) $(ENV_INFO_DIST_GO_ARCH) and tar"
-	@echo "~> make distAllTar               - build all tar to dist"
+	@echo "~> make distAllLocalTar          - build all local tar to dist"
 	@echo "~> make distPlatformTarCommonUse - build tar to dist linux-amd64 win-amd64 macOS-amd64 macOS-arm64"
 	@echo "~> make distPlatformTarAll       - build all platform tar to dist and tar"
 	@echo ""
