@@ -9,7 +9,7 @@ endif
 ROOT_NAME ?= golang-project-temple-base
 ENV_RUN_INFO_HELP_ARGS= -h
 ENV_RUN_INFO_ARGS=
-# change to other build enterance
+# change to other build entrance
 ENV_ROOT_BUILD_ENTRANCE = main.go
 ENV_ROOT_BUILD_BIN_NAME = $(ROOT_NAME)
 ENV_ROOT_BUILD_PATH = build
@@ -55,11 +55,11 @@ endif
 # MakeGoDist.mk settings
 INFO_ROOT_DIST_PATH ?= dist
 
-include MakefileUtils/MakeGoMod.mk
-include MakefileUtils/MakeGoAction.mk
-include MakefileUtils/MakeDistTools.mk
-include MakefileUtils/MakeGoDist.mk
-include MakefileUtils/MakeDocker.mk
+include z-MakefileUtils/MakeGoMod.mk
+include z-MakefileUtils/MakeGoAction.mk
+include z-MakefileUtils/MakeDistTools.mk
+include z-MakefileUtils/MakeGoDist.mk
+include z-MakefileUtils/MakeDocker.mk
 
 #checkEnvGOPATH:
 #ifndef GOPATH
