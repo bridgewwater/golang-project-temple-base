@@ -34,14 +34,36 @@ ENV_INFO_DIST_ENV_RELEASE_NAME=release
 define dist_tar_with_source
 	@echo "=> start $(0)"
 	@echo " want tar source folder     : $(strip ${1})"
-	@echo "      tar file full folder  : $(strip ${2})"
+	@echo "      tar file abs folder   : $(strip ${2})"
 	@echo "      tar file env mark     : $(strip ${3})"
 	@echo "      tar file full path    : $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
 	@echo "      ENV_INFO_DIST_VERSION : ${ENV_INFO_DIST_VERSION}"
 	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
 	@echo ""
-	$(warning if cp source can change here)
+	$(warning if cp source can change here cp tar undper $(strip ${1}))
+	cp ${ENV_ROOT_MANIFEST_PKG_JSON} $(strip ${1})
+	cp -R doc/ $(strip ${1})/doc/
+	@echo "-> cp source finish"
+
+	tar -zcvf $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz -C $(strip ${1}) "."
+	shasum -a 256 $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz > $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz.sha256
+	@echo "-> check as: tar -tf $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
+	@echo "~> tar ${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK} at: $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
+endef
+
+define dist_tar_with_windows_source
+	@echo "=> start $(0)"
+	@echo " want tar source folder     : $(strip ${1})"
+	@echo "      tar file abs folder   : $(strip ${2})"
+	@echo "      tar file env mark     : $(strip ${3})"
+	@echo "      tar file full path    : $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
+	@echo "      ENV_INFO_DIST_VERSION : ${ENV_INFO_DIST_VERSION}"
+	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
 	@echo ""
+	$(warning if cp source can change here cp tar undper $(strip ${1}))
+	cp ${ENV_ROOT_MANIFEST_PKG_JSON} $(strip ${1})
+	cp -R doc\ $(strip ${1})\doc\
+	@echo "-> cp source finish"
 
 	tar -zcvf $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz -C $(strip ${1}) "."
 	shasum -a 256 $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz > $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz.sha256
@@ -133,7 +155,7 @@ endif
 
 distTestTar: distTest
 ifeq ($(OS),Windows_NT)
-	$(call dist_tar_with_source,\
+	$(call dist_tar_with_windows_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST}/),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL}/),\
 	${ENV_INFO_DIST_ENV_TEST_NAME}\
@@ -169,7 +191,7 @@ endif
 
 distTestOSTar: distTestOS
 ifeq ($(OS),Windows_NT)
-	$(call dist_tar_with_source,\
+	$(call dist_tar_with_windows_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
 	${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
@@ -204,7 +226,7 @@ endif
 
 distReleaseTar: distRelease
 ifeq ($(OS),Windows_NT)
-	$(call dist_tar_with_source,\
+	$(call dist_tar_with_windows_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}/),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL}/),\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME}\
@@ -240,7 +262,7 @@ endif
 
 distReleaseOSTar: distReleaseOS
 ifeq ($(OS),Windows_NT)
-	$(call dist_tar_with_source,\
+	$(call dist_tar_with_windows_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
@@ -288,7 +310,7 @@ else
 	)
 endif
 ifeq ($(OS),Windows_NT)
-	$(call dist_tar_with_source,\
+	$(call dist_tar_with_windows_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_PLATFORM_OS_WINDOWS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
@@ -322,7 +344,7 @@ else
 	)
 endif
 ifeq ($(OS),Windows_NT)
-	$(call dist_tar_with_source,\
+	$(call dist_tar_with_windows_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_386}),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_PLATFORM_OS_WINDOWS}-${ENV_INFO_PLATFORM_OS_ARCH_386}\
@@ -356,7 +378,7 @@ else
 	)
 endif
 ifeq ($(OS),Windows_NT)
-	$(call dist_tar_with_source,\
+	$(call dist_tar_with_windows_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_PLATFORM_OS_WINDOWS}-${ENV_INFO_PLATFORM_OS_ARCH_ARM64}\
@@ -390,7 +412,7 @@ else
 	)
 endif
 ifeq ($(OS),Windows_NT)
-	$(call dist_tar_with_source,\
+	$(call dist_tar_with_windows_source,\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM}),\
 	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_PLATFORM_OS_WINDOWS}-${ENV_INFO_PLATFORM_OS_ARCH_ARM}\
