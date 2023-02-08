@@ -8,7 +8,6 @@
 # https://scoop.sh/#/apps?q=busybox&s=0&d=1&o=true
 # scoop install shasum
 #
-# INFO_ROOT_DIST_PATH for set make go dist path
 # ENV_ROOT_BUILD_BIN_NAME for set go binary file name
 # ENV_DIST_VERSION for set dist version name
 # ENV_DIST_MARK for set dist version mark
@@ -140,7 +139,7 @@ $(warning "-> windows make shell cross compiling may be take mistake")
 	@echo "=> end $(strip $(6)).exe"
 endef
 
-distTest: cleanRootDistLocalTest pathCheckRootDistLocalTest
+distTest: pathCheckRootDistLocalTest
 ifeq ($(OS),Windows_NT)
 	$(call go_local_binary_dist,\
 	${ENV_INFO_DIST_ENV_TEST_NAME},\
@@ -291,7 +290,7 @@ distAllOsTar: distTestOSTar distReleaseOSTar
 distAllTar: distAllLocalTar distAllOsTar
 	@echo "=> all dist tar has finish"
 
-distPlatformTarWinAmd64: pathCheckRootDistPlatformWinAmd64
+distPlatformTarWinAmd64: cleanRootDistPlatformWinAmd64 pathCheckRootDistPlatformWinAmd64
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -325,7 +324,7 @@ else
 	)
 endif
 
-distPlatformTarWin386: pathCheckRootDistPlatformWin386
+distPlatformTarWin386: cleanRootDistPlatformWin386 pathCheckRootDistPlatformWin386
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -359,7 +358,7 @@ else
 	)
 endif
 
-distPlatformTarWinArm64:
+distPlatformTarWinArm64: cleanRootDistPlatformWinArm64 pathCheckRootDistPlatformWinArm64
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -393,7 +392,7 @@ else
 	)
 endif
 
-distPlatformTarWinArm:
+distPlatformTarWinArm: cleanRootDistPlatformWinArm pathCheckRootDistPlatformWinArm
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -429,7 +428,7 @@ endif
 
 distPlatformTarAllWindows: distPlatformTarWinAmd64 distPlatformTarWin386 distPlatformTarWinArm64 distPlatformTarWinArm
 
-distPlatformTarLinuxAmd64:
+distPlatformTarLinuxAmd64: cleanRootDistPlatformLinuxAmd64 pathCheckRootDistPlatformLinuxAmd64
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -463,7 +462,7 @@ else
 	)
 endif
 
-distPlatformTarLinux386:
+distPlatformTarLinux386: cleanRootDistPlatformLinuxAmd386 pathCheckRootDistPlatformLinux386
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -497,7 +496,7 @@ else
 	)
 endif
 
-distPlatformTarLinuxArm64:
+distPlatformTarLinuxArm64: cleanRootDistPlatformLinuxArm64 pathCheckRootDistPlatformLinuxArm64
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -531,7 +530,7 @@ else
 	)
 endif
 
-distPlatformTarLinuxArm:
+distPlatformTarLinuxArm: cleanRootDistPlatformLinuxArm pathCheckRootDistPlatformLinuxArm
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -567,13 +566,73 @@ endif
 
 distPlatformTarAllLinux: distPlatformTarLinuxAmd64 distPlatformTarLinux386 distPlatformTarLinuxArm64 distPlatformTarLinuxArm
 
-distPlatformTarMacosAmd64:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},darwin,amd64)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/darwin/amd64/${ENV_INFO_DIST_ENV_RELEASE_NAME},darwin-amd64-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+distPlatformTarMacosAmd64: cleanRootDistPlatformMacOsAmd64 pathCheckRootDistPlatformMacOsAmd64
+ifeq ($(OS),Windows_NT)
+	$(call go_static_binary_windows_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${EENV_INFO_PLATFORM_OS_MACOS},\
+	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME})\
+	)
+else
+	$(call go_static_binary_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${EENV_INFO_PLATFORM_OS_MACOS},\
+	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}\
+	)
+endif
+ifeq ($(OS),Windows_NT)
+	$(call dist_tar_with_windows_source,\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${EENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	)
+else
+	$(call dist_tar_with_source,\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
+	${EENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	)
+endif
 
-distPlatformTarMacosArm64:
-	$(call go_static_binary_dist,${INFO_ROOT_DIST_PATH},${ENV_INFO_DIST_ENV_RELEASE_NAME},${ENV_INFO_DIST_BIN_NAME},darwin,arm64)
-	$(call dist_tar_with_source,${INFO_ROOT_DIST_PATH}/os/darwin/arm64/${ENV_INFO_DIST_ENV_RELEASE_NAME},darwin-arm64-${ENV_INFO_DIST_ENV_RELEASE_NAME},${INFO_ROOT_DIST_PATH}/os)
+distPlatformTarMacosArm64: cleanRootDistPlatformMacOsArm64 pathCheckRootDistPlatformMacOsArm64
+ifeq ($(OS),Windows_NT)
+	$(call go_static_binary_windows_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${EENV_INFO_PLATFORM_OS_MACOS},\
+	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME})\
+	)
+else
+	$(call go_static_binary_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_INFO_DIST_BIN_NAME},\
+	${EENV_INFO_PLATFORM_OS_MACOS},\
+	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}\
+	)
+endif
+ifeq ($(OS),Windows_NT)
+	$(call dist_tar_with_windows_source,\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${EENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	)
+else
+	$(call dist_tar_with_source,\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${EENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
+	${EENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	)
+endif
 
 distPlatformTarAllMacos: distPlatformTarMacosAmd64 distPlatformTarMacosArm64
 
