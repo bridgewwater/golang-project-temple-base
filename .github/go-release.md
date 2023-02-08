@@ -75,7 +75,7 @@ jobs:
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         # replace v chat at tag
         [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-        ENV_CI_DIST_VERSION=v${VERSION}
+        export ENV_CI_DIST_VERSION=v${VERSION}
         make cleanAllDist distPlatformTarAll
     - uses: softprops/action-gh-release@master
       name: Create Release
