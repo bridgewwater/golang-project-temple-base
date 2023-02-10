@@ -21,6 +21,21 @@ environment:
   GOARCH: amd64
 
 steps:
+  - name: env-init
+    image: alpine:3.17
+    pull: if-not-exists
+    commands:
+      - "echo \"=> base info\nDRONE_STAGE_MACHINE    ${DRONE_STAGE_MACHINE}\nDRONE_STAGE_OS         ${DRONE_STAGE_OS}\nDRONE_STAGE_ARCH       ${DRONE_STAGE_ARCH}\nDRONE_WORKSPACE        ${DRONE_WORKSPACE}\nDRONE_REPO_NAME        ${DRONE_REPO_NAME}\nDRONE_REPO_OWNER       ${DRONE_REPO_OWNER}\nDRONE_REPO             ${DRONE_REPO}\nDRONE_BRANCH           ${DRONE_BRANCH/\\//-}\nDRONE_COMMIT_SHA short ${DRONE_COMMIT_SHA:0:8}\nDRONE_TAG              ${DRONE_TAG##v}\n\""
+      - echo "DRONE_STAGE_MACHINE    ${DRONE_STAGE_MACHINE}"
+      - echo "DRONE_STAGE_OS         ${DRONE_STAGE_OS}"
+      - echo "DRONE_STAGE_ARCH       ${DRONE_STAGE_ARCH}"
+      - echo "DRONE_WORKSPACE        ${DRONE_WORKSPACE}"
+      - echo "DRONE_REPO_NAME        ${DRONE_REPO_NAME}"
+      - echo "DRONE_REPO_OWNER       ${DRONE_REPO_OWNER}"
+      - echo "DRONE_REPO             ${DRONE_REPO}"
+      - echo "DRONE_BRANCH           ${DRONE_BRANCH/\//-}"
+      - echo "DRONE_COMMIT_SHA short ${DRONE_COMMIT_SHA:0:8}"
+      - echo "DRONE_TAG              ${DRONE_TAG##v}"
   - name: go-init
     image: golang:1.17.13-buster
     pull: if-not-exists
@@ -30,13 +45,6 @@ steps:
     environment:
       GOPATH: /go
     commands:
-      - pwd
-      - echo "DRONE_REPO_NAME        ${DRONE_REPO_NAME}"
-      - echo "DRONE_REPO_OWNER       ${DRONE_REPO_OWNER}"
-      - echo "DRONE_REPO             ${DRONE_REPO}"
-      - echo "DRONE_BRANCH           ${DRONE_BRANCH/\//-}"
-      - echo "DRONE_COMMIT_SHA short ${DRONE_COMMIT_SHA:0:8}"
-      - echo "DRONE_TAG              ${DRONE_TAG##v}"
       - go version
       - go env
       - go mod verify
