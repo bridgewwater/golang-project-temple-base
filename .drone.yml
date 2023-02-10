@@ -126,12 +126,17 @@ steps:
         - failure
         - success
 
-trigger:
-  branch:
-    - main
-  event: # if use trigger.event tag , trigger.branch are invalid
-    - pull_request # will use trigger.branch
+trigger: # https://docs.drone.io/pipeline/triggers/
+  # branch:
+  #   - main
+  event:
+    - cron
+    - custom
     - push
+    - pull_request
+    - tag
+    - promote
+    - rollback
 
 volumes: # need admin open Trusted
   - name: go_cache
