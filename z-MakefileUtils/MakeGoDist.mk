@@ -42,8 +42,8 @@ define dist_tar_with_source
 	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
 	@echo ""
 	$(warning if cp source can change here cp tar undper $(strip ${1}))
-	cp '${ENV_ROOT_MANIFEST_PKG_JSON}' '$(strip ${1})'
-	cp -R 'doc/' '$(strip ${1})/doc'
+	$(info change this - cp '${ENV_ROOT_MANIFEST_PKG_JSON}' '$(strip ${1})')
+	$(info change this - cp -R 'doc/' '$(strip ${1})/doc')
 	@echo "-> cp source finish"
 
 	tar -zcvf $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz -C $(strip ${1}) "."
@@ -62,8 +62,8 @@ define dist_tar_with_windows_source
 	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
 	@echo ""
 	$(warning if cp source can change here cp tar undper $(strip ${1}))
-	cp '${ENV_ROOT_MANIFEST_PKG_JSON}' '$(strip ${1})'
-	cp -R 'doc\' '$(strip ${1})\'
+	$(info change this - cp '${ENV_ROOT_MANIFEST_PKG_JSON}' '$(strip ${1})')
+	$(info change this - cp -R 'doc\' '$(strip ${1})\')
 	@echo "-> cp source finish"
 
 	tar -zcvf $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz -C $(strip ${1}) "."
