@@ -3,6 +3,7 @@
 [![GoDoc](https://godoc.org/github.com/bridgewwater/golang-project-temple-base?status.png)](https://godoc.org/github.com/bridgewwater/golang-project-temple-base/)
 [![GoReportCard](https://goreportcard.com/badge/github.com/bridgewwater/golang-project-temple-base)](https://goreportcard.com/report/github.com/bridgewwater/golang-project-temple-base)
 [![codecov](https://codecov.io/gh/bridgewwater/golang-project-temple-base/branch/main/graph/badge.svg)](https://codecov.io/gh/bridgewwater/golang-project-temple-base)
+[![github release](https://img.shields.io/github/v/release/bridgewwater/golang-project-temple-base?style=social)](https://github.com/bridgewwater/golang-project-temple-base/releases)
 
 ## for what
 
