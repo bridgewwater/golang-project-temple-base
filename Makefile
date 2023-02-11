@@ -49,17 +49,20 @@ ENV_DIST_MARK=
 
 # this can change to other mark https://docs.drone.io/pipeline/environment/substitution/
 ifneq ($(strip $(DRONE_TAG)),)
+$(info -> change ENV_DIST_MARK by DRONE_TAG)
     ENV_DIST_MARK=-tag.${DRONE_TAG}
 else
     ifneq ($(strip $(DRONE_COMMIT)),)
+$(info -> change ENV_DIST_MARK by DRONE_COMMIT)
         ENV_DIST_MARK=-${DRONE_COMMIT}
     endif
 endif
 ifneq ($(strip $(GITHUB_SHA)),)
+$(info -> change ENV_DIST_MARK by GITHUB_SHA)
     ENV_DIST_MARK=-${GITHUB_SHA}# https://docs.github.com/cn/enterprise-server@2.22/actions/learn-github-actions/environment-variables
 endif
 ifeq ($(strip $(ENV_DIST_MARK)),)
-$(warning -> change ENV_DIST_MARK by git)
+$(info -> change ENV_DIST_MARK by git)
     ENV_DIST_MARK=-$(strip $(shell git --no-pager rev-parse --short HEAD))
 endif
 
