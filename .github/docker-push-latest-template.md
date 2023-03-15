@@ -83,6 +83,23 @@ jobs:
         docker run --privileged --rm tonistiigi/binfmt --install all
         docker buildx create --use --name mybuilder
         docker buildx inspect mybuilder --bootstrap
+    - name: Build dry
+      run: |
+        # parse docker image id
+        IMAGE_ID=$DOCKER_HUB_USER/$IMAGE_NAME
+        # lower case all
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        # ref get version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        # replace v chat at tag
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+        # Use Docker `latest` tag convention when get main
+        [ "$VERSION" == "main" ] && VERSION=latest
+
+        echo IMAGE_ID=$IMAGE_ID
+        echo VERSION=$VERSION
+        # build
+        docker buildx build -t $IMAGE_ID:$VERSION --platform=linux/arm,linux/arm64,linux/amd64 .
     - name: Push image
       run: |
         # parse docker image id
