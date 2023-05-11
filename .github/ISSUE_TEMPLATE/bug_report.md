@@ -26,9 +26,20 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Device:**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+- OS: [e.g. iOS]
+- Browser [e.g. chrome, safari]
+- Version [e.g. 22]
+- get system info by command
+```bash
+# UNIX like
+$ uname -a
+# linux
+$ lsb_release -a
+# macOS
+$ sw_vers
+# windows
+$ systeminfo
+```
 
 **Additional context**
 Add any other context about the problem here.
