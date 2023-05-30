@@ -16,7 +16,7 @@ on:
 
 #env:
   # name of docker image
-#  DOCKER_HUB_USER: sinlov
+#  DOCKER_HUB_USER: bridgewwater
 
 permissions:
   contents: write
@@ -62,7 +62,7 @@ on:
 
 #env:
   # name of docker image
-#  DOCKER_HUB_USER: sinlov
+#  DOCKER_HUB_USER: bridgewwater
 
 permissions:
   contents: write
