@@ -4,8 +4,8 @@
 
 modClean:
 	@echo "=> try to clean go.sum and vendor/"
-	-@RM go.sum
-	-@RM -r vendor/
+	-@$(RM) go.sum
+	-@$(RM) -r vendor/
 
 modList:
 	@echo "=> show go list -m -json all"

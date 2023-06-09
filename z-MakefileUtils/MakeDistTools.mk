@@ -150,9 +150,9 @@ endif
 
 cleanDistAll:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_INFO_ROOT_DIST})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_INFO_ROOT_DIST})
 else
-	-@RM -r ${ENV_PATH_INFO_ROOT_DIST}
+	-@$(RM) -r ${ENV_PATH_INFO_ROOT_DIST}
 endif
 	$(info -> has clean ${ENV_PATH_INFO_ROOT_DIST})
 
@@ -169,9 +169,9 @@ endif
 
 cleanRootDistLocal:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL})
 else
-	-@RM -r ${ENV_PATH_INFO_ROOT_DIST_LOCAL}
+	-@$(RM) -r ${ENV_PATH_INFO_ROOT_DIST_LOCAL}
 endif
 	$(info -> has clean ${ENV_PATH_INFO_ROOT_DIST_LOCAL})
 
@@ -201,9 +201,9 @@ endif
 
 cleanRootDistLocalTest:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST})
+	-@$(RM) -r $(subst /,\,${${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST})
 else
-	-@RM -r ${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST}
+	-@$(RM) -r ${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST}
 endif
 	$(info -> has clean ${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST})
 
@@ -222,17 +222,17 @@ endif
 
 cleanRootDistLocalRelease:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE})
+	-@$(RM) -r $(subst /,\,${${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE})
 else
-	-@RM -r ${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}
+	-@$(RM) -r ${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}
 endif
 	$(info -> has clean ${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE})
 
 cleanRootDistOs:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS})
 else
-	-@RM -r ${ENV_PATH_INFO_ROOT_DIST_OS}
+	-@$(RM) -r ${ENV_PATH_INFO_ROOT_DIST_OS}
 endif
 	$(info -> has clean ${ENV_PATH_INFO_ROOT_DIST_OS})
 
@@ -264,9 +264,9 @@ endif
 
 cleanRootDistPlatformWin:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS})
 
@@ -285,9 +285,9 @@ endif
 
 cleanRootDistPlatformWinAmd64:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_AMD64})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_AMD64})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_AMD64}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_AMD64}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_AMD64})
 
@@ -306,9 +306,9 @@ endif
 
 cleanRootDistPlatformWin386:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_386})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_386})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_386}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_386}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_386})
 
@@ -327,9 +327,9 @@ endif
 
 cleanRootDistPlatformWinArm64:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM64})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM64})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM64}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM64}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM64})
 
@@ -348,9 +348,9 @@ endif
 
 cleanRootDistPlatformWinArm:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_WINDOWS_ARM})
 
@@ -372,9 +372,9 @@ endif
 
 cleanRootDistPlatformMacOs:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_MACOS})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_MACOS})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_MACOS}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_MACOS}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_MACOS})
 
@@ -393,9 +393,9 @@ endif
 
 cleanRootDistPlatformMacOsAmd64:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_MACOS_AMD64})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_MACOS_AMD64})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_MACOS_AMD64}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_MACOS_AMD64}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_MACOS_AMD64})
 
@@ -414,9 +414,9 @@ endif
 
 cleanRootDistPlatformMacOsArm64:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_MACOS_ARM64})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_MACOS_ARM64})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_MACOS_ARM64}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_MACOS_ARM64}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_MACOS_ARM64})
 
@@ -439,9 +439,9 @@ endif
 
 cleanRootRootDistPlatformLinux:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_LINUX})
 
@@ -460,9 +460,9 @@ endif
 
 cleanRootDistPlatformLinuxAmd64:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX_AMD64})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX_AMD64})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX_AMD64}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX_AMD64}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_LINUX_AMD64})
 
@@ -481,9 +481,9 @@ endif
 
 cleanRootDistPlatformLinuxAmd386:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX_386})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX_386})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX_386}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX_386}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_LINUX_386})
 
@@ -502,9 +502,9 @@ endif
 
 cleanRootDistPlatformLinuxArm64:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM64})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM64})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM64}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM64}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM64})
 
@@ -523,9 +523,9 @@ endif
 
 cleanRootDistPlatformLinuxArm:
 ifeq ($(OS),Windows_NT)
-	-@RM -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM})
+	-@$(RM) -r $(subst /,\,${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM})
 else
-	-@RM -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM}
+	-@$(RM) -r ${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM}
 endif
 	$(info -> has clean ${ENV_PATH_DIST_PLATFORM_OS_LINUX_ARM})
 
