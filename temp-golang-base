@@ -297,9 +297,12 @@ case ${read_want_keep_sample_code} in
   echo " now keep sample code"
   ;;
 *)
-  echo " just remove sample code"
+  echo " just remove sample code at stack and stack_test"
   if [[ -d ./${new_project}/stack ]]; then
     rm -rf ./${new_project}/stack
+  fi
+  if [[ -d ./${new_project}/stack_test ]]; then
+    rm -rf ./${new_project}/stack_test
   fi
   ;;
 esac

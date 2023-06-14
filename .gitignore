@@ -14,7 +14,7 @@ vendor/
 coverage.out
 coverage.txt
 # testData folder of golang
-testdata/
+test[Dd]ata/
 # Expected results when tested
 .golden
 
