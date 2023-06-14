@@ -167,10 +167,10 @@ cleanTestData:
 	@$(RM) -r **/**/**/**/**/**/testdata
 	$(info -> finish clean folder [ testdata ])
 
-clean: cleanBuild cleanLog
+clean: cleanBuild cleanTestData cleanLog
 	@echo "~> clean finish"
 
-cleanAll: clean cleanTestData cleanAllDist
+cleanAll: clean cleanAllDist
 	@echo "~> clean all finish"
 
 init:
