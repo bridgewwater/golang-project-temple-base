@@ -12,9 +12,22 @@ modClean:
 	@$(RM) -r vendor/
 	@echo "=> finish clean: go.sum vendor/"
 
+modFetch:
+	@echo "-> can fetch last version github.com/gin-gonic/gin as"
+	@echo "go list -mod readonly -m -versions github.com/gin-gonic/gin | awk '{print \044\061 \042 lastest: \042 \044\0116\0106 }'"
+	@echo ""
+ifeq ($(OS),Windows_NT)
+	@go list -mod mod -m -versions github.com/gin-gonic/gin
+	@go list -mod mod -m -versions github.com/shirou/gopsutil/v3
+else
+	@echo "last version"
+	@go list -mod mod -m -versions github.com/gin-gonic/gin | awk '{print $$1 " lastest: " $$NF }'
+	@go list -mod mod -m -versions github.com/shirou/gopsutil/v3 | awk '{print $$1 " lastest: " $$NF }'
+endif
+
 modList:
-	$(info show go list -mod=readonly -json all)
-	@go list -mod=readonly -json all
+	$(info show go list -mod readonly -json all)
+	@go list -mod readonly -json all
 
 modGraphDependencies:
 	@go mod graph
@@ -30,13 +43,6 @@ modDownload:
 
 modVendor:
 	@go mod vendor
-
-modFetch:
-	@echo "-> can fetch last version github.com/gin-gonic/gin as"
-	@echo "go list -m -versions github.com/gin-gonic/gin | awk '{print \044\061 \042 lastest: \042 \044\0116\0106 }'"
-	@echo ""
-	@echo "full version update v1.x"
-	@go list -m -versions github.com/gin-gonic/gin
 
 modFmt:
 	@go fmt -x ./...
