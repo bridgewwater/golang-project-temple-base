@@ -173,6 +173,8 @@ func pathIsDir(path string) bool {
 }
 
 // rmDir remove dir by path
+//
+//nolint:golint,unused
 func rmDir(path string, force bool) error {
 	if force {
 		return os.RemoveAll(path)
@@ -218,6 +220,9 @@ func readFileAsByte(path string) ([]byte, error) {
 // read file as json
 func readFileAsJson(path string, v interface{}) error {
 	fileAsByte, err := readFileAsByte(path)
+	if err != nil {
+		return err
+	}
 	err = json.Unmarshal(fileAsByte, v)
 	if err != nil {
 		return fmt.Errorf("path: %s , read file as json err: %v", path, err)
@@ -369,6 +374,8 @@ func setEnvBool(t *testing.T, key string, val bool) {
 
 // setEnvU64
 // set env by key and val
+//
+//nolint:golint,unused
 func setEnvU64(t *testing.T, key string, val uint64) {
 	err := os.Setenv(key, strconv.FormatUint(val, 10))
 	if err != nil {
@@ -387,6 +394,8 @@ func setEnvInt64(t *testing.T, key string, val int64) {
 
 // randomStr
 // new random string by cnt
+//
+//nolint:golint,unused
 func randomStr(cnt uint) string {
 	var letters = []byte("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
 	result := make([]byte, cnt)
@@ -400,6 +409,8 @@ func randomStr(cnt uint) string {
 
 // randomInt
 // new random int by max
+//
+//nolint:golint,unused
 func randomInt(max int) int {
 	rand.Seed(time.Now().Unix())
 	return rand.Intn(max)

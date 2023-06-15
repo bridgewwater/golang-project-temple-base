@@ -1,10 +1,11 @@
 .PHONY: test check clean build dist all
 #TOP_DIR := $(shell pwd)
 # can change by env:ENV_CI_DIST_VERSION use and change by env:ENV_CI_DIST_MARK by CI
-ENV_DIST_VERSION = v0.1.2
+ENV_DIST_VERSION=v0.1.2
 ENV_DIST_MARK=
 
 ROOT_NAME?=golang-project-temple-base
+
 # MakeDocker.mk settings start
 ROOT_OWNER?=bridgewwater
 ROOT_PARENT_SWITCH_TAG=1.17.13-buster
@@ -41,53 +42,19 @@ ENV_DIST_GO_OS = linux
 # amd64 386
 ENV_DIST_GO_ARCH = amd64
 
-# this can change to other mark https://docs.drone.io/pipeline/environment/substitution/
-ifneq ($(strip $(DRONE_TAG)),)
-$(info -> change ENV_DIST_MARK by DRONE_TAG)
-    ENV_DIST_MARK=-tag.${DRONE_TAG}
-else
-    ifneq ($(strip $(DRONE_COMMIT)),)
-$(info -> change ENV_DIST_MARK by DRONE_COMMIT)
-        ENV_DIST_MARK=-${DRONE_COMMIT}
-    endif
-endif
-ifneq ($(strip $(GITHUB_SHA)),)
-$(info -> change ENV_DIST_MARK by GITHUB_SHA)
-    ENV_DIST_MARK=-${GITHUB_SHA}# https://docs.github.com/cn/enterprise-server@2.22/actions/learn-github-actions/environment-variables
-endif
-ifeq ($(strip $(ENV_DIST_MARK)),)
-$(info -> change ENV_DIST_MARK by git)
-    ENV_DIST_MARK=-$(strip $(shell git --no-pager rev-parse --short HEAD))
-endif
-ifneq ($(strip $(ENV_CI_DIST_MARK)),)
-$(info -> change ENV_DIST_MARK by ENV_CI_DIST_MARK)
-    ENV_DIST_MARK=-${ENV_CI_DIST_MARK}
-endif
 
-ifneq ($(strip $(ENV_CI_DIST_VERSION)),)
-$(info -> change ENV_DIST_VERSION by ENV_CI_DIST_VERSION)
-    ENV_DIST_VERSION=${ENV_CI_DIST_VERSION}
-endif
-
-# ifeq ($(FILE), $(wildcard $(FILE)))
-# 	@ echo target file not found
-# endif
-
+include z-MakefileUtils/MakeBasicEnv.mk
 include z-MakefileUtils/MakeGoMod.mk
 include z-MakefileUtils/MakeGoAction.mk
 include z-MakefileUtils/MakeDistTools.mk
 include z-MakefileUtils/MakeGoDist.mk
 include z-MakefileUtils/MakeDocker.mk
 
-#checkEnvGOPATH:
-#ifndef GOPATH
-#	@echo Environment variable GOPATH is not set
-#	exit 1
-#endif
-
 ENV_ROOT_MAKE_FILE ?= Makefile
 ENV_ROOT_MANIFEST_PKG_JSON ?= package.json
 ENV_ROOT_CHANGELOG_PATH ?= CHANGELOG.md
+
+all: env
 
 env: distEnv
 	@echo "== project env info start =="
@@ -111,39 +78,6 @@ endif
 	@echo ""
 	@echo "ENV_DIST_MARK                             ${ENV_DIST_MARK}"
 	@echo "== project env info end =="
-
-versionUtils:
-	node -v
-	npm -v
-	npm install -g commitizen cz-conventional-changelog conventional-changelog-cli
-
-versionHelp:
-	@git fetch --tags
-	@echo "project base info"
-	@echo " project name         : ${ROOT_NAME}"
-	@echo " if error can fix after git set remote url, then run: npm init"
-	@echo ""
-	@echo "=> please check to change version, now is [ ${ENV_DIST_VERSION} ]"
-	@echo "-> check at: ${ENV_ROOT_MAKE_FILE}:4"
-ifeq ($(OS),Windows_NT)
-	@echo " $(shell head -n 4 ${ENV_ROOT_MAKE_FILE} | findstr ${ENV_DIST_VERSION})"
-else
-	@echo " $(shell head -n 4 ${ENV_ROOT_MAKE_FILE} | tail -n 1)"
-endif
-	@echo "-> check at: ${ENV_ROOT_MANIFEST_PKG_JSON}:3"
-ifeq ($(OS),Windows_NT)
-	@echo " $(shell head -n 3 ${ENV_ROOT_MANIFEST_PKG_JSON} | findstr ${ENV_DIST_VERSION})"
-else
-	@echo " $(shell head -n 3 ${ENV_ROOT_MANIFEST_PKG_JSON} | tail -n 1)"
-endif
-
-tagBefore: versionHelp
-	@echo " if error can fix after git set remote url, then run: npm init"
-	@conventional-changelog -i ${ENV_ROOT_CHANGELOG_PATH} -s --skip-unstable
-	@echo ""
-	@echo "=> new CHANGELOG.md at: ${ENV_ROOT_CHANGELOG_PATH}"
-	@echo "place check all file, then can add tag like this!"
-	@echo "$$ git tag -a '${ENV_DIST_VERSION}' -m 'message for this tag'"
 
 cloc:
 	@echo "see: https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore"
@@ -181,6 +115,11 @@ init:
 	go env
 	@echo "~> you can use [ make help ] see more task"
 	-go mod verify
+
+dep: modVerify modDownload modVendor
+	@echo "-> just check depends below"
+
+ci: modFmt modLintRun test
 
 test:
 	@echo "=> run test start"
@@ -270,4 +209,4 @@ helpProjectRoot:
 
 help: helpGoMod helpDocker helpGoAction helpDist helpProjectRoot
 	@echo ""
-	@echo "-- more info see Makefile include: MakeGoMod.mk MakeDockerRun.mk MakeGoAction.mk MakeDist.mk--"
+	@echo "-- more info see Makefile include: MakeGoMod.mk MakeDockerRun.mk MakeGoAction.mk MakeGoDist.mk--"

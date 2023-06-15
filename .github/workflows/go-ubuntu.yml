@@ -10,37 +10,57 @@ on:
 #  CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}'
 
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
 
-    - name: Set up Go 1.x
-      uses: actions/setup-go@v2
-      with:
-        go-version: ^1.17
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.17
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
 
-    - name: Print info
-      run: |
-        make env
+      - name: Print info
+        run: |
+          make env
 
-    - name: Get dependencies
-      run: |
-        make actionInstall
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          # Require: The version of golangci-lint to use.
+          # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
+          # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
+          version: v1.53.2
+          # Optional: working directory, useful for monorepos
+          # working-directory: somedir
 
-    - name: test coverage
-      run: make actionCoverage
+          # Optional: golangci-lint command line arguments.
+          #
+          # Note: by default the `.golangci.yml` file should be at the root of the repository.
+          # The location of the configuration file can be changed by using `--config=`
+          # args: --timeout=30m --config=/my/path/.golangci.yml --issues-exit-code=0
 
-    - name: test benchmark
-      run: make actionTestBenchmark
+          # Optional: show only new issues if it's a pull request. The default value is `false`.
+          # only-new-issues: true
 
-#    - name: Codecov
-#      uses: codecov/codecov-action@v3.1.1
-#      with:
-#        token: ${{secrets.CODECOV_TOKEN}}
-#        files: coverage.txt
-##        verbose: true
+          # Optional:The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
+          # install-mode: "goinstall"
+
+      - name: go install check
+        run: |
+          make actionInstall
+      - name: test coverage
+        run: make actionCoverage
+
+      - name: test benchmark
+        run: make actionTestBenchmark
+
+#      - name: Codecov
+#        uses: codecov/codecov-action@v3.1.1
+#        with:
+#          token: ${{secrets.CODECOV_TOKEN}}
+#          files: coverage.txt
+##          verbose: true
