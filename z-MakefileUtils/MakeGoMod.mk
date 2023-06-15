@@ -72,9 +72,6 @@ modLintRun:
 helpGoMod:
 	@echo "Help: MakeGoMod.mk"
 	@echo "this project use go mod, so golang version must 1.12+"
-	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
-	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
-	fi
 	@echo "~> make modClean             - will clean ./go.sum and ./vendor"
 	@echo "~> make modList              - list all depends as: go list -m -json all"
 	@echo "~> make modGraphDependencies - see depends graph of this project"
