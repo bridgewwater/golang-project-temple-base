@@ -1,4 +1,5 @@
-name: go Create release by ENV_CI_DIST_VERSION and push binary
+name: go release
+# by ENV_CI_DIST_VERSION and push binary
 
 on:
   push:

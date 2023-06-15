@@ -101,7 +101,7 @@ cleanTestData:
 	@$(RM) -r **/**/**/**/**/**/testdata
 	$(info -> finish clean folder [ testdata ])
 
-clean: cleanBuild cleanTestData cleanLog
+clean: cleanTestData cleanBuild cleanLog
 	@echo "~> clean finish"
 
 cleanAll: clean cleanAllDist
@@ -119,7 +119,7 @@ init:
 dep: modVerify modDownload modVendor
 	@echo "-> just check depends below"
 
-ci: modFmt modLintRun test
+ci: modTidy modVerify modFmt modVet modLintRun test
 
 test:
 	@echo "=> run test start"
@@ -200,12 +200,15 @@ helpProjectRoot:
 	@echo ""
 	@echo "~> make env                 - print env of this project"
 	@echo "~> make init                - check base env of this project"
-	@echo "~> make clean               - remove binary file and log files"
+	@echo "~> make dep                 - check and install by go mod"
+	@echo "~> make clean               - remove build binary file, log files, and testdata"
 	@echo "~> make test                - run test case ignore --invert-match by config"
 	@echo "~> make testCoverage        - run test coverage case ignore --invert-match by config"
 	@echo "~> make testCoverageBrowser - see coverage at browser --invert-match by config"
 	@echo "~> make testBenchmark       - run go test benchmark case all"
-	@echo "~> make dev                 - run as develop"
+	@echo "~> make ci                  - run CI tools tasks"
+	@echo "~> make dev                 - run as develop mode"
+	@echo "~> make run                 - run as sample mode"
 
 help: helpGoMod helpDocker helpGoAction helpDist helpProjectRoot
 	@echo ""

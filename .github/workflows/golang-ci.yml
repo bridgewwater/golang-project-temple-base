@@ -1,4 +1,4 @@
-name: go-ubuntu
+name: golang-ci
 
 on:
   push:
@@ -10,24 +10,29 @@ on:
 #  CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}'
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  golang-ci:
+    name: glang-ci
+    strategy:
+      matrix:
+        go: ['^1.17']
+        os:
+          - macos-latest
+          - windows-latest
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
-
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v3
+      - name: Set up Go SDK
+        uses: actions/setup-go@v4
         with:
-          go-version: ^1.17
-
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
-
-      - name: Print info
+          go-version: ${{ matrix.go }}
+          cache: false
+      - name: Print env info
         run: |
-          make env
+          go env
+          go version
 
-      - name: golangci-lint
+      - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           # Require: The version of golangci-lint to use.
@@ -39,9 +44,9 @@ jobs:
 
           # Optional: golangci-lint command line arguments.
           #
-          # Note: by default the `.golangci.yml` file should be at the root of the repository.
+          # Note: by default the `.golang-ci.yml` file should be at the root of the repository.
           # The location of the configuration file can be changed by using `--config=`
-          # args: --timeout=30m --config=/my/path/.golangci.yml --issues-exit-code=0
+          # args: --timeout=30m --config=/my/path/.golang-ci.yml --issues-exit-code=0
 
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           # only-new-issues: true
@@ -49,14 +54,14 @@ jobs:
           # Optional:The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           # install-mode: "goinstall"
 
-      - name: go install check
+      - name: Run go install check
         run: |
-          make actionInstall
-      - name: test coverage
-        run: make actionCoverage
+          go get -t -v ./...
+      - name: Run test coverage
+        run: go test -cover -coverprofile=coverage.txt -covermode=count -v ./...
 
-      - name: test benchmark
-        run: make actionTestBenchmark
+      - name: Run test benchmark
+        run: go test -bench=. -test.benchmem ./...
 
 #      - name: Codecov
 #        uses: codecov/codecov-action@v3.1.1

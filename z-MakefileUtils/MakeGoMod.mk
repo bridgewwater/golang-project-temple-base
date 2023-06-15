@@ -22,14 +22,14 @@ modGraphDependencies:
 modVerify:
 	@go mod verify
 
+modTidy:
+	@go mod tidy -x -v
+
 modDownload:
 	@go mod download -x
 
 modVendor:
 	@go mod vendor
-
-modTidy:
-	@go mod tidy
 
 modFetch:
 	@echo "-> can fetch last version github.com/gin-gonic/gin as"
@@ -40,6 +40,9 @@ modFetch:
 
 modFmt:
 	@go fmt -x ./...
+
+modVet:
+	@go vet ./...
 
 modCiLintInstall:
 	$(info go lint tools use: https://golangci-lint.run/)
@@ -57,6 +60,7 @@ endif
 endif
 
 modLintRun:
+	@echo "if run error try fix: make modCiLintInstall"
 	golangci-lint run -c .golangci.yaml
 
 helpGoMod:
