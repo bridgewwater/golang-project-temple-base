@@ -32,7 +32,7 @@ ENV_ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
 ifeq ($(OS),Windows_NT)
 ENV_ROOT_TEST_LIST ?= ./...
 else
-ENV_ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E $(ENV_ROOT_TEST_INVERT_MATCH))
+ENV_ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E ${ENV_ROOT_TEST_INVERT_MATCH})
 endif
 # test max time
 ENV_ROOT_TEST_MAX_TIME := 1

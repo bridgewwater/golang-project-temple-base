@@ -60,7 +60,7 @@ endif
 endif
 
 modLintRun:
-	@echo "if run error try fix: make modCiLintInstall"
+	@echo "-> if run error try fix: make modCiLintInstall"
 	golangci-lint run -c .golangci.yaml
 
 helpGoMod:
