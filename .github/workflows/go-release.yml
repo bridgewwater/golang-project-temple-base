@@ -23,7 +23,7 @@ jobs:
         run: |
           make dep cleanAllDist
           make test
-          make distPlatformTarCommonUse
+          # make distPlatformTarCommonUse
       - uses: softprops/action-gh-release@master
         name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
