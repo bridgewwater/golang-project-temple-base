@@ -60,8 +60,8 @@ ifeq ($(shell uname),Darwin)
 	@echo "brew install golangci-lint"
 	@brew install golangci-lint
 else
-	@echo "install golangci-lint by offical script"
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH)/bin latest
+	@echo "install golangci-lint to $(go env GOPATH)/bin"
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 endif
 endif
 
