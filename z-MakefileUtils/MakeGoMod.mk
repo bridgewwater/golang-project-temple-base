@@ -64,6 +64,8 @@ else
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 endif
 endif
+	golangci-lint --version
+
 
 modLintRun:
 	@echo "-> if run error try fix: make modCiLintInstall"
