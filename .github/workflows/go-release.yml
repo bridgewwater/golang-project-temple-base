@@ -1,4 +1,4 @@
-name: go release
+name: go-release
 # by ENV_CI_DIST_VERSION and push binary
 
 on:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  go-release-cross:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
