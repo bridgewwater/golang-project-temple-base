@@ -33,6 +33,6 @@ jobs:
           #  body_path: ${{ github.workspace }}-CHANGELOG.txt
           prerelease: true
           # https://github.com/isaacs/node-glob
-          files: |
-            **/*.tar.gz
-            **/*.sha256
+          # files: |
+          #   **/*.tar.gz
+          #   **/*.sha256
