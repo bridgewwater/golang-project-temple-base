@@ -143,9 +143,9 @@ testCoverageBrowser: testCoverage
 testBenchmark:
 	@echo "=> run test benchmark start"
 ifeq ($(OS),Windows_NT)
-	@go test -bench . -test.benchmem ./...
+	@go test -bench . -benchmem ./...
 else
-	@go test -bench . -test.benchmem -v $(ENV_ROOT_TEST_LIST)
+	@go test -bench . -benchmem -v $(ENV_ROOT_TEST_LIST)
 endif
 
 buildMain:

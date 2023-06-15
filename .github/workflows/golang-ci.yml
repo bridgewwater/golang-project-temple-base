@@ -55,13 +55,16 @@ jobs:
           # install-mode: "goinstall"
 
       - name: Run go install check
-        run: |
-          go get -t -v ./...
+        run: go get -t -v ./...
+
+      - name: Run go build
+        run: go build -v ./...
+
       - name: Run test coverage
         run: go test -cover -coverprofile coverage.txt -covermode count -v ./...
 
       - name: Run test benchmark
-        run: go test -bench . -test.benchmem ./...
+        run: go test -benchmem -bench . ./...
 
 #      - name: Codecov
 #        uses: codecov/codecov-action@v3.1.1
