@@ -30,8 +30,6 @@ jobs:
         run: |
           go env
           go version
-      - name: Run go install check
-        run: go get -t -v ./...
 
       - name: Run go build
         run: go build -v ./...
@@ -39,11 +37,11 @@ jobs:
       - name: Run test coverage
         run: go test -cover -coverprofile coverage.txt -covermode count -tags test -coverpkg ./... -v ./...
 
-      # - name: Codecov
-      #   uses: codecov/codecov-action@v3.1.4
-      #   with:
-      #     token: ${{secrets.CODECOV_TOKEN}}
-      #     files: coverage.txt
-      #     # verbose: true
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.4
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          files: coverage.txt
+#          verbose: true
 
 ```
