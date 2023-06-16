@@ -161,7 +161,7 @@ else
 endif
 
 run: export ENV_WEB_AUTO_HOST=false
-run:  cleanBuild buildMain
+run: cleanBuild buildMain
 	@echo "=> run start"
 ifeq ($(OS),windows)
 	$(subst /,\,${ENV_ROOT_BUILD_BIN_PATH}).exe ${ENV_RUN_INFO_ARGS}
@@ -188,7 +188,7 @@ helpProjectRoot:
 	@echo "~> make testBenchmark       - run go test benchmark case all"
 	@echo "~> make ci                  - run CI tools tasks"
 	@echo "~> make dev                 - run as develop mode"
-	@echo "~> make run                 - run as sample mode"
+	@echo "~> make run                 - run as ordinary mode"
 
 help: helpGoMod helperGoTest helpDocker helpGoAction helpDist helpProjectRoot
 	@echo ""
