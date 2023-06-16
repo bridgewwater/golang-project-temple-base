@@ -28,7 +28,7 @@ ENV_ROOT_BUILD_ENTRANCE = main.go
 ENV_ROOT_BUILD_BIN_NAME = ${ROOT_NAME}
 ENV_ROOT_BUILD_PATH = build
 ENV_ROOT_BUILD_BIN_PATH = ${ENV_ROOT_BUILD_PATH}/${ENV_ROOT_BUILD_BIN_NAME}
-ENV_ROOT_LOG_PATH = log/
+ENV_ROOT_LOG_PATH=logs/
 # linux windows darwin  list as: go tool dist list
 ENV_DIST_GO_OS=linux
 # amd64 386
