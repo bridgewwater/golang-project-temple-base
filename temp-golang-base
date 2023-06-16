@@ -307,9 +307,9 @@ case ${read_want_keep_sample_code} in
   ;;
 esac
 
-# choose LICENCE
-read -p "Choose licence (default: apache)? [mit] " read_choose_licence
-case ${read_choose_licence} in
+# choose LICENSE
+read -p "Choose license (default: apache)? [mit] " read_choose_license
+case ${read_choose_license} in
 mit*)
   mv ./${new_project}/LICENSE-MIT ./${new_project}/LICENSE
   ;;
