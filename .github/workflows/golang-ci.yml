@@ -60,15 +60,15 @@ jobs:
       - name: Run go build
         run: go build -v ./...
 
-      - name: Run test coverage
-        run: go test -cover -coverprofile coverage.txt -covermode count -v ./...
+      - name: Run test
+        run: go test -v ./...
 
       - name: Run test benchmark
         run: go test -benchmem -bench . ./...
 
-#      - name: Codecov
-#        uses: codecov/codecov-action@v3.1.1
-#        with:
-#          token: ${{secrets.CODECOV_TOKEN}}
-#          files: coverage.txt
-##          verbose: true
+    #  - name: Codecov
+    #    uses: codecov/codecov-action@v3.1.1
+    #    with:
+    #      token: ${{secrets.CODECOV_TOKEN}}
+    #      files: coverage.txt
+    #     #  verbose: true
