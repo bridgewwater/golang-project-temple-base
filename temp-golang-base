@@ -311,14 +311,14 @@ esac
 read -p "Choose licence (default: apache)? [mit] " read_choose_licence
 case ${read_choose_licence} in
 mit*)
-  mv ./${new_project}/LICENCE-MIT ./${new_project}/LICENCE
+  mv ./${new_project}/LICENSE-MIT ./${new_project}/LICENSE
   ;;
 *)
-  mv ./${new_project}/LICENCE-APACHE ./${new_project}/LICENCE
+  mv ./${new_project}/LICENSE-APACHE ./${new_project}/LICENSE
   ;;
 esac
 # move other LICENCE
-removeFileByRegular "LICENCE-*"
+removeFileByRegular "LICENSE-*"
 
 read -p "Do you can keep travis CI (default: no)? [y/n] " read_want_keep_travis_ci
 case ${read_want_keep_travis_ci} in
