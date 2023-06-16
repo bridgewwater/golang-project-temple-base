@@ -6,7 +6,7 @@ ENV_DIST_MARK=
 
 ROOT_NAME?=golang-project-temple-base
 
-# MakeDocker.mk settings start
+## MakeDocker.mk settings start
 ROOT_OWNER?=bridgewwater
 ROOT_PARENT_SWITCH_TAG=1.17.13-buster
 # for image local build
@@ -15,44 +15,50 @@ INFO_TEST_BUILD_DOCKER_PARENT_IMAGE=golang
 INFO_BUILD_DOCKER_FROM_IMAGE=alpine:3.17
 INFO_BUILD_DOCKER_FILE=Dockerfile
 INFO_TEST_BUILD_DOCKER_FILE=Dockerfile.s6
-# MakeDocker.mk settings end
+## MakeDocker.mk settings end
 
+## run info start
 ENV_RUN_INFO_HELP_ARGS= -h
 ENV_RUN_INFO_ARGS=
+## run info end
+
+## build dist env start
 # change to other build entrance
 ENV_ROOT_BUILD_ENTRANCE = main.go
 ENV_ROOT_BUILD_BIN_NAME = $(ROOT_NAME)
 ENV_ROOT_BUILD_PATH = build
 ENV_ROOT_BUILD_BIN_PATH = $(ENV_ROOT_BUILD_PATH)/$(ENV_ROOT_BUILD_BIN_NAME)
 ENV_ROOT_LOG_PATH = log/
+# linux windows darwin  list as: go tool dist list
+ENV_DIST_GO_OS=linux
+# amd64 386
+ENV_DIST_GO_ARCH=amd64
+# mark for dist and tag helper
+ENV_ROOT_MANIFEST_PKG_JSON?=package.json
+ENV_ROOT_MAKE_FILE?=Makefile
+ENV_ROOT_CHANGELOG_PATH?=CHANGELOG.md
+## build dist env end
 
+## go test MakeGoTest.mk start
 # ignore used not matching mode
 # set ignore of test case like grep -v -E "vendor|go_fatal_error" to ignore vendor and go_fatal_error package
 ENV_ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
 ifeq ($(OS),Windows_NT)
-ENV_ROOT_TEST_LIST ?= ./...
+ENV_ROOT_TEST_LIST?=./...
 else
-ENV_ROOT_TEST_LIST ?= $$(go list ./... | grep -v -E ${ENV_ROOT_TEST_INVERT_MATCH})
+ENV_ROOT_TEST_LIST?=$$(go list ./... | grep -v -E ${ENV_ROOT_TEST_INVERT_MATCH})
 endif
 # test max time
-ENV_ROOT_TEST_MAX_TIME := 1
-
-# linux windows darwin  list as: go tool dist list
-ENV_DIST_GO_OS = linux
-# amd64 386
-ENV_DIST_GO_ARCH = amd64
-
+ENV_ROOT_TEST_MAX_TIME:=1m
+## go test MakeGoTest.mk end
 
 include z-MakefileUtils/MakeBasicEnv.mk
 include z-MakefileUtils/MakeGoMod.mk
+include z-MakefileUtils/MakeGoTest.mk
 include z-MakefileUtils/MakeGoAction.mk
 include z-MakefileUtils/MakeDistTools.mk
 include z-MakefileUtils/MakeGoDist.mk
 include z-MakefileUtils/MakeDocker.mk
-
-ENV_ROOT_MAKE_FILE ?= Makefile
-ENV_ROOT_MANIFEST_PKG_JSON ?= package.json
-ENV_ROOT_CHANGELOG_PATH ?= CHANGELOG.md
 
 all: env
 
@@ -78,10 +84,6 @@ endif
 	@echo ""
 	@echo "ENV_DIST_MARK                             ${ENV_DIST_MARK}"
 	@echo "== project env info end =="
-
-cloc:
-	@echo "see: https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore"
-	cloc --exclude-list-file=.clocignore .
 
 cleanBuild:
 	-@$(RM) -r ${ENV_ROOT_BUILD_PATH}
@@ -122,33 +124,6 @@ dep: modVerify modDownload modTidy modVendor
 
 ci: modTidy modVerify modFmt modVet modLintRun test
 
-test:
-	@echo "=> run test start"
-ifeq ($(OS),Windows_NT)
-	@go test -test.v $(ENV_ROOT_TEST_LIST)
-else
-	@go test -test.v $(ENV_ROOT_TEST_LIST)
-endif
-
-testCoverage:
-	@echo "=> run test coverage start"
-ifeq ($(OS),Windows_NT)
-	@go test -cover -coverprofile coverage.txt -covermode count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
-else
-	@go test -cover -coverprofile coverage.txt -covermode count -coverpkg ./... -v $(ENV_ROOT_TEST_LIST)
-endif
-
-testCoverageBrowser: testCoverage
-	@go tool cover -html=coverage.txt
-
-testBenchmark:
-	@echo "=> run test benchmark start"
-ifeq ($(OS),Windows_NT)
-	@go test -bench . -benchmem ./...
-else
-	@go test -bench . -benchmem -v $(ENV_ROOT_TEST_LIST)
-endif
-
 buildMain:
 	@echo "-> start build local OS"
 ifeq ($(OS),Windows_NT)
@@ -159,7 +134,7 @@ else
 	@echo "-> finish build out path: ${ENV_ROOT_BUILD_BIN_PATH}"
 endif
 
-buildARCH:
+buildCross:
 	@echo "-> start build OS:$(ENV_DIST_GO_OS) ARCH:$(ENV_DIST_GO_ARCH)"
 ifeq ($(ENV_DIST_GO_OS),windows)
 	@GOOS=$(ENV_DIST_GO_OS) GOARCH=$(ENV_DIST_GO_ARCH) go build \
@@ -194,6 +169,10 @@ else
 	${ENV_ROOT_BUILD_BIN_PATH} ${ENV_RUN_INFO_ARGS}
 endif
 
+cloc:
+	@echo "see: https://stackoverflow.com/questions/26152014/cloc-ignore-exclude-list-file-clocignore"
+	cloc --exclude-list-file=.clocignore .
+
 helpProjectRoot:
 	@echo "Help: Project root Makefile"
 	@echo "-- now build name: $(ROOT_NAME) version: $(ENV_DIST_VERSION)"
@@ -211,6 +190,6 @@ helpProjectRoot:
 	@echo "~> make dev                 - run as develop mode"
 	@echo "~> make run                 - run as sample mode"
 
-help: helpGoMod helpDocker helpGoAction helpDist helpProjectRoot
+help: helpGoMod helperGoTest helpDocker helpGoAction helpDist helpProjectRoot
 	@echo ""
 	@echo "-- more info see Makefile include: MakeGoMod.mk MakeDockerRun.mk MakeGoAction.mk MakeGoDist.mk--"

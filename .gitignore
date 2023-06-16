@@ -6,6 +6,7 @@ dist/
 
 !go.sum
 vendor/
+.vendor_new/
 
 ### go test
 # out of testcase
