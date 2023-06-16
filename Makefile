@@ -25,9 +25,9 @@ ENV_RUN_INFO_ARGS=
 ## build dist env start
 # change to other build entrance
 ENV_ROOT_BUILD_ENTRANCE = main.go
-ENV_ROOT_BUILD_BIN_NAME = $(ROOT_NAME)
+ENV_ROOT_BUILD_BIN_NAME = ${ROOT_NAME}
 ENV_ROOT_BUILD_PATH = build
-ENV_ROOT_BUILD_BIN_PATH = $(ENV_ROOT_BUILD_PATH)/$(ENV_ROOT_BUILD_BIN_NAME)
+ENV_ROOT_BUILD_BIN_PATH = ${ENV_ROOT_BUILD_PATH}/${ENV_ROOT_BUILD_BIN_NAME}
 ENV_ROOT_LOG_PATH = log/
 # linux windows darwin  list as: go tool dist list
 ENV_DIST_GO_OS=linux
