@@ -6,24 +6,22 @@ ifndef GOPATH
 	exit 1
 endif
 
-modClean:
-	@echo "=> try to clean: go.sum vendor/"
-	@$(RM) go.sum
-	@$(RM) -r vendor/
-	@echo "=> finish clean: go.sum vendor/"
-
 modFetch:
 	@echo "-> can fetch last version github.com/gin-gonic/gin as"
 	@echo "go list -mod readonly -m -versions github.com/gin-gonic/gin | awk '{print \044\061 \042 lastest: \042 \044\0116\0106 }'"
 	@echo ""
 ifeq ($(OS),Windows_NT)
-	@go list -mod mod -m -versions github.com/gin-gonic/gin
-	@go list -mod mod -m -versions github.com/shirou/gopsutil/v3
+	@go list -mod mod -m -versions github.com/stretchr/testify
 else
 	@echo "last version"
-	@go list -mod mod -m -versions github.com/gin-gonic/gin | awk '{print $$1 " lastest: " $$NF }'
-	@go list -mod mod -m -versions github.com/shirou/gopsutil/v3 | awk '{print $$1 " lastest: " $$NF }'
+	@go list -mod mod -m -versions github.com/stretchr/testify | awk '{print $$1 " lastest: " $$NF }'
 endif
+
+modClean:
+	@echo "=> try to clean: go.sum vendor/"
+	@$(RM) go.sum
+	@$(RM) -r vendor/
+	@echo "=> finish clean: go.sum vendor/"
 
 modList:
 	$(info show go list -mod readonly -json all)
