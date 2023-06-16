@@ -73,9 +73,9 @@ testCoverageClean:
 testCoverage:
 	@echo "=> run test coverage start"
 ifeq ($(OS),Windows_NT)
-	@go test -cover -coverprofile ${ENV_GO_TEST_COVERAGE_PROFILE} -covermode count -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}
+	@go test -cover -coverprofile ${ENV_GO_TEST_COVERAGE_PROFILE} -covermode count -tags test -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}
 else
-	@go test -cover -coverprofile ${ENV_GO_TEST_COVERAGE_PROFILE} -covermode count -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}
+	@go test -cover -coverprofile ${ENV_GO_TEST_COVERAGE_PROFILE} -covermode count -tags test -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}
 endif
 
 testCoverageBrowser: testCoverage
@@ -84,9 +84,9 @@ testCoverageBrowser: testCoverage
 testCoverageAtomic:
 	@echo "=> run test coverage start"
 ifeq ($(OS),Windows_NT)
-	@go test -cover -coverprofile ${ENV_GO_TEST_COVERAGE_PROFILE} -covermode atomic -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}
+	@go test -cover -coverprofile ${ENV_GO_TEST_COVERAGE_PROFILE} -covermode atomic -tags test -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}
 else
-	@go test -cover -coverprofile ${ENV_GO_TEST_COVERAGE_PROFILE} -covermode atomic -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}
+	@go test -cover -coverprofile ${ENV_GO_TEST_COVERAGE_PROFILE} -covermode atomic -tags test -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}
 endif
 
 testCoverageAtomicBrowser: testCoverageAtomic
