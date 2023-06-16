@@ -1,8 +1,3 @@
-## config-file
-
-`golang-codecov.yml`
-
-```yml
 name: golang-codecov
 
 on:
@@ -39,11 +34,10 @@ jobs:
       - name: Run test coverage
         run: go test -cover -coverprofile coverage.txt -covermode count -tags test -coverpkg ./... -v ./...
 
-      # - name: Codecov
-      #   uses: codecov/codecov-action@v3.1.4
-      #   with:
-      #     token: ${{secrets.CODECOV_TOKEN}}
-      #     files: coverage.txt
-      #     # verbose: true
+       - name: Codecov
+         uses: codecov/codecov-action@v3.1.4
+         with:
+           token: ${{secrets.CODECOV_TOKEN}}
+           files: coverage.txt
+           # verbose: true
 
-```
