@@ -58,7 +58,17 @@ make test
 add main.go file and run
 
 ```bash
+# run at env dev
+make dev
+
+# run at env ordinary
 make run
+```
+
+- ci to fast check
+
+```bash
+make ci
 ```
 
 ## docker
