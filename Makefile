@@ -53,11 +53,12 @@ ENV_ROOT_TEST_MAX_TIME:=1m
 ## go test MakeGoTest.mk end
 
 include z-MakefileUtils/MakeBasicEnv.mk
+include z-MakefileUtils/MakeDistTools.mk
 include z-MakefileUtils/MakeGoMod.mk
 include z-MakefileUtils/MakeGoTest.mk
-include z-MakefileUtils/MakeGoAction.mk
-include z-MakefileUtils/MakeDistTools.mk
 include z-MakefileUtils/MakeGoDist.mk
+include z-MakefileUtils/MakeGoAction.mk
+# include MakeDockerRun.mk for docker run
 include z-MakefileUtils/MakeDocker.mk
 
 all: env
@@ -135,7 +136,7 @@ else
 endif
 
 buildCross:
-	@echo "-> start build OS:$(ENV_DIST_GO_OS) ARCH:$(ENV_DIST_GO_ARCH)"
+	@echo "-> start build OS:${ENV_DIST_GO_OS} ARCH:${ENV_DIST_GO_ARCH}"
 ifeq ($(ENV_DIST_GO_OS),windows)
 	@GOOS=$(ENV_DIST_GO_OS) GOARCH=$(ENV_DIST_GO_ARCH) go build \
 	-a \
@@ -175,8 +176,8 @@ cloc:
 
 helpProjectRoot:
 	@echo "Help: Project root Makefile"
-	@echo "-- now build name: $(ROOT_NAME) version: $(ENV_DIST_VERSION)"
-	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_DIST_GO_OS) $(ENV_DIST_GO_ARCH) --"
+	@echo "-- now build name: ${ROOT_NAME} version: ${ENV_DIST_VERSION}"
+	@echo "-- distTestOS or distReleaseOS will out abi as: ${ENV_DIST_GO_OS} ${ENV_DIST_GO_ARCH} --"
 	@echo ""
 	@echo "~> make env                 - print env of this project"
 	@echo "~> make init                - check base env of this project"
@@ -192,4 +193,4 @@ helpProjectRoot:
 
 help: helpGoMod helperGoTest helpDocker helpGoAction helpDist helpProjectRoot
 	@echo ""
-	@echo "-- more info see Makefile include: MakeGoMod.mk MakeDockerRun.mk MakeGoAction.mk MakeGoDist.mk--"
+	@echo "-- more info see Makefile include: MakeGoMod.mk MakeGoTest.mk MakeGoDist.mk MakeDockerRun.mk MakeGoAction.mk --"

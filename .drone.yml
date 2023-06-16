@@ -22,12 +22,14 @@ environment:
 
 steps:
   - name: env-init
-    image: alpine:3.17
+    image: sinlov/drone-env-printer:1.1.0
     pull: if-not-exists
-    commands:
-      - "echo \"=> base  info\nDRONE_STAGE_MACHINE    ${DRONE_STAGE_MACHINE}\nDRONE_STAGE_OS         ${DRONE_STAGE_OS}\nDRONE_STAGE_ARCH       ${DRONE_STAGE_ARCH}\""
-      - "echo \"=> drone info\nDRONE_WORKSPACE        ${DRONE_WORKSPACE}\nDRONE_REPO_NAME        ${DRONE_REPO_NAME}\nDRONE_REPO_OWNER       ${DRONE_REPO_OWNER}\nDRONE_REPO             ${DRONE_REPO}\""
-      - "echo \"=> cvs   info\nDRONE_BRANCH           ${DRONE_BRANCH/\\//-}\nDRONE_COMMIT_SHA short ${DRONE_COMMIT_SHA:0:8}\nDRONE_TAG              ${DRONE_TAG##v}\""
+    settings:
+      debug: false
+      # env_printer_padding_left_max: 42
+      env_printer_print_keys:
+        - GOPATH
+        - GOBIN
   - name: go-init
     image: golang:1.17.13-buster
     pull: if-not-exists
@@ -38,11 +40,9 @@ steps:
       GOPATH: /go
     commands:
       - go version
-      - go env
       - go mod verify
-      - go mod tidy
-      - go mod download
-      - go mod vendor
+      - go mod download -x
+      - go mod tidy -x -v
     when:
       event:
         - push
@@ -55,8 +55,9 @@ steps:
     environment:
       GOPATH: /go
     commands:
-      - make test
-      # - go test -test.v .
+      - go get -t -v ./...
+      - go build -v ./...
+      - go test -v ./...
     when:
       event:
         - push
