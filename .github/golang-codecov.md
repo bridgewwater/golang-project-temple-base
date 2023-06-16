@@ -13,7 +13,7 @@ on:
 
 jobs:
   golang-codecov:
-    name: glang-codecov
+    name: golang-codecov
     strategy:
       matrix:
         go:
