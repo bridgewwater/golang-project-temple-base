@@ -1,7 +1,7 @@
 # this file must use as base Makefile
 
 # test max time
-ENV_ROOT_TEST_MAX_TIME := 1m
+ENV_ROOT_TEST_MAX_TIME:=1m
 
 actionInfo:
 	@echo "you can use #=> find set"
