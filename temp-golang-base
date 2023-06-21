@@ -36,9 +36,11 @@ HELP
 }
 
 ARG=$1
-if [[ "$ARG" =~ "-h" ]]; then
-  Usage
-  exit 0
+if [[ $# -eq 1 ]]; then
+  if [[ "$ARG" =~ "-h" ]]; then
+    Usage
+    exit 0
+  fi
 fi
 
 pV() {
