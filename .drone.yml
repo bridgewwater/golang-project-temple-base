@@ -42,11 +42,14 @@ steps:
       - go version
       - go mod verify
       - go mod download -x
-      - go mod tidy -x -v
+      - go mod tidy -v
     when:
       event:
         - push
   - name: go-test
+    depends_on: # https://docs.drone.io/pipeline/exec/syntax/parallelism/
+      - go-init
+
     image: golang:1.17.13-buster
     pull: if-not-exists
     volumes:
@@ -61,41 +64,29 @@ steps:
     when:
       event:
         - push
-  - name: go-dist-test
+  - name: go-test-benchmark
+    depends_on: # https://docs.drone.io/pipeline/exec/syntax/parallelism/
+      - go-test
+
     image: golang:1.17.13-buster
     pull: if-not-exists
     volumes:
       - name: go_cache
         path: /go
-      - name: go_dist_test
-        path: /go_dist_test
     environment:
       GOPATH: /go
     commands:
-      - make cleanAllDist distTestTar
-      - cp ./dist/**/**.gz /go_dist_test/
+      - go test -run none -bench . -benchmem -v ./...
     when:
       event:
         - push
-  - name: go-dist-release
-    image: golang:1.17.13-buster
-    pull: if-not-exists
-    volumes:
-      - name: go_cache
-        path: /go
-      - name: go_dist_release
-        path: /go_dist_release
-    environment:
-      GOPATH: /go
-    commands:
-      - export ENV_CI_DIST_VERSION=${DRONE_TAG}
-      - export ENV_CI_DIST_MARK=${DRONE_COMMIT_SHA:0:8}
-      - make cleanAllDist distPlatformTarCommonUse
-      - cp ./dist/**/**.gz /go_dist_release/
-    when:
-      event:
-        - tag
-  - name: notification-feishu-group-robot
+  - name: notification-failure-feishu-group-robot
+    depends_on: # https://docs.drone.io/pipeline/exec/syntax/parallelism/
+      - env-init
+      - go-init
+      - go-test
+      - go-test-benchmark
+
     image: sinlov/drone-feishu-group-robot:1.11.0-alpine
     pull: if-not-exists
     settings:
@@ -119,7 +110,7 @@ steps:
         - tag
       status: # only support failure/success,  both open will send anything
         - failure
-        - success
+       # - success
 
 trigger: # https://docs.drone.io/pipeline/triggers/
   # branch:

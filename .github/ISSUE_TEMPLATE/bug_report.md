@@ -30,6 +30,7 @@ If applicable, add screenshots to help explain your problem.
 - Browser [e.g. chrome, safari]
 - Version [e.g. 22]
 - get system info by command
+
 ```bash
 # UNIX like
 $ uname -a

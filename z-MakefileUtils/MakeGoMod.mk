@@ -1,4 +1,8 @@
-# this file must use as base Makefile
+## for golang test task
+# include z-MakefileUtils/MakeGoMod.mk
+# windows use must install tools
+# https://scoop.sh/#/apps?q=gow&s=0&d=1&o=true
+# scoop install gow
 
 checkEnvGOPATH:
 ifndef GOPATH
@@ -15,6 +19,13 @@ ifeq ($(OS),Windows_NT)
 else
 	@echo "last version"
 	@go list -mod mod -m -versions github.com/stretchr/testify | awk '{print $$1 " lastest: " $$NF }'
+endif
+
+modName:
+ifeq ($(OS),Windows_NT)
+	@echo "-> this package go mod name: $(subst module ,,$(shell head -n 1 go.mod))"
+else
+	@echo "-> this package go mod name: $(subst module ,,$(shell head -n 1 go.mod))"
 endif
 
 modClean:
@@ -34,7 +45,7 @@ modVerify:
 	@go mod verify
 
 modTidy:
-	@go mod tidy -x -v
+	@go mod tidy -v
 
 modDownload:
 	@go mod download -x
@@ -47,6 +58,9 @@ modFmt:
 
 modVet:
 	@go vet ./...
+
+modWhy:
+	@go mod why ./...
 
 modCiLintInstall:
 	$(info go lint tools use: https://golangci-lint.run/)
@@ -71,7 +85,9 @@ modLintRun:
 
 helpGoMod:
 	@echo "Help: MakeGoMod.mk"
+	@echo "-> go mod document at: https://go.dev/ref/mod"
 	@echo "this project use go mod, so golang version must 1.12+"
+	@echo "~> make modName              - will show this go mod name"
 	@echo "~> make modClean             - will clean ./go.sum and ./vendor"
 	@echo "~> make modList              - list all depends as: go list -m -json all"
 	@echo "~> make modGraphDependencies - see depends graph of this project"

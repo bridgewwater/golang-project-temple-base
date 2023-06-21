@@ -6,6 +6,7 @@ import (
 )
 
 func BenchmarkStack(b *testing.B) {
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		stack := NewStack()
 		stack.Push(0)
@@ -32,4 +33,5 @@ func BenchmarkStack(b *testing.B) {
 		nilValue := stack.Pop()
 		assert.Equal(b, nilValue, nil)
 	}
+	b.StopTimer()
 }

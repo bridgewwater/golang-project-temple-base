@@ -14,7 +14,9 @@ jobs:
     name: glang-ci
     strategy:
       matrix:
-        go: ['^1.17']
+        go:
+         - '^1.17'
+         - '1.17.13'
         os:
           - macos-latest
           - windows-latest
@@ -64,11 +66,9 @@ jobs:
         run: go test -v ./...
 
       - name: Run test benchmark
-        run: go test -benchmem -bench . ./...
+        run: go test -run none -bench . -benchmem -v ./...
 
-    #  - name: Codecov
-    #    uses: codecov/codecov-action@v3.1.1
-    #    with:
-    #      token: ${{secrets.CODECOV_TOKEN}}
-    #      files: coverage.txt
-    #     #  verbose: true
+      - name: Run test coverage
+        run: |
+          go test -cover -coverprofile coverage.txt -covermode count -coverpkg ./... -tags test -v ./...
+          go tool cover -func coverage.txt

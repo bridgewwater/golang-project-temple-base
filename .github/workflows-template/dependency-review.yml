@@ -1,0 +1,29 @@
+name: 'dependency-review'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: dependency-review
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v3
+      - name: 'Dependency Review' # https://github.com/actions/dependency-review-action
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: moderate # low, moderate, high, critical. Default value low
+          base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
+          head-ref: ${{ github.event.pull_request.head.sha || github.ref }}
+          # support https://spdx.org/licenses/
+          # You cannot specify both allow-licenses and deny-licenses
+          # allow-licenses: WTFPL, MIT, Apache-2.0, ISC, 0BSD, CC0-1.0, OFL-1.1
+          # Use comma-separated names to pass list arguments:
+          deny-licenses: CC-BY-4.0, CC-BY-SA-4.0, LGPL-2.0, BSD-2-Clause, BSD-3-Clause

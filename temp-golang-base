@@ -277,9 +277,9 @@ findFileReplaceByRegular ${new_project} "*.md" ${temple_name} ${new_project}
 
 # remove README.md last line
   if [[ ${release} -eq "Darwin" ]]; then
-    sed -i "" '91,100d' ./${new_project}/README.md
+    sed -i "" '101,110d' ./${new_project}/README.md
   else
-    sed -i '91,100d' ./${new_project}/README.md
+    sed -i '101,110d' ./${new_project}/README.md
   fi
 
 # re init go mod
@@ -319,6 +319,13 @@ mit*)
 esac
 # move other LICENCE
 removeFileByRegular "LICENSE-*"
+# replace LICENSE by git info
+license_template_user='{name[[:space:]]of[[:space:]]copyright[[:space:]]owner}'
+license_template_year='{yyyy}'
+license_user=$(git config --global --get user.name)
+license_year=$(date +%Y)
+replaceFileByRegular ${new_project}/LICENSE ${license_template_user} ${license_user}
+replaceFileByRegular ${new_project}/LICENSE ${license_template_year} ${license_year}
 
 read -p "Do you can keep travis CI (default: no)? [y/n] " read_want_keep_travis_ci
 case ${read_want_keep_travis_ci} in

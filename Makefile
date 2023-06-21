@@ -18,7 +18,7 @@ INFO_TEST_BUILD_DOCKER_FILE=Dockerfile.s6
 ## MakeDocker.mk settings end
 
 ## run info start
-ENV_RUN_INFO_HELP_ARGS= -h
+ENV_RUN_INFO_HELP_ARGS=-h
 ENV_RUN_INFO_ARGS=
 ## run info end
 
@@ -42,7 +42,7 @@ ENV_ROOT_CHANGELOG_PATH?=CHANGELOG.md
 ## go test MakeGoTest.mk start
 # ignore used not matching mode
 # set ignore of test case like grep -v -E "vendor|go_fatal_error" to ignore vendor and go_fatal_error package
-ENV_ROOT_TEST_INVERT_MATCH ?= "vendor|go_fatal_error|robotn|shirou|go_robot"
+ENV_ROOT_TEST_INVERT_MATCH?="vendor|go_fatal_error|robotn|shirou"
 ifeq ($(OS),Windows_NT)
 ENV_ROOT_TEST_LIST?=./...
 else
@@ -54,8 +54,10 @@ ENV_ROOT_TEST_MAX_TIME:=1m
 
 include z-MakefileUtils/MakeBasicEnv.mk
 include z-MakefileUtils/MakeDistTools.mk
+include z-MakefileUtils/MakeGoList.mk
 include z-MakefileUtils/MakeGoMod.mk
 include z-MakefileUtils/MakeGoTest.mk
+include z-MakefileUtils/MakeGoTestIntegration.mk
 include z-MakefileUtils/MakeGoDist.mk
 include z-MakefileUtils/MakeGoAction.mk
 # include MakeDockerRun.mk for docker run
@@ -97,6 +99,8 @@ cleanLog:
 cleanTestData:
 	$(info -> notes: remove folder [ testdata ] unable to match subdirectories)
 	@$(RM) coverage.txt
+	@$(RM) coverage.out
+	@$(RM) profile.txt
 	@$(RM) -r **/testdata
 	@$(RM) -r **/**/testdata
 	@$(RM) -r **/**/**/testdata
@@ -122,6 +126,8 @@ init:
 
 dep: modVerify modDownload modTidy modVendor
 	@echo "-> just check depends below"
+
+style: modTidy modVerify modFmt modLintRun
 
 ci: modTidy modVerify modFmt modVet modLintRun test
 
@@ -176,6 +182,19 @@ cloc:
 
 helpProjectRoot:
 	@echo "Help: Project root Makefile"
+ifeq ($(OS),Windows_NT)
+	@echo ""
+	@echo "warning: other install make cli tools has bug, please use: scoop install main/make"
+	@echo " run will at make tools version 4.+"
+	@echo "windows use this kit must install tools blow:"
+	@echo ""
+	@echo "https://scoop.sh/#/apps?q=busybox&s=0&d=1&o=true"
+	@echo "-> scoop install main/busybox"
+	@echo "and"
+	@echo "https://scoop.sh/#/apps?q=shasum&s=0&d=1&o=true"
+	@echo "-> scoop install main/shasum"
+	@echo ""
+endif
 	@echo "-- now build name: ${ROOT_NAME} version: ${ENV_DIST_VERSION}"
 	@echo "-- distTestOS or distReleaseOS will out abi as: ${ENV_DIST_GO_OS} ${ENV_DIST_GO_ARCH} --"
 	@echo ""
@@ -188,9 +207,10 @@ helpProjectRoot:
 	@echo "~> make testCoverageBrowser - see coverage at browser --invert-match by config"
 	@echo "~> make testBenchmark       - run go test benchmark case all"
 	@echo "~> make ci                  - run CI tools tasks"
+	@echo "~> make style               - run local code fmt and style check"
 	@echo "~> make dev                 - run as develop mode"
 	@echo "~> make run                 - run as ordinary mode"
 
-help: helpGoMod helperGoTest helpDocker helpGoAction helpDist helpProjectRoot
+help: helpGoMod helpGoTest helpGoDist helpDocker helpProjectRoot
 	@echo ""
-	@echo "-- more info see Makefile include: MakeGoMod.mk MakeGoTest.mk MakeGoDist.mk MakeDockerRun.mk MakeGoAction.mk --"
+	@echo "-- more info see Makefile include: MakeGoMod.mk MakeGoTest.mk MakeGoDist.mk MakeDocker.mk MakeGoAction.mk --"

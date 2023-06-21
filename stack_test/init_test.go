@@ -30,6 +30,8 @@ var (
 	envCiNum  = 0
 	envCiKey  = ""
 	envCiKeys []string
+
+	strData []string
 )
 
 func init() {
@@ -37,6 +39,9 @@ func init() {
 	envCiNum = fetchOsEnvInt(keyEnvCiNum, 1)
 	envCiKey = fetchOsEnvStr(keyEnvCiKey, "")
 	envCiKeys = fetchOsEnvArray(keyEnvCiKeys)
+	for i := 0; i < 200; i++ {
+		strData = append(strData, randomStr(300))
+	}
 }
 
 // test case file tools start

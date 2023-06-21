@@ -1,5 +1,6 @@
 [![golang-ci](https://github.com/bridgewwater/golang-project-temple-base/actions/workflows/golang-ci.yml/badge.svg)](https://github.com/bridgewwater/golang-project-temple-base/actions/workflows/golang-ci.yml)
 [![TravisBuildStatus](https://api.travis-ci.com/bridgewwater/golang-project-temple-base.svg?branch=main)](https://travis-ci.com/bridgewwater/golang-project-temple-base)
+[![license](https://img.shields.io/github/license/bridgewwater/golang-project-temple-base)](https://github.com/bridgewwater/golang-project-temple-base)
 [![go mod version](https://img.shields.io/github/go-mod/go-version/bridgewwater/golang-project-temple-base?label=go.mod)](https://github.com/bridgewwater/golang-project-temple-base)
 [![GoDoc](https://godoc.org/github.com/bridgewwater/golang-project-temple-base?status.png)](https://godoc.org/github.com/bridgewwater/golang-project-temple-base/)
 [![GoReportCard](https://goreportcard.com/badge/github.com/bridgewwater/golang-project-temple-base)](https://goreportcard.com/report/github.com/bridgewwater/golang-project-temple-base)
@@ -8,7 +9,16 @@
 
 ## for what
 
-- this project used to github golang
+- this project used to GitHub.com with golang
+
+## Contributing
+
+[![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v1.4-ff69b4.svg)](.github/CONTRIBUTING_DOC/CODE_OF_CONDUCT.md)
+[![GitHub contributors](https://img.shields.io/github/contributors/bridgewwater/template-golang-lib)](https://github.com/bridgewwater/template-golang-lib/graphs/contributors)
+
+We welcome community contributions to this project.
+
+Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for more information on how to get started.
 
 ## depends
 
@@ -41,34 +51,34 @@ $ echo "go mod vendor"
 
 ## evn
 
-- golang sdk 1.17+
+- minimum go version: go 1.17
 
 # dev
 
 ```bash
-make init dep
+$ make init dep
 ```
 
 - test code
 
 ```bash
-make test
+$ make test testBenchmark
 ```
 
-add main.go file and run
+edit [main.go](main.go) file and run
 
 ```bash
 # run at env dev
-make dev
+$ make dev
 
 # run at env ordinary
-make run
+$ make run
 ```
 
 - ci to fast check
 
 ```bash
-make ci
+$ make ci
 ```
 
 ## docker
@@ -90,7 +100,7 @@ $ make helpDocker
 
 ### cli tools to init project fast
 
-```
+```bash
 $ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/main/temp-golang-base
 # let temp-golang-base file folder under $PATH
 $ chmod +x temp-golang-base

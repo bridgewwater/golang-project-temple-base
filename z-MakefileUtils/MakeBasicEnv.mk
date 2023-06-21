@@ -7,28 +7,28 @@ ifeq ($(OS),Windows_NT)
   PLATFORM=Windows
   OS_BIT?=${shell if /i "%PROCESSOR_ARCHITECTURE%"=="AMD64" (echo x86_64) ELSE echo x86}
   # do windows powershell
-  ENV_ROOT ?= $(shell pwd)
-  ENV_HOME_PATH ?= ${shell echo %UserProfile%}
+  ENV_ROOT?=$(shell pwd)
+  ENV_HOME_PATH?=${shell echo %UserProfile%}
   # ENV_NOW_TIME_FORMAT = $(shell echo %Date:~0,4%%Date:~5,2%%Date:~8,2%)
   ENV_NOW_TIME_FORMAT=$(shell echo %Date:~0,4%-%Date:~5,2%-%Date:~8,2%-%time:~0,2%-%time:~3,2%-%time:~6,2%)
 else
-  OS_UNAME ?= $(shell echo `uname`) # Linux Darwin
-  OS_BIT ?= $(shell echo `uname -m`) # x86_64 arm64
-  ENV_ROOT ?= $(shell pwd)
-  ENV_HOME_PATH ?= ${HOME}
+  OS_UNAME?=$(shell echo `uname`) # Linux Darwin
+  OS_BIT?=$(shell echo `uname -m`) # x86_64 arm64
+  ENV_ROOT?=$(shell pwd)
+  ENV_HOME_PATH?=${HOME}
   # ENV_NOW_TIME_FORMAT = $(shell date -u '+%Y-%m-%d-%H-%M-%S')
   ENV_NOW_TIME_FORMAT = $(shell date '+%Y-%m-%d-%H-%M-%S')
   ifeq ($(shell uname),Darwin)
-    PLATFORM="MacOS"
+    PLATFORM=MacOS
     ifeq ($(shell echo ${OS_BIT}),arm64)
-      PLATFORM="MacOS-Apple-Silicon"
+      PLATFORM=MacOS-Apple-Silicon
     else
-      PLATFORM="MacOS-Intel"
+      PLATFORM=MacOS-Intel
     endif
     # do MacOS
 
   else
-    PLATFORM="Unix-Like"
+    PLATFORM=Unix-Like
     # do unix
   endif
 endif

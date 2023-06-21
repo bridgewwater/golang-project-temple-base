@@ -1,7 +1,7 @@
 # this file must use as base Makefile
 
 # test max time
-ENV_ROOT_TEST_MAX_TIME:=1m
+ENV_ROOT_TEST_ACTION_MAX_TIME:=5m
 
 actionInfo:
 	@echo "you can use #=> find set"
@@ -15,31 +15,25 @@ actionInfo:
 	@echo "go test -cover -coverprofile coverage.txt -covermode atomic -coverpkg ./... -v ${ENV_ROOT_TEST_LIST}"
 
 actionInstall:
-	go get -t -v $(ENV_ROOT_TEST_LIST)
+	go get -t -v ${ENV_ROOT_TEST_LIST}
 
 actionTest:
-	go test -test.v $(ENV_ROOT_TEST_LIST) -timeout $(ENV_ROOT_TEST_MAX_TIME)
+	go test -test.v ${ENV_ROOT_TEST_LIST} -timeout ${ENV_ROOT_TEST_ACTION_MAX_TIME}
 
 actionTestBenchmark:
-	go test -bench . -benchmem $(ENV_ROOT_TEST_LIST) -timeout $(ENV_ROOT_TEST_MAX_TIME)
+	go test -run none -bench . -benchmem ${ENV_ROOT_TEST_LIST} -timeout ${ENV_ROOT_TEST_ACTION_MAX_TIME}
 
 actionTestFail:
-	go test -test.v $(ENV_ROOT_TEST_LIST) -timeout $(ENV_ROOT_TEST_MAX_TIME) | grep FAIL --color
+	go test -test.v ${ENV_ROOT_TEST_LIST} -timeout ${ENV_ROOT_TEST_ACTION_MAX_TIME} | grep FAIL --color
 
 actionCoverage:
-	@go test -cover -coverprofile coverage.txt -covermode count -v $(ENV_ROOT_TEST_LIST)
+	@go test -cover -coverprofile coverage.txt -covermode count -tags test -v ${ENV_ROOT_TEST_LIST}
 
 actionCoverageAtomic:
-	@go test -cover -coverprofile coverage.txt -covermode atomic -v $(ENV_ROOT_TEST_LIST)
+	@go test -cover -coverprofile coverage.txt -covermode atomic -tags test -v ${ENV_ROOT_TEST_LIST}
 
 actionCoverageBrowserLocal: actionCoverage
 	@go tool cover -html coverage.txt
-
-actionCoverageLocal:
-	@echo "-> use goconvey at https://github.com/smartystreets/goconvey"
-	@echo "-> see report at http://localhost:8080"
-	which goconvey
-	goconvey -depth 1 -launchBrowser false -workDir $$PWD
 
 actionCodecovPush: actionCoverage
 	@echo "must finish before CI build"
@@ -56,5 +50,5 @@ helpGoAction:
 	@echo "~> make actionCoverage              - run project coverage"
 	@echo "~> make actionCoverageAtomic        - run project coverage as atomic"
 	@echo "~> make actionCoverageBrowserLocal  - run project coverage and see at browser"
-	@echo "~> make actionCoverageLocal         - run project coverage local as tools https://github.com/smartystreets/goconvey"
+	@echo "~> make actionCodecovPush           - run project coverage push"
 	@echo ""
