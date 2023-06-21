@@ -20,6 +20,31 @@ We welcome community contributions to this project.
 
 Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for more information on how to get started.
 
+## Features
+
+- [ ] more perfect test case coverage
+- [ ] more perfect benchmark case
+
+## usage
+
+- use this template, replace list below
+  - `github.com/bridgewwater/golang-project-temple-base` to your package name
+  - `bridgewwater` to your owner name
+  - `template-golang-lib` to your project name
+  - `go 1.17`, `^1.17`, `1.17.13` to new go version for dev
+
+## evn
+
+- minimum go version: go 1.17
+
+### libs
+
+| lib                                 | version |
+|:------------------------------------|:--------|
+| https://github.com/stretchr/testify | v1.8.4  |
+
+# dev
+
 ## depends
 
 in go mod project
@@ -49,12 +74,6 @@ $ echo "go mod edit -require=$(go list -mod=readonly -m -versions github.com/bri
 $ echo "go mod vendor"
 ```
 
-## evn
-
-- minimum go version: go 1.17
-
-# dev
-
 ```bash
 $ make init dep
 ```
@@ -81,7 +100,7 @@ $ make run
 $ make ci
 ```
 
-## docker
+### docker
 
 ```bash
 # then test build as test/Dockerfile
@@ -92,11 +111,6 @@ $ make dockerTestPruneLatest
 # more info see
 $ make helpDocker
 ```
-
-## use
-
-- use to replace
-  `bridgewwater/golang-project-temple-base` to you code
 
 ### cli tools to init project fast
 
