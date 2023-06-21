@@ -14,7 +14,7 @@
 ## Contributing
 
 [![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v1.4-ff69b4.svg)](.github/CONTRIBUTING_DOC/CODE_OF_CONDUCT.md)
-[![GitHub contributors](https://img.shields.io/github/contributors/bridgewwater/template-golang-lib)](https://github.com/bridgewwater/template-golang-lib/graphs/contributors)
+[![GitHub contributors](https://img.shields.io/github/contributors/bridgewwater/golang-project-temple-base)](https://github.com/bridgewwater/golang-project-temple-base/graphs/contributors)
 
 We welcome community contributions to this project.
 
@@ -30,7 +30,7 @@ Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for mo
 - use this template, replace list below
   - `github.com/bridgewwater/golang-project-temple-base` to your package name
   - `bridgewwater` to your owner name
-  - `template-golang-lib` to your project name
+  - `golang-project-temple-base` to your project name
   - `go 1.17`, `^1.17`, `1.17.13` to new go version for dev
 
 ## evn
