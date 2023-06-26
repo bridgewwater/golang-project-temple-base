@@ -1,48 +1,22 @@
 {
   "types": [
-    {
-      "type": "feat",
-      "section": "Features"
-    },
-    {
-      "type": "fix",
-      "section": "Bug Fixes"
-    },
-    {
-      "type": "docs",
-      "hidden": true
-    },
-    {
-      "type": "style",
-      "hidden": true
-    },
-    {
-      "type": "refactor",
-      "section": "Refactor"
-    },
-    {
-      "type": "perf",
-      "section": "Performance"
-    },
-    {
-      "type": "test",
-      "hidden": true
-    },
-    {
-      "type": "build",
-      "hidden": true
-    },
-    {
-      "type": "ci",
-      "hidden": true
-    },
-    {
-      "type": "chore",
-      "hidden": true
-    },
-    {
-      "type": "revert",
-      "hidden": true
-    }
-  ]
+    {"type": "feat", "section": "✨ Features", "hidden": false},
+    {"type": "fix", "section": "🐛 Bug Fixes", "hidden": false},
+    {"type": "docs", "section":"📝 Documentation", "hidden": true},
+    {"type": "style", "section":"💄 Styles", "hidden": true},
+    {"type": "refactor", "section":"♻ Refactor", "hidden": false},
+    {"type": "perf", "section":"⚡ Performance Improvements", "hidden": false},
+    {"type": "test", "section":"✅ Tests", "hidden": true},
+    {"type": "build", "section":"👷‍ Build System", "hidden": false},
+    {"type": "ci", "section":"🔧 Continuous Integration", "hidden": true},
+    {"type": "chore", "section":"📦 Chores", "hidden": true},
+    {"type": "revert", "section":"⏪ Reverts", "hidden": false}
+  ],
+  "tag-prefix": "",
+  "skip": {
+    "bump": false,
+    "changelog": false,
+    "commit": false,
+    "tag": false
+  }
 }
