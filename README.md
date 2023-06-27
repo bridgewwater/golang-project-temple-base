@@ -7,6 +7,16 @@
 [![codecov](https://codecov.io/gh/bridgewwater/golang-project-temple-base/branch/main/graph/badge.svg)](https://codecov.io/gh/bridgewwater/golang-project-temple-base)
 [![github release](https://img.shields.io/github/v/release/bridgewwater/golang-project-temple-base?style=social)](https://github.com/bridgewwater/golang-project-temple-base/releases)
 
+### cli tools to init project fast
+
+```bash
+$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/main/temp-golang-base
+# let temp-golang-base file folder under $PATH
+$ chmod +x temp-golang-base
+# see how to use
+$ temp-golang-base -h
+```
+
 ## for what
 
 - this project used to GitHub.com with golang
@@ -110,14 +120,4 @@ $ make dockerTestPruneLatest
 
 # more info see
 $ make helpDocker
-```
-
-### cli tools to init project fast
-
-```bash
-$ curl -L --fail https://raw.githubusercontent.com/bridgewwater/golang-project-temple-base/main/temp-golang-base
-# let temp-golang-base file folder under $PATH
-$ chmod +x temp-golang-base
-# see how to use
-$ temp-golang-base -h
 ```

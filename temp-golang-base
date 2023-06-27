@@ -262,11 +262,13 @@ replaceFileByRegular ${new_project}/Dockerfile.s6 ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/README.md ${temple_repo_host} ${new_repo_host}
 replaceFileByRegular ${new_project}/README.md ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/docker-compose.yml ${temple_name} ${new_project}
+replaceFileByRegular ${new_project}/Makefile ${temple_group} ${new_repo_group}
 replaceFileByRegular ${new_project}/Makefile ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/**/*.mk ${temple_name} ${new_project}
 replaceFileByRegular ${new_project}/**/*.mk ${temple_group} ${new_repo_group}
-replaceFileByRegular ${new_project}/package.json ${temple_group}\/${temple_name} ${new_repo_group}\/${new_project}
-replaceFileByRegular ${new_project}/package.json ${temple_name} ${new_project}
+ replaceFileByRegular ${new_project}/package.json ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
+ replaceFileByRegular ${new_project}/package.json ${temple_group} ${new_repo_group}
+ replaceFileByRegular ${new_project}/package.json ${temple_name} ${new_project}
 # replace code at folder
 findFileReplaceByRegular ${new_project} "*.go" ${temple_repo_host}\/${temple_group}\/${temple_name} ${new_repo_host}\/${new_repo_group}\/${new_project}
 findFileReplaceByRegular ${new_project} "*.go" ${temple_group} ${new_repo_group}
@@ -276,12 +278,14 @@ findFileReplaceByRegular ${new_project} "*.mk" ${temple_group} ${new_repo_group}
 findFileReplaceByRegular ${new_project} "*.mk" ${temple_name} ${new_project}
 findFileReplaceByRegular ${new_project} "*.md" ${temple_group} ${new_repo_group}
 findFileReplaceByRegular ${new_project} "*.md" ${temple_name} ${new_project}
+findFileReplaceByRegular ${new_project} "*.yml" ${temple_group} ${new_repo_group}
+findFileReplaceByRegular ${new_project} "*.yml" ${temple_name} ${new_project}
 
 # remove README.md last line
   if [[ ${release} -eq "Darwin" ]]; then
-    sed -i "" '115,123d' ./${new_project}/README.md
+    sed -i "" '10,19d' ./${new_project}/README.md
   else
-    sed -i '115,123d' ./${new_project}/README.md
+    sed -i '10,19d' ./${new_project}/README.md
   fi
 
 # re init go mod
@@ -364,9 +368,6 @@ case ${read_want_remove_action_ci} in
   echo " now keep action CI"
   ;;
 esac
-
-# remove shell util
-rm ./${new_project}/temp-golang-base
 
 cd ..
 new_project="$(pwd)/${new_project}"
