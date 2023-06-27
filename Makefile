@@ -89,11 +89,11 @@ endif
 	@echo "== project env info end =="
 
 cleanBuild:
-	-@$(RM) -r ${ENV_ROOT_BUILD_PATH}
+	@$(RM) -r ${ENV_ROOT_BUILD_PATH}
 	@echo "~> finish clean path: ${ENV_ROOT_BUILD_PATH}"
 
 cleanLog:
-	-@$(RM) -r ${ENV_ROOT_LOG_PATH}
+	@$(RM) -r ${ENV_ROOT_LOG_PATH}
 	@echo "~> finish clean path: ${ENV_ROOT_LOG_PATH}"
 
 cleanTestData:

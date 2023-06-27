@@ -6,9 +6,10 @@
 # ENV_ROOT_TEST_LIST test list for most use case is ./...
 # ENV_ROOT_TEST_MAX_TIME timeout for test case set
 # ENV_ROOT_BUILD_PATH=build
-# ENV_ROOT_BUILD_ENTRANCE=cmd/main.go
+# ENV_ROOT_BUILD_ENTRANCE=main.go
 # ENV_ROOT_BUILD_BIN_NAME=${ROOT_NAME}
 # ENV_RUN_INFO_ARGS=
+# ENV_RUN_INFO_HELP_ARGS=
 # can use as:
 #
 ### go test MakeGoTest.mk start
@@ -28,7 +29,7 @@ ENV_ROOT_GO_TEST_INTEGRATION_BUILD_ROOT_PATH=${ENV_ROOT_BUILD_PATH}
 ENV_ROOT_GO_TEST_INTEGRATION_BUILD_BIN_NAME=integration-test-${ENV_ROOT_BUILD_BIN_NAME}
 ENV_ROOT_GO_TEST_INTEGRATION_BIN_PATH=${ENV_ROOT_GO_TEST_INTEGRATION_BUILD_ROOT_PATH}/${ENV_ROOT_GO_TEST_INTEGRATION_BUILD_BIN_NAME}
 ENV_ROOT_GO_TEST_INTEGRATION_BUILD_ENTRANCE=${ENV_ROOT_BUILD_ENTRANCE}
-ENV_ROOT_GO_TEST_INTEGRATION_RUN_ARGS=${ENV_RUN_INFO_ARGS}
+ENV_ROOT_GO_TEST_INTEGRATION_RUN_ARGS=${ENV_RUN_INFO_HELP_ARGS}
 
 ENV_PATH_GO_COVER_ROOT_DIR_PATH=${ENV_ROOT_GO_TEST_INTEGRATION_BUILD_ROOT_PATH}/integration-test
 ENV_PATH_GO_COVER_DIR_PATH=${ENV_PATH_GO_COVER_ROOT_DIR_PATH}/${PLATFORM}/${OS_BIT}
@@ -56,9 +57,9 @@ envGoTestIntegration:
 
 cleanGoCoverDirRoot:
 ifeq ($(OS),Windows_NT)
-	-@$(RM) -r $(subst /,\,${ENV_PATH_GO_COVER_ROOT_DIR_PATH})
+	@$(RM) -r ${ENV_PATH_GO_COVER_ROOT_DIR_PATH}
 else
-	-@$(RM) -r ${ENV_PATH_GO_COVER_ROOT_DIR_PATH}
+	@$(RM) -r ${ENV_PATH_GO_COVER_ROOT_DIR_PATH}
 endif
 	$(info -> has clean ${ENV_PATH_GO_COVER_ROOT_DIR_PATH})
 
@@ -68,16 +69,16 @@ pathCheckGoCoverDir: | $(ENV_PATH_GO_COVER_DIR_PATH)
 $(ENV_PATH_GO_COVER_DIR_PATH):
 	@echo "-> dist folder tools does not exist, try mkdir at: ${ENV_PATH_GO_COVER_DIR_PATH}"
 ifeq ($(OS),Windows_NT)
-	-@mkdir $(subst /,\,${ENV_PATH_GO_COVER_DIR_PATH})
+	@mkdir -p ${ENV_PATH_GO_COVER_DIR_PATH}
 else
-	-@mkdir -p ${ENV_PATH_GO_COVER_DIR_PATH}
+	@mkdir -p ${ENV_PATH_GO_COVER_DIR_PATH}
 endif
 
 cleanGoCoverDir:
 ifeq ($(OS),Windows_NT)
-	-@$(RM) -r $(subst /,\,${ENV_PATH_GO_COVER_DIR_PATH})
+	@$(RM) -r ${ENV_PATH_GO_COVER_DIR_PATH}
 else
-	-@$(RM) -r ${ENV_PATH_GO_COVER_DIR_PATH}
+	@$(RM) -r ${ENV_PATH_GO_COVER_DIR_PATH}
 endif
 	$(info -> has clean ${ENV_PATH_GO_COVER_DIR_PATH})
 
@@ -93,9 +94,9 @@ endif
 testIntegrationRun: export GOCOVERDIR=$(strip ${ENV_PATH_GO_COVER_DIR_VALUE})
 testIntegrationRun: cleanGoCoverDir pathCheckGoCoverDir testIntegrationBuild
 ifeq ($(OS),Windows_NT)
-	$(subst /,\,${ENV_ROOT_GO_TEST_INTEGRATION_BIN_PATH}).exe ${ENV_RUN_INFO_ARGS}
+	$(subst /,\,${ENV_ROOT_GO_TEST_INTEGRATION_BIN_PATH}).exe ${ENV_ROOT_GO_TEST_INTEGRATION_RUN_ARGS}
 else
-	./${ENV_ROOT_GO_TEST_INTEGRATION_BIN_PATH} ${ENV_RUN_INFO_ARGS}
+	./${ENV_ROOT_GO_TEST_INTEGRATION_BIN_PATH} ${ENV_ROOT_GO_TEST_INTEGRATION_RUN_ARGS}
 endif
 	go tool covdata percent -i $(strip ${ENV_PATH_GO_COVER_DIR_VALUE})
 

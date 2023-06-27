@@ -5,7 +5,8 @@
 # env PLATFORM OS_BIT ENV_ROOT ENV_HOME_PATH
 ifeq ($(OS),Windows_NT)
   PLATFORM=Windows
-  OS_BIT?=${shell if /i "%PROCESSOR_ARCHITECTURE%"=="AMD64" (echo x86_64) ELSE echo x86}
+#  OS_BIT?=${shell if /i "%PROCESSOR_ARCHITECTURE%"=="AMD64" (echo x86_64) ELSE echo x86}
+  OS_BIT?=$(shell echo `uname -m`) # x86_64 arm64
   # do windows powershell
   ENV_ROOT?=$(shell pwd)
   ENV_HOME_PATH?=${shell echo %UserProfile%}
