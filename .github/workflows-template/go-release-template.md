@@ -23,7 +23,7 @@ jobs:
       - name: Set up Go SDK
         uses: actions/setup-go@v4
         with:
-          go-version: '^1.17'
+          go-version: '^1.18'
           cache: false
       - name: Build Release binary
         run: |

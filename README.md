@@ -41,11 +41,11 @@ Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for mo
   - `github.com/bridgewwater/golang-project-temple-base` to your package name
   - `bridgewwater` to your owner name
   - `golang-project-temple-base` to your project name
-  - `go 1.17`, `^1.17`, `1.17.13` to new go version for dev
+  - `go 1.18`, `^1.18`, `1.18.10` to new go version for dev
 
 ## evn
 
-- minimum go version: go 1.17
+- minimum go version: go 1.18
 
 ### libs
 
