@@ -233,12 +233,16 @@ else
   new_repo_host=${temple_repo_host}
 fi
 
+temple_name_go_package=${temple_name//-/_}
+new_project_go_package=${new_project//-/_}
+
 echo -e "=> temple url: ${temple_url}
 => temple_branch:  ${temple_branch}
 -> new_repo_host:  ${new_repo_host}
 -> new_group:      ${new_repo_group}
 -> new_project:    ${new_project}
--> new remote url: http://${new_repo_host}/${new_repo_group}/${new_project}
+-> new_project_go_package: ${new_project_go_package}
+-> new remote url: https://${new_repo_host}/${new_repo_group}/${new_project}
 "
 
 pI "Clone from ${temple_url}"
@@ -280,6 +284,11 @@ findFileReplaceByRegular ${new_project} "*.md" ${temple_group} ${new_repo_group}
 findFileReplaceByRegular ${new_project} "*.md" ${temple_name} ${new_project}
 findFileReplaceByRegular ${new_project} "*.yml" ${temple_group} ${new_repo_group}
 findFileReplaceByRegular ${new_project} "*.yml" ${temple_name} ${new_project}
+# replace go code at root
+replaceFileByRegular ${new_project}/resource.go ${temple_name_go_package} ${new_project_go_package}
+replaceFileByRegular ${new_project}/cmd/${temple_name}/main.go ${temple_name_go_package}.PackageJson ${new_project_go_package}.PackageJson
+# replace cmd build entrance
+mv ${new_project}/cmd/${temple_name} ${new_project}/cmd/${new_project}
 
 # remove README.md last line
   if [[ ${release} -eq "Darwin" ]]; then
@@ -288,15 +297,7 @@ findFileReplaceByRegular ${new_project} "*.yml" ${temple_name} ${new_project}
     sed -i '10,19d' ./${new_project}/README.md
   fi
 
-# re init go mod
-#cd ${new_project}
-#if [[ -f "go.mod" ]]; then
-#  rm -f go.mod
-#  rm -f go.sum
-#  GO111MODULE=on go mod init
-#fi
-#cd ..${new_project}
-
+# choose LICENSE
 read -p "Do you can keep sample code (default: no)? [y/n] " read_want_keep_sample_code
 case ${read_want_keep_sample_code} in
 [yY]*)

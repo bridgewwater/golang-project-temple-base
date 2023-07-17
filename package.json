@@ -16,7 +16,11 @@
     "docker",
     "action"
   ],
-  "author": "sinlov",
+  "author": {
+    "name": "bridgewwater",
+    "email": "",
+    "url": "https://github.com/bridgewwater/golang-project-temple-base"
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/bridgewwater/golang-project-temple-base/issues"

@@ -10,6 +10,8 @@ ifndef GOPATH
 	exit 1
 endif
 
+ENV_GO_PATH=$(shell go env GOPATH)
+
 modFetch:
 	@echo "-> can fetch last version github.com/gin-gonic/gin as"
 	@echo "go list -mod readonly -m -versions github.com/gin-gonic/gin | awk '{print \044\061 \042 lastest: \042 \044\0116\0106 }'"
