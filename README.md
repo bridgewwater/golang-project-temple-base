@@ -1,4 +1,4 @@
-[![golang-ci](https://github.com/bridgewwater/golang-project-temple-base/actions/workflows/golang-ci.yml/badge.svg)](https://github.com/bridgewwater/golang-project-temple-base/actions/workflows/golang-ci.yml)
+[![ci](https://github.com/bridgewwater/golang-project-temple-base/actions/workflows/ci.yml/badge.svg)](https://github.com/bridgewwater/golang-project-temple-base/actions/workflows/ci.yml)
 [![TravisBuildStatus](https://api.travis-ci.com/bridgewwater/golang-project-temple-base.svg?branch=main)](https://travis-ci.com/bridgewwater/golang-project-temple-base)
 [![license](https://img.shields.io/github/license/bridgewwater/golang-project-temple-base)](https://github.com/bridgewwater/golang-project-temple-base)
 [![go mod version](https://img.shields.io/github/go-mod/go-version/bridgewwater/golang-project-temple-base?label=go.mod)](https://github.com/bridgewwater/golang-project-temple-base)

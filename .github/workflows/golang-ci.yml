@@ -1,13 +1,10 @@
 name: golang-ci
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_call: # https://docs.github.com/actions/using-workflows/reusing-workflows#using-inputs-and-secrets-in-a-reusable-workflow
 
-#env:
-#  CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}'
+permissions:
+  contents: read
 
 jobs:
   golang-ci:
@@ -34,33 +31,48 @@ jobs:
           go env
           go version
 
+      - name: Run go install check
+        run: go get -t -v ./...
+
+      - name: Run go build
+        run: go build -v ./...
+
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           # Require: The version of golangci-lint to use.
           # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
           # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
+          # version: v1.50.0 for go verison 1.19+
+          # version: v1.45.2 for go verison 1.18+
+          # version: v1.42.1 for go verison 1.17+
+          # version: v1.41.0 for go verison 1.16+
           version: v1.53.2
+
           # Optional: working directory, useful for monorepos
           # working-directory: somedir
 
           # Optional: golangci-lint command line arguments.
           #
-          # Note: by default the `.golang-ci.yml` file should be at the root of the repository.
+          # Note: By default, the `.golangci.yml` file should be at the root of the repository.
           # The location of the configuration file can be changed by using `--config=`
-          # args: --timeout=30m --config=/my/path/.golang-ci.yml --issues-exit-code=0
+          # args: --timeout=30m --config=/my/path/.golangci.yml --issues-exit-code=0
 
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           # only-new-issues: true
 
-          # Optional:The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
+          # Optional: if set to true, then all caching functionality will be completely disabled,
+          #           takes precedence over all other caching options.
+          # skip-cache: true
+
+          # Optional: if set to true, then the action won't cache or restore ~/go/pkg.
+          # skip-pkg-cache: true
+
+          # Optional: if set to true, then the action won't cache or restore ~/.cache/go-build.
+          # skip-build-cache: true
+
+          # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           # install-mode: "goinstall"
-
-      - name: Run go install check
-        run: go get -t -v ./...
-
-      - name: Run go build
-        run: go build -v ./...
 
       - name: Run test
         run: go test -v ./...

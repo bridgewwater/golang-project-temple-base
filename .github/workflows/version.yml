@@ -1,0 +1,79 @@
+name: version
+
+on:
+  workflow_call: # https://docs.github.com/actions/using-workflows/reusing-workflows#using-inputs-and-secrets-in-a-reusable-workflow
+    outputs:
+      short_sha:
+        description: 'version short hash of the commit size 8'
+        value: ${{ jobs.version-check.outputs.short_sha }}
+      tag_name:
+        description: 'tag name, if not tag will null'
+        value: ${{ jobs.version-check.outputs.tag_name }}
+      tag_changes:
+        description: 'tag changes, if not tag will null'
+        value: ${{ jobs.version-check.outputs.tag_changes }}
+      tag_status:
+        description: 'tag status, if not tag will null, will be prereleased, unreleased, patch, minor, major'
+        value: ${{ jobs.version-check.outputs.tag_status }}
+
+jobs:
+  version-check:
+    name: version-check
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # You can add more, for any target you'd like!
+        include:
+          - build: linux
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+          # - build: macos
+          #   os: macos-latest
+          #   target: x86_64-apple-darwin
+          # - build: windows
+          #   os: windows-latest
+          #   target: x86_64-pc-windows-gnu
+    outputs:
+      short_sha: ${{ steps.short-sha.outputs.sha }}
+      tag_name: ${{ steps.get_tag.outputs.tag }}
+      tag_changes: ${{ steps.changelog_reader.outputs.changes }}
+      tag_status: ${{ steps.changelog_reader.outputs.status }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: get hash
+        uses: benjlevesque/short-sha@v2.2
+        id: short-sha
+        with:
+          length: 8
+
+      - name: get tag
+        id: get_tag
+        uses: olegtarasov/get-tag@v2.1.2
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Get version from tag
+        id: tag_name
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
+
+      - name: get changelog
+        id: changelog_reader
+        uses: artlaman/conventional-changelog-reader-action@v1.1.0
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          version: ${{ steps.tag_name.outputs.current_version }}
+          path: ./CHANGELOG.md
+
+      - name: Check Version
+        run: |
+          echo "get short version hash => ${{ steps.short-sha.outputs.sha }}"
+          echo "get tag_name => ${{ steps.get_tag.outputs.tag }}"
+          echo "get changelog_reader.version => ${{ steps.changelog_reader.outputs.version }}"
+          echo "get changelog_reader.changes => ${{ steps.changelog_reader.outputs.changes }}"
+          echo "get changelog_reader.status => ${{ steps.changelog_reader.outputs.status }}"

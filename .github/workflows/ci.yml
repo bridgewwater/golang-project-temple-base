@@ -1,0 +1,53 @@
+name: ci
+
+on:
+  push:
+    paths-ignore:
+      - '**/README.md'
+    branches:
+      - main
+    tags:
+      - '*' # Push events to matching *, i.e. 1.0.0 v1.0, v20.15.10
+  pull_request:
+    paths-ignore:
+      - '**/README.md'
+    branches:
+      - main
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  version:
+    name: version
+    uses: ./.github/workflows/version.yml
+
+  golang-ci:
+    name: golang-ci
+    needs:
+     - version
+    uses: ./.github/workflows/golang-ci.yml
+
+  go-release:
+    name: go-release
+    needs:
+     - version
+     - golang-ci
+    if: startsWith(github.ref, 'refs/tags/')
+    uses: ./.github/workflows/go-release.yml
+    with:
+      upload_artifact_name: go-release
+
+  deploy-tag:
+    needs:
+      - version
+      - go-release
+    name: deploy-tag
+    uses: ./.github/workflows/deploy-tag.yml
+    if: startsWith(github.ref, 'refs/tags/')
+    with:
+      prerelease: true
+      tag_name: ${{ needs.version.outputs.tag_name }}
+      tag_changes: ${{ needs.version.outputs.tag_changes }}
+      download_artifact_name: go-release

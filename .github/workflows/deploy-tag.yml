@@ -1,0 +1,70 @@
+name: deploy-tag
+
+on:
+  workflow_call: # https://docs.github.com/actions/using-workflows/reusing-workflows#using-inputs-and-secrets-in-a-reusable-workflow
+    inputs:
+      prerelease:
+        description: 'prerelease flag'
+        default: true
+        required: false
+        type: boolean
+      tag_name:
+        description: 'tag name, if not tag will null'
+        default: ''
+        required: false
+        type: string
+      tag_changes:
+        description: 'tag changes, if not tag will null'
+        default: ''
+        required: false
+        type: string
+      download_artifact_name:
+        description: 'download artifact name, if not set will not use download_artifact'
+        default: ''
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  repo-release:
+    name: repo-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check deploy inputs
+        run: |
+          echo "prerelease: ${{inputs.prerelease}}"
+          echo "tag_name: ${{inputs.tag_name}}"
+          echo "download_artifact_name: ${{inputs.download_artifact_name}}"
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        if: ${{ inputs.download_artifact_name != null }}
+        with:
+          name: ${{inputs.download_artifact_name}}
+          path: ${{ github.workspace }}/dist
+
+      - name: Display structure of downloaded files
+        if: ${{ inputs.download_artifact_name != null }}
+        run: |
+          ls -R ${{ github.workspace }}/dist
+
+      - uses: softprops/action-gh-release@master
+        name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: ${{inputs.tag_name}}
+          ## with permissions to create releases in the other repo
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: ${{inputs.prerelease}}
+          body: "${{ inputs.tag_changes }}"
+          # body_path: ${{ github.workspace }}/CHANGELOG.md
+          # https://github.com/isaacs/node-glob
+#          files: |
+#            **/*.zip
+#            **/*.tar.gz
+#            **/*.sha256
