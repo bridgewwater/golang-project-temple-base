@@ -64,7 +64,7 @@ jobs:
           body: "${{ inputs.tag_changes }}"
           # body_path: ${{ github.workspace }}/CHANGELOG.md
           # https://github.com/isaacs/node-glob
-#          files: |
-#            **/*.zip
-#            **/*.tar.gz
-#            **/*.sha256
+          files: |
+            **/*.zip
+            **/*.tar.gz
+            **/*.sha256

@@ -6,15 +6,25 @@ on:
       short_sha:
         description: 'version short hash of the commit size 8'
         value: ${{ jobs.version-check.outputs.short_sha }}
+      sha:
+        description: 'version short hash of the commit'
+        value: ${{ jobs.version-check.outputs.sha }}
       tag_name:
         description: 'tag name, if not tag will null'
         value: ${{ jobs.version-check.outputs.tag_name }}
-      tag_changes:
-        description: 'tag changes, if not tag will null'
-        value: ${{ jobs.version-check.outputs.tag_changes }}
-      tag_status:
-        description: 'tag status, if not tag will null, will be prereleased, unreleased, patch, minor, major'
-        value: ${{ jobs.version-check.outputs.tag_status }}
+      cc_version:
+        description: 'conventional version'
+        value: ${{ jobs.version-check.outputs.cc_version }}
+      cc_date:
+        description: 'conventional date'
+        value: ${{ jobs.version-check.outputs.cc_date }}
+      cc_changes:
+        description: 'conventional change logs'
+        value: ${{ jobs.version-check.outputs.cc_changes }}
+      cc_status:
+        description: 'conventional change status, released or prereleased'
+        value: ${{ jobs.version-check.outputs.cc_status }}
+
 
 jobs:
   version-check:
@@ -22,58 +32,37 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # You can add more, for any target you'd like!
         include:
           - build: linux
             os: ubuntu-latest
-            target: x86_64-unknown-linux-musl
-          # - build: macos
-          #   os: macos-latest
-          #   target: x86_64-apple-darwin
-          # - build: windows
-          #   os: windows-latest
-          #   target: x86_64-pc-windows-gnu
+            target: x86_64-unknown-linux-gnu
     outputs:
-      short_sha: ${{ steps.short-sha.outputs.sha }}
-      tag_name: ${{ steps.get_tag.outputs.tag }}
-      tag_changes: ${{ steps.changelog_reader.outputs.changes }}
-      tag_status: ${{ steps.changelog_reader.outputs.status }}
+      short_sha: ${{ steps.check-version.outputs.short-sha }}
+      sha: ${{ steps.check-version.outputs.sha }}
+      tag_name: ${{ steps.check-version.outputs.tag-version }}
+      cc_version: ${{ steps.check-version.outputs.cc-latest-version }}
+      cc_date: ${{ steps.check-version.outputs.cc-latest-date }}
+      cc_changes: ${{ steps.check-version.outputs.cc-latest-changes-log }}
+      cc_status: ${{ steps.check-version.outputs.cc-latest-status }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: get hash
-        uses: benjlevesque/short-sha@v2.2
-        id: short-sha
+      - name: get version and conventional
+        id: check-version
+        uses: convention-change/conventional-version-check@v1.2.0 # or change to latest version
         with:
-          length: 8
+          sha-length: 8
 
-      - name: get tag
-        id: get_tag
-        uses: olegtarasov/get-tag@v2.1.2
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Get version from tag
-        id: tag_name
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: check version and conventional
         run: |
-          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
-
-      - name: get changelog
-        id: changelog_reader
-        uses: artlaman/conventional-changelog-reader-action@v1.1.0
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          version: ${{ steps.tag_name.outputs.current_version }}
-          path: ./CHANGELOG.md
-
-      - name: Check Version
-        run: |
-          echo "get short version hash => ${{ steps.short-sha.outputs.sha }}"
-          echo "get tag_name => ${{ steps.get_tag.outputs.tag }}"
-          echo "get changelog_reader.version => ${{ steps.changelog_reader.outputs.version }}"
-          echo "get changelog_reader.changes => ${{ steps.changelog_reader.outputs.changes }}"
-          echo "get changelog_reader.status => ${{ steps.changelog_reader.outputs.status }}"
+          echo "sha: ${{ steps.check-version.outputs.sha }}"
+          echo "env SHA-SHORT: ${{ env.SHA-SHORT }}"
+          echo "short-sha: ${{ steps.check-version.outputs.short-sha }}"
+          echo "tag-version: ${{ steps.check-version.outputs.tag-version }}"
+          echo "env GIT_TAG_VERSION: ${{ env.GIT_TAG_VERSION }}"
+          echo "cc-latest-version: ${{ steps.check-version.outputs.cc-latest-version }}"
+          echo "cc-latest-date: ${{ steps.check-version.outputs.cc-latest-date }}"
+          echo "cc-latest-status: ${{ steps.check-version.outputs.cc-latest-status }}"
+          echo "cc-latest-changes-log: ${{ steps.check-version.outputs.cc-latest-changes-log }}"

@@ -1,0 +1,119 @@
+name: go-release-platform
+
+on:
+  workflow_call: # https://docs.github.com/actions/using-workflows/reusing-workflows#using-inputs-and-secrets-in-a-reusable-workflow
+    inputs:
+      verison_name:
+        description: 'most of this use tag name'
+        default: ''
+        required: false
+        type: string
+      upload_artifact_name:
+        description: 'upload artifact name'
+        default: ''
+        required: false
+        type: string
+
+env:
+  DIST_BINARY_NAME: golang-project-temple-base # to change your binary name, windows will auto add .exe
+  DIST_BUILD_ENTRANCE: cmd/golang-project-temple-base/main.go # to change your build entrance
+
+permissions:
+  contents: write
+
+jobs:
+  go-release-platform:
+    defaults:
+      run:
+        shell: bash
+       # working-directory: ${{ env.WORK_DIR }}
+    strategy:
+      matrix:
+        # You can add more, for any target you'd like! target list see: go tool dist list
+        include:
+          - build: linux-amd64
+            os: ubuntu-latest
+            go_os: linux
+            go_arch: amd64
+          - build: linux-arm64
+            os: ubuntu-latest
+            go_os: linux
+            go_arch: arm64
+          - build: macos-amd64
+            os: macos-latest
+            go_os: darwin
+            go_arch: amd64
+          - build: macos-arm64
+            os: macos-latest
+            go_os: darwin
+            go_arch: arm64
+          - build: windows-amd64
+            os: windows-latest
+            go_os: windows
+            go_arch: amd64
+          - build: windows-arm64
+            os: windows-latest
+            go_os: windows
+            go_arch: arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go SDK
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.18'
+          cache: false
+
+      - name: Build Release binary
+        run: |
+          go mod verify
+          go mod download -x
+          go mod tidy -v
+          go mod vendor
+          # Replace with the name of your binary
+          binary_name=${{ env.DIST_BINARY_NAME }}
+
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            binary_name=${{ env.DIST_BINARY_NAME }}.exe
+          fi
+
+          dirname="${{ env.DIST_BINARY_NAME }}-${{ inputs.verison_name }}-${{ matrix.go_os }}-${{ matrix.go_arch }}"
+
+          # change build tag and ldflags if you need
+          go build -a -tags netgo -ldflags '-w -s --extldflags "-static -fpic"' -o $dirname/$binary_name ${{ env.DIST_BUILD_ENTRANCE }}
+
+          # add more resource to archive
+          # mv doc/cmd.md "$dirname"
+
+          # archive and hash
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            7z a "$dirname.zip" "$dirname"
+            certutil -hashfile "$dirname.zip" SHA256 >> "$dirname.zip.sha256"
+            echo "ASSET=$dirname.zip" >> $GITHUB_ENV
+          else
+            tar -czf "$dirname.tar.gz" "$dirname"
+            shasum -a 256 "$dirname.tar.gz" >> "$dirname.tar.gz.sha256"
+            echo "ASSET=$dirname.tar.gz" >> $GITHUB_ENV
+          fi
+
+        env:
+          CGO_ENABLED: 0
+          GOOS: ${{ matrix.go_os }}
+          GOARCH: ${{ matrix.go_arch }}
+
+      - name: Check Release archive
+       # if: ${{ inputs.tag_name != null }}
+        run: |
+          echo "release archive at: ${{ env.ASSET }}"
+          echo " archive sha256sum at: ${{ env.ASSET }}.sha256"
+
+      - name: upload-artifact
+        uses: actions/upload-artifact@v3
+        if: ${{ inputs.upload_artifact_name != null }}
+        with:
+          name: ${{ inputs.upload_artifact_name }}
+          retention-days: 5
+          if-no-files-found: error
+          path: |
+            ${{ env.ASSET }}
+            ${{ env.ASSET }}.sha256
