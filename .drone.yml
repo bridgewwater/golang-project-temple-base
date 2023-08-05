@@ -22,7 +22,7 @@ environment:
 
 steps:
   - name: env-init
-    image: sinlov/drone-env-printer:1.1.0
+    image: sinlov/drone-env-printer:1.2.0
     pull: if-not-exists
     settings:
       debug: false
@@ -87,7 +87,7 @@ steps:
       - go-test
       - go-test-benchmark
 
-    image: sinlov/drone-feishu-group-robot:1.11.0-alpine
+    image: sinlov/drone-feishu-group-robot:1.13.0 # https://hub.docker.com/r/sinlov/drone-feishu-group-robot/tags
     pull: if-not-exists
     settings:
       debug: false

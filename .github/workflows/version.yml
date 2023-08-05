@@ -65,4 +65,3 @@ jobs:
           echo "cc-latest-version: ${{ steps.check-version.outputs.cc-latest-version }}"
           echo "cc-latest-date: ${{ steps.check-version.outputs.cc-latest-date }}"
           echo "cc-latest-status: ${{ steps.check-version.outputs.cc-latest-status }}"
-          echo "cc-latest-changes-log: ${{ steps.check-version.outputs.cc-latest-changes-log }}"

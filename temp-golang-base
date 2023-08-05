@@ -292,9 +292,9 @@ mv ${new_project}/cmd/${temple_name} ${new_project}/cmd/${new_project}
 
 # remove README.md last line
   if [[ ${release} -eq "Darwin" ]]; then
-    sed -i "" '10,19d' ./${new_project}/README.md
+    sed -i "" '13,21d' ./${new_project}/README.md
   else
-    sed -i '10,19d' ./${new_project}/README.md
+    sed -i '13,21d' ./${new_project}/README.md
   fi
 
 # choose LICENSE
