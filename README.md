@@ -46,15 +46,19 @@ Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for mo
   - `golang-project-temple-base` to your project name
   - `go 1.18`, `^1.18`, `1.18.10` to new go version for dev
 
-## evn
+## env
 
 - minimum go version: go 1.18
+- change `go 1.18`, `^1.18`, `1.18.10` to new go version
 
 ### libs
 
-| lib                                 | version |
-|:------------------------------------|:--------|
-| https://github.com/stretchr/testify | v1.8.4  |
+| lib                                        | version |
+|:-------------------------------------------|:--------|
+| https://github.com/stretchr/testify        | v1.8.4  |
+| https://github.com/sebdah/goldie           | v2.5.3  |
+
+- more see [go.mod](go.mod)
 
 # dev
 
