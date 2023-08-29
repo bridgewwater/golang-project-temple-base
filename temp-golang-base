@@ -290,12 +290,29 @@ replaceFileByRegular ${new_project}/cmd/${temple_name}/main.go ${temple_name_go_
 # replace cmd build entrance
 mv ${new_project}/cmd/${temple_name} ${new_project}/cmd/${new_project}
 
-# remove README.md last line
-  if [[ ${release} -eq "Darwin" ]]; then
-    sed -i "" '13,21d' ./${new_project}/README.md
-  else
-    sed -i '13,21d' ./${new_project}/README.md
-  fi
+# fix go install
+findFileReplaceByRegular ${new_project} "*.mk" "go install ${new_repo_host}" "go install github.com"
+findFileReplaceByRegular ${new_project} "*.yml" "go install ${new_repo_host}" "go install github.com"
+findFileReplaceByRegular ${new_project} "*.dockerfile" "go install ${new_repo_host}" "go install github.com"
+
+# readme.md fix golang package
+readme_package_fix=(
+  stretchr
+  sebdah
+  gookit
+  urfave
+  bar-counter
+  spf13
+  convention-change
+)
+if [ ! -n "${readme_package_fix}" ];then
+  pI "readme_package_fix is empty"
+else
+  for readme_package_fix_item in ${readme_package_fix[@]}; do
+    # pD "try fix README.md package: ${readme_package_fix_item}"
+    findFileReplaceByRegular ${new_project} "README.md" "${new_repo_host}\/${readme_package_fix_item}" "github.com\/${readme_package_fix_item}"
+  done
+fi
 
 # choose LICENSE
 read -p "Do you can keep sample code (default: no)? [y/n] " read_want_keep_sample_code
@@ -369,6 +386,16 @@ case ${read_want_remove_action_ci} in
   echo " now keep action CI"
   ;;
 esac
+
+# remove README.md last line
+if [[ ${release} -eq "Darwin" ]]; then
+  sed -i "" '13,21d' ./${new_project}/README.md
+else
+  sed -i '13,21d' ./${new_project}/README.md
+fi
+
+cd ${new_project}
+git init
 
 cd ..
 new_project="$(pwd)/${new_project}"

@@ -126,7 +126,7 @@ init:
 	@echo "~> you can use [ make help ] see more task"
 	-go mod verify
 
-dep: modVerify modDownload modTidy modVendor
+dep: modVerify modDownload modTidy
 	@echo "-> just check depends below"
 
 style: modTidy modVerify modFmt modLintRun
