@@ -1,0 +1,112 @@
+# this is a workflow must has secrets.DOCKERHUB_TOKEN
+name: docker-image-tag
+
+on:
+  workflow_call: # https://docs.github.com/actions/using-workflows/reusing-workflows#using-inputs-and-secrets-in-a-reusable-workflow
+    inputs:
+      docker_hub_user:
+        description: 'name of docker hub user'
+        default: ''
+        required: true
+        type: string
+      docker_image_name:
+        description: 'name of docker image'
+        default: ''
+        required: true
+        type: string
+      push_remote_flag:
+        description: 'flag for push to remote'
+        default: true
+        required: false
+        type: boolean
+
+env:
+  DOCKER_IMAGE_PLATFORMS: linux/amd64,linux/arm64/v8 # change to your platforms for release
+#  DOCKER_IMAGE_PLATFORMS: linux/amd64,linux/386,linux/arm64/v8,linux/arm/v7
+
+jobs:
+  docker-image-buildx:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        docker_image: # change this for build dry-run
+          - platform: linux/amd64
+          - platform: linux/arm64/v8
+          # - platform: linux/386
+          # - platform: linux/arm/v7
+    runs-on: ${{ matrix.os }}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ inputs.docker_image_name }}
+          tags: |
+            # type semver https://github.com/docker/metadata-action#typesemver
+            type=semver,pattern={{version}}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build dry
+        uses: docker/build-push-action@v5 # https://github.com/docker/build-push-action
+        with:
+          context: .
+          file: Dockerfile
+          platforms: ${{ matrix.docker_image.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          no-cache: false
+          pull: true
+          push: false
+
+  docker-image-push:
+    runs-on: ubuntu-latest
+    needs:
+      - docker-image-buildx
+    if: ${{ inputs.push_remote_flag }}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ inputs.docker_image_name }}
+          tags: |
+            # type semver https://github.com/docker/metadata-action#typesemver
+            type=semver,pattern={{version}}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: "Login into registry as user: inputs.docker_hub_user"
+        uses: docker/login-action@v3
+        with:
+          username: ${{ inputs.docker_hub_user }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build and push
+        id: docker_push
+        uses: docker/build-push-action@v5 # https://github.com/docker/build-push-action
+        with:
+          context: .
+          file: Dockerfile
+          platforms: ${{ env.DOCKER_IMAGE_PLATFORMS }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          no-cache: false
+          pull: true
+          push: true
