@@ -3,7 +3,7 @@ name: go-release-platform
 on:
   workflow_call: # https://docs.github.com/actions/using-workflows/reusing-workflows#using-inputs-and-secrets-in-a-reusable-workflow
     inputs:
-      verison_name:
+      version_name:
         description: 'most of this use tag name'
         default: ''
         required: false
@@ -77,7 +77,7 @@ jobs:
             binary_name=${{ env.DIST_BINARY_NAME }}.exe
           fi
 
-          dirname="${{ env.DIST_BINARY_NAME }}-${{ inputs.verison_name }}-${{ matrix.go_os }}-${{ matrix.go_arch }}"
+          dirname="${{ env.DIST_BINARY_NAME }}-${{ inputs.version_name }}-${{ matrix.go_os }}-${{ matrix.go_arch }}"
 
           # change build tag and ldflags if you need
           go build -a -tags netgo -ldflags '-w -s --extldflags "-static -fpic"' -o $dirname/$binary_name ${{ env.DIST_BUILD_ENTRANCE }}

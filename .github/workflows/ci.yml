@@ -52,7 +52,7 @@ jobs:
 #    uses: ./.github/workflows/go-release-platform.yml
 #    secrets: inherit
 #    with:
-#      verison_name: latest
+#      version_name: latest
 
   go-release-platform:
     name: go-release-platform
@@ -63,7 +63,7 @@ jobs:
     uses: ./.github/workflows/go-release-platform.yml
     secrets: inherit
     with:
-      verison_name: ${{ needs.version.outputs.tag_name }}
+      version_name: ${{ needs.version.outputs.tag_name }}
       upload_artifact_name: go-release
 
 #  go-release-cross:
