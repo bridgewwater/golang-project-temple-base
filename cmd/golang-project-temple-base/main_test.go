@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"os/exec"
@@ -28,7 +29,8 @@ func Test_package_main_error(t *testing.T) {
 	cmdFail := exec.Command(os.Args[0], "--error.arg")
 	cmdFail.Env = append(os.Environ(), "ENV_WEB_AUTO_HOST=true")
 	err := cmdFail.Run()
-	if e, ok := err.(*exec.ExitError); ok {
+	var e *exec.ExitError
+	if errors.As(err, &e) {
 		assert.False(t, e.Success())
 		assert.Equal(t, 2, e.ExitCode())
 		return
