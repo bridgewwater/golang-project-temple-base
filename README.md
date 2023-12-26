@@ -44,12 +44,12 @@ Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for mo
   - `github.com/bridgewwater/golang-project-temple-base` to your package name
   - `bridgewwater` to your owner name
   - `golang-project-temple-base` to your project name
-  - `go 1.18`, `^1.18`, `1.18.10` to new go version for dev
+  - `go 1.19`, `^1.19`, `1.19.12` to new go version for dev
 
 ## env
 
-- minimum go version: go 1.18
-- change `go 1.18`, `^1.18`, `1.18.10-buster`, `1.18.10` to new go version
+- minimum go version: go 1.19
+- change `go 1.19`, `^1.19`, `1.19.12-bullseye`, `1.19.12` to new go version
 
 ### libs
 

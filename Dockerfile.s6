@@ -3,7 +3,7 @@
 # Author: bridgewwater
 # dockerfile offical document https://docs.docker.com/engine/reference/builder/
 # https://hub.docker.com/_/golang
-FROM golang:1.18.10-buster as builder
+FROM golang:1.19.12-bullseye as builder
 
 ARG GO_ENV_PACKAGE_NAME=github.com/bridgewwater/golang-project-temple-base
 ARG GO_ENV_ROOT_BUILD_BIN_NAME=golang-project-temple-base

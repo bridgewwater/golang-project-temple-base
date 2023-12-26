@@ -43,11 +43,12 @@ jobs:
           # Require: The version of golangci-lint to use.
           # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
           # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
+          # version: v1.55.2 for go verison 1.21+
           # version: v1.50.0 for go verison 1.19+
           # version: v1.45.2 for go verison 1.18+
           # version: v1.42.1 for go verison 1.17+
           # version: v1.41.0 for go verison 1.16+
-          version: v1.53.2
+          version: v1.55.2
 
           # Optional: working directory, useful for monorepos
           # working-directory: somedir
