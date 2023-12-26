@@ -108,7 +108,7 @@ jobs:
           echo " archive sha256sum at: ${{ env.ASSET }}.sha256"
 
       - name: upload-artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ inputs.upload_artifact_name != null }}
         with:
           name: ${{ inputs.upload_artifact_name }}
