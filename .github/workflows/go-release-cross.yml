@@ -33,7 +33,7 @@ jobs:
           # make distPlatformTarAll
 
       - name: upload-artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ inputs.upload_artifact_name != null }}
         with:
           name: ${{ inputs.upload_artifact_name }}
