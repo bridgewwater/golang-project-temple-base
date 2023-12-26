@@ -42,7 +42,7 @@ jobs:
           echo "download_artifact_name: ${{inputs.download_artifact_name}}"
 
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         if: ${{ inputs.download_artifact_name != null }}
         with:
           name: ${{inputs.download_artifact_name}}
