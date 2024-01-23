@@ -8,10 +8,13 @@ on:
       - 'main'
       - 'release-*'
       - 'FE-*'
+      - '*-feature-*'
       - 'BF-*'
+      - '*-bug-*'
       - 'PU-*'
       - 'DOC-*'
-      - 'hotfix-*'
+      - '*-documentation-*'
+      - '*-hotfix-*'
     tags:
       - '*' # Push events to matching *, i.e. 1.0.0 v1.0, v20.15.10
   pull_request:
@@ -39,26 +42,26 @@ jobs:
   golang-ci:
     name: golang-ci
     needs:
-     - version
+      - version
     uses: ./.github/workflows/golang-ci.yml
     secrets: inherit
 
-#  go-build-check-main:
-#    name: go-build-check-main
-#    needs:
-#     - version
-#     - golang-ci
-#    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) || github.base_ref == 'main' }}
-#    uses: ./.github/workflows/go-release-platform.yml
-#    secrets: inherit
-#    with:
-#      version_name: latest
+  go-build-check-main:
+    name: go-build-check-main
+    needs:
+      - version
+      - golang-ci
+    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) || github.base_ref == 'main' }}
+    uses: ./.github/workflows/go-release-platform.yml
+    secrets: inherit
+    with:
+      version_name: latest
 
   go-release-platform:
     name: go-release-platform
     needs:
-     - version
-     - golang-ci
+      - version
+      - golang-ci
     if: startsWith(github.ref, 'refs/tags/')
     uses: ./.github/workflows/go-release-platform.yml
     secrets: inherit
@@ -66,22 +69,10 @@ jobs:
       version_name: ${{ needs.version.outputs.tag_name }}
       upload_artifact_name: go-release
 
-#  go-release-cross:
-#    name: go-release-cross
-#    needs:
-#     - version
-#     - golang-ci
-#    if: startsWith(github.ref, 'refs/tags/')
-#    uses: ./.github/workflows/go-release-cross.yml
-#    secrets: inherit
-#    with:
-#      upload_artifact_name: go-release
-
   deploy-tag:
     needs:
       - version
       - go-release-platform
-    # - go-release-cross
     name: deploy-tag
     uses: ./.github/workflows/deploy-tag.yml
     if: startsWith(github.ref, 'refs/tags/')

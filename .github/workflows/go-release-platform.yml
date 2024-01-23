@@ -61,7 +61,7 @@ jobs:
       - name: Set up Go SDK
         uses: actions/setup-go@v5
         with:
-          go-version: '^1.18'
+          go-version: '^1.19'
           cache: false
 
       - name: Build Release binary
@@ -111,8 +111,9 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ inputs.upload_artifact_name != null }}
         with:
-          name: ${{ inputs.upload_artifact_name }}
+          name: ${{ inputs.upload_artifact_name }}-${{inputs.version_name}}-${{ matrix.go_os }}-${{ matrix.go_arch }}
           retention-days: 5
+          overwrite: true
           if-no-files-found: error
           path: |
             ${{ env.ASSET }}

@@ -31,7 +31,7 @@ steps:
         - GOPATH
         - GOBIN
   - name: go-init
-    image: golang:1.19.12-bullseye
+    image: golang:1.19.13
     pull: if-not-exists
     volumes:
       - name: go_cache
@@ -50,7 +50,7 @@ steps:
     depends_on: # https://docs.drone.io/pipeline/exec/syntax/parallelism/
       - go-init
 
-    image: golang:1.19.12-bullseye
+    image: golang:1.19.13
     pull: if-not-exists
     volumes:
       - name: go_cache
@@ -68,7 +68,7 @@ steps:
     depends_on: # https://docs.drone.io/pipeline/exec/syntax/parallelism/
       - go-test
 
-    image: golang:1.19.12-bullseye
+    image: golang:1.19.13
     pull: if-not-exists
     volumes:
       - name: go_cache

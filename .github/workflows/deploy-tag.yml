@@ -3,6 +3,11 @@ name: deploy-tag
 on:
   workflow_call: # https://docs.github.com/actions/using-workflows/reusing-workflows#using-inputs-and-secrets-in-a-reusable-workflow
     inputs:
+      dry_run:
+        description: 'dry run flag'
+        default: false
+        required: false
+        type: boolean
       prerelease:
         description: 'prerelease flag'
         default: true
@@ -45,8 +50,9 @@ jobs:
         uses: actions/download-artifact@v4
         if: ${{ inputs.download_artifact_name != null }}
         with:
-          name: ${{inputs.download_artifact_name}}
           path: ${{ github.workspace }}/dist
+          pattern: ${{ inputs.download_artifact_name }}-${{inputs.tag_name}}*
+          merge-multiple: true
 
       - name: Display structure of downloaded files
         if: ${{ inputs.download_artifact_name != null }}
@@ -55,7 +61,7 @@ jobs:
 
       - uses: softprops/action-gh-release@master
         name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: ${{ ! inputs.dry_run }}
         with:
           tag_name: ${{inputs.tag_name}}
           ## with permissions to create releases in the other repo
