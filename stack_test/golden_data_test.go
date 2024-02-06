@@ -1,27 +1,91 @@
 package stack_test
 
 import (
+	"errors"
+	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
+type goldieDataInType struct {
+	Foo string
+	Bar int
+}
+
+type goldieDataOutType struct {
+	Foo string
+	Bar int
+}
+
+var goldDataInEmpty = errors.New("goldieDataInType is empty")
+
+func goldieDataMock(int goldieDataInType) (*goldieDataOutType, error) {
+	if int.Foo == "" {
+		return nil, goldDataInEmpty
+	}
+	return &goldieDataOutType{
+		Foo: int.Foo,
+		Bar: int.Bar,
+	}, nil
+}
+
+func TestGoldieData(t *testing.T) {
+	tests := []struct {
+		name    string
+		c       goldieDataInType
+		wantErr error
+	}{
+		{
+			name: "sample",
+			c: goldieDataInType{
+				Foo: "foo",
+				Bar: 2,
+			},
+		},
+		{
+			name:    "err",
+			wantErr: goldDataInEmpty,
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			g := goldie.New(t,
+				goldie.WithDiffEngine(goldie.ClassicDiff), // default: goldie.ClassicDiff
+			)
+
+			gotResult, gotErr := goldieDataMock(tc.c)
+			assert.Equal(t, tc.wantErr, gotErr)
+			if tc.wantErr != nil {
+				return
+			}
+			g.AssertJson(t, t.Name(), gotResult)
+		})
+	}
+}
+
 func Test_goldenDataSaveFast(t *testing.T) {
 	// mock _goldenDataSaveFast
 	const extraName = "_goldenDataSaveFast"
-	var saveDataStr = "foo data"
+	type testData struct {
+		Name string
+	}
+	var fooData = testData{
+		Name: "foo",
+	}
 	t.Logf("~> mock _goldenDataSaveFast")
-	err := goldenDataSaveFast(t, []byte(saveDataStr), extraName)
+	err := goldenDataSaveFast(t, fooData, extraName)
 	if err != nil {
 		t.Fatal(err)
 	}
 	// do _goldenDataSaveFast
 	t.Logf("~> do _goldenDataSaveFast")
-	readAsByte, err := goldenDataReadAsByte(t, extraName)
+	var readData testData
+	err = goldenDataReadAsType(t, extraName, &readData)
 	if err != nil {
 		t.Fatal(err)
 	}
 	// verify _goldenDataSaveFast
-	assert.Equal(t, saveDataStr, string(readAsByte))
+	assert.Equal(t, fooData.Name, readData.Name)
 }
 
 func Test_test_data_json(t *testing.T) {

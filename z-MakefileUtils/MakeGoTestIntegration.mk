@@ -6,7 +6,7 @@
 # ENV_ROOT_TEST_LIST test list for most use case is ./...
 # ENV_ROOT_TEST_MAX_TIME timeout for test case set
 # ENV_ROOT_BUILD_PATH=build
-# ENV_ROOT_BUILD_ENTRANCE=main.go
+# ENV_ROOT_BUILD_ENTRANCE=cmd/golang-project-temple-base/main.go
 # ENV_ROOT_BUILD_BIN_NAME=${ROOT_NAME}
 # ENV_RUN_INFO_ARGS=
 # ENV_RUN_INFO_HELP_ARGS=

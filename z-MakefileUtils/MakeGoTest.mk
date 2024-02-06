@@ -61,17 +61,17 @@ testBuild:
 testBenchmark:
 	@echo "=> run test benchmark start"
 ifeq ($(OS),Windows_NT)
-	@go test -run none -bench . -benchmem -v ${ENV_ROOT_TEST_LIST}
+	@go test -run none -tags test -bench . -benchmem -v ${ENV_ROOT_TEST_LIST}
 else
-	@go test -run none -bench . -benchmem -v ${ENV_ROOT_TEST_LIST}
+	@go test -run none -tags test -bench . -benchmem -v ${ENV_ROOT_TEST_LIST}
 endif
 
 testBenchmarkMaxTimeOut:
 	@echo "=> run test benchmark by timout: ${ENV_ROOT_TEST_MAX_TIME} start"
 ifeq ($(OS),Windows_NT)
-	@go test -run none -bench . -benchmem -v ${ENV_ROOT_TEST_LIST} -timeout ${ENV_ROOT_TEST_MAX_TIME}
+	@go test -run none -tags test -bench . -benchmem -v ${ENV_ROOT_TEST_LIST} -timeout ${ENV_ROOT_TEST_MAX_TIME}
 else
-	@go test -run none -bench . -benchmem -v ${ENV_ROOT_TEST_LIST} -timeout ${ENV_ROOT_TEST_MAX_TIME}
+	@go test -run none -tags test -bench . -benchmem -v ${ENV_ROOT_TEST_LIST} -timeout ${ENV_ROOT_TEST_MAX_TIME}
 endif
 
 testCoverageClean:

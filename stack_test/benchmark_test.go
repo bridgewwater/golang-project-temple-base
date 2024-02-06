@@ -8,6 +8,30 @@ import (
 	"testing"
 )
 
+// benchmark_test
+
+var strData []string
+
+func initStrData() {
+	if len(strData) == 0 {
+		for i := 0; i < 200; i++ {
+			strData = append(strData, randomStr(300))
+		}
+	}
+}
+
+func TestRandomStr(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		t.Logf("randomStr: %s", randomStr(16))
+	}
+}
+
+func TestRandomInt(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		t.Logf("randomInt: %d", randomInt(1024))
+	}
+}
+
 func BenchmarkExampleBasic(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -15,7 +39,7 @@ func BenchmarkExampleBasic(b *testing.B) {
 		if err != nil {
 			b.Fatal(err)
 		}
-		assert.Truef(b, pathExistsFast(testDataFolderFullPath), "want testDataFolderFullPath exist: %s", testDataFolderFullPath)
+		assert.Truef(b, pathExistsFast(testDataFolderFullPath), "want BenchmarkExampleBasic exist: %s", testDataFolderFullPath)
 	}
 	b.StopTimer()
 }
@@ -35,18 +59,20 @@ func demoCunt() bool {
 }
 
 func BenchmarkExampleTimer(b *testing.B) {
-	// reset counter
-	b.ResetTimer()
 	// mock ExampleTimer
 
+	// reset counter
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		// do ExampleTimer
 		flag := demoCunt()
 		if flag {
 			// need for timing
+			//b.Log("StartTimer")
 			b.StartTimer()
 		} else {
 			// no need for timing
+			//b.Log("StopTimer")
 			b.StopTimer()
 		}
 		// verify ExampleTimer
@@ -56,6 +82,8 @@ func BenchmarkExampleTimer(b *testing.B) {
 }
 
 func BenchmarkStringsAdd(b *testing.B) {
+	initStrData()
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		var s string
@@ -67,6 +95,8 @@ func BenchmarkStringsAdd(b *testing.B) {
 }
 
 func BenchmarkStringsFmt(b *testing.B) {
+	initStrData()
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		var _ string = fmt.Sprint(strData)
@@ -75,6 +105,8 @@ func BenchmarkStringsFmt(b *testing.B) {
 }
 
 func BenchmarkStringsJoin(b *testing.B) {
+	initStrData()
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = strings.Join(strData, "")
@@ -83,6 +115,8 @@ func BenchmarkStringsJoin(b *testing.B) {
 }
 
 func BenchmarkStringsBuffer(b *testing.B) {
+	initStrData()
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		n := len("") * (len(strData) - 1)
@@ -100,6 +134,8 @@ func BenchmarkStringsBuffer(b *testing.B) {
 }
 
 func BenchmarkStringsBuilder(b *testing.B) {
+	initStrData()
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		n := len("") * (len(strData) - 1)

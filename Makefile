@@ -1,42 +1,42 @@
 .PHONY: test check clean build dist all
 #TOP_DIR := $(shell pwd)
 # can change by env:ENV_CI_DIST_VERSION use and change by env:ENV_CI_DIST_MARK by CI
-ENV_DIST_VERSION=v0.1.2
+ENV_DIST_VERSION =v0.1.2
 ENV_DIST_MARK=
 
-ROOT_NAME?=golang-project-temple-base
+ROOT_NAME ?=golang-project-temple-base
 
 ## MakeDocker.mk settings start
-ROOT_OWNER?=bridgewwater
-ROOT_PARENT_SWITCH_TAG=1.19.13
+ROOT_OWNER ?=bridgewwater
+ROOT_PARENT_SWITCH_TAG =1.19.13
 # for image local build
-INFO_TEST_BUILD_DOCKER_PARENT_IMAGE=golang
+INFO_TEST_BUILD_DOCKER_PARENT_IMAGE =golang
 # for image running
-INFO_BUILD_DOCKER_FROM_IMAGE=alpine:3.17
-INFO_BUILD_DOCKER_FILE=Dockerfile
-INFO_TEST_BUILD_DOCKER_FILE=Dockerfile.s6
+INFO_BUILD_DOCKER_FROM_IMAGE =alpine:3.17
+INFO_BUILD_DOCKER_FILE =Dockerfile
+INFO_TEST_BUILD_DOCKER_FILE =Dockerfile.s6
 ## MakeDocker.mk settings end
 
 ## run info start
-ENV_RUN_INFO_HELP_ARGS=-h
+ENV_RUN_INFO_HELP_ARGS =-h
 ENV_RUN_INFO_ARGS=
 ## run info end
 
 ## build dist env start
 # change to other build entrance
-ENV_ROOT_BUILD_ENTRANCE=cmd/golang-project-temple-base/main.go
-ENV_ROOT_BUILD_BIN_NAME=${ROOT_NAME}
-ENV_ROOT_BUILD_PATH=build
-ENV_ROOT_BUILD_BIN_PATH=${ENV_ROOT_BUILD_PATH}/${ENV_ROOT_BUILD_BIN_NAME}
-ENV_ROOT_LOG_PATH=logs/
+ENV_ROOT_BUILD_ENTRANCE =cmd/golang-project-temple-base/main.go
+ENV_ROOT_BUILD_BIN_NAME =${ROOT_NAME}
+ENV_ROOT_BUILD_PATH =build
+ENV_ROOT_BUILD_BIN_PATH =${ENV_ROOT_BUILD_PATH}/${ENV_ROOT_BUILD_BIN_NAME}
+ENV_ROOT_LOG_PATH =logs/
 # linux windows darwin  list as: go tool dist list
-ENV_DIST_GO_OS=linux
+ENV_DIST_GO_OS =linux
 # amd64 386
-ENV_DIST_GO_ARCH=amd64
+ENV_DIST_GO_ARCH =amd64
 # mark for dist and tag helper
-ENV_ROOT_MANIFEST_PKG_JSON?=package.json
-ENV_ROOT_MAKE_FILE?=Makefile
-ENV_ROOT_CHANGELOG_PATH?=CHANGELOG.md
+ENV_ROOT_MANIFEST_PKG_JSON ?=package.json
+ENV_ROOT_MAKE_FILE ?=Makefile
+ENV_ROOT_CHANGELOG_PATH ?=CHANGELOG.md
 ## build dist env end
 
 ## go test MakeGoTest.mk start
@@ -133,6 +133,12 @@ style: modTidy modVerify modFmt modLintRun
 
 ci: modTidy modVerify modFmt modVet modLintRun test
 
+ciTestBenchmark: modTidy modVerify testBenchmark
+
+ciCoverageShow: modTidy modVerify modVet testCoverage testCoverageShow
+
+ciAll: ci ciTestBenchmark ciCoverageShow
+
 buildMain:
 	@echo "-> start build local OS: ${PLATFORM} ${OS_BIT}"
 ifeq ($(OS),Windows_NT)
@@ -228,8 +234,11 @@ endif
 	@echo "~> make testCoverageBrowser - see coverage at browser --invert-match by config"
 	@echo "~> make testBenchmark       - run go test benchmark case all"
 	@echo "~> make ci                  - run CI tools tasks"
+	@echo "~> make ciTestBenchmark     - run CI tasks as test benchmark"
+	@echo "~> make ciCoverageShow      - run CI tasks as test coverage and show"
+	@echo "~> make ciAll               - run CI tasks all"
 	@echo "~> make style               - run local code fmt and style check"
-	@echo "~> make devHelp             - run as develop mode show help"
+	@echo "~> make devHelp             - run as develop mode see help with ${ENV_RUN_INFO_HELP_ARGS}"
 	@echo "~> make dev                 - run as develop mode"
 ifeq ($(OS),Windows_NT)
 	@echo "~> make devInstallLocal     - install at $(subst /,\,${ENV_GO_PATH}/bin)"
