@@ -3,6 +3,8 @@ package stack_test
 import (
 	"errors"
 	"github.com/sebdah/goldie/v2"
+	"github.com/sinlov-go/unittest-kit/env_kit"
+	"github.com/sinlov-go/unittest-kit/unittest_file_kit"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -73,14 +75,14 @@ func Test_goldenDataSaveFast(t *testing.T) {
 		Name: "foo",
 	}
 	t.Logf("~> mock _goldenDataSaveFast")
-	err := goldenDataSaveFast(t, fooData, extraName)
+	err := testGoldenKit.GoldenDataSaveFast(t, fooData, extraName)
 	if err != nil {
 		t.Fatal(err)
 	}
 	// do _goldenDataSaveFast
 	t.Logf("~> do _goldenDataSaveFast")
 	var readData testData
-	err = goldenDataReadAsType(t, extraName, &readData)
+	err = testGoldenKit.GoldenDataReadAsType(t, extraName, &readData)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -92,7 +94,7 @@ func Test_test_data_json(t *testing.T) {
 	// mock _test_data_json
 	t.Logf("~> mock _test_data_json")
 
-	testDataJsonFullPath, err := getOrCreateTestDataFullPath("json", "basic", "test_data.json")
+	testDataJsonFullPath, err := testGoldenKit.GetOrCreateTestDataFullPath("json", "basic", "test_data.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -111,17 +113,19 @@ func Test_test_data_json(t *testing.T) {
 	}
 
 	// do _test_data_json
-	err = writeFileAsJsonBeauty(testDataJsonFullPath, data, true)
+	err = unittest_file_kit.WriteFileAsJsonBeauty(testDataJsonFullPath, data, true)
 	if err != nil {
 		t.Fatal(err)
 	}
 	t.Logf("~> do _test_data_json")
 
 	var readData TestData
-	err = readFileAsJson(testDataJsonFullPath, &readData)
+	err = unittest_file_kit.ReadFileAsJson(testDataJsonFullPath, &readData)
 	if err != nil {
 		t.Fatal(err)
 	}
 	// verify _test_data_json
 	assert.Equal(t, data.CiBuildNumber, readData.CiBuildNumber)
+
+	t.Logf("~> verify _test_data_json at env: \n%s", env_kit.FindEnv4PrintAsPrefixSortJust("CI_", 36))
 }
