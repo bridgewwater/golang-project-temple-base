@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/sebdah/goldie/v2 v2.5.3
 	github.com/sinlov-go/unittest-kit v1.1.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
