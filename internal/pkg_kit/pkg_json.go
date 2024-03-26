@@ -1,4 +1,4 @@
-package pkgJson
+package pkg_kit
 
 import (
 	"encoding/json"
@@ -71,7 +71,7 @@ func GetPackageJsonDescription() string {
 
 func checkPackageJsonLoad() {
 	if pkgJsonContent == "" {
-		panic(fmt.Errorf("pkgJson must use InitPkgJsonContent(content), then use"))
+		panic(fmt.Errorf("pkg_kit must use InitPkgJsonContent(content), then use"))
 	}
 	if pkgJson == nil {
 		initJsonContent()
@@ -85,19 +85,19 @@ func initJsonContent() {
 	pkgJ := PkgJson{}
 	err := json.Unmarshal([]byte(pkgJsonContent), &pkgJ)
 	if err != nil {
-		panic(fmt.Errorf("pkgJson parse package.json err: %v", err))
+		panic(fmt.Errorf("pkg_kit parse package.json err: %v", err))
 	}
 	if pkgJ.Name == "" {
-		panic(fmt.Errorf("pkgJson parse package.json name is empty"))
+		panic(fmt.Errorf("pkg_kit parse package.json name is empty"))
 	}
 	if pkgJ.Version == "" {
-		panic(fmt.Errorf("pkgJson parse package.json version is empty"))
+		panic(fmt.Errorf("pkg_kit parse package.json version is empty"))
 	}
 	if pkgJ.Author.Name == "" {
-		panic(fmt.Errorf("pkgJson parse package.json author name is empty"))
+		panic(fmt.Errorf("pkg_kit parse package.json author name is empty"))
 	}
 	if pkgJ.Author.Email == "" {
-		panic(fmt.Errorf("pkgJson parse package.json author email is empty"))
+		panic(fmt.Errorf("pkg_kit parse package.json author email is empty"))
 	}
 	pkgJson = &pkgJ
 }

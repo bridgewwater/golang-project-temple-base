@@ -1,4 +1,4 @@
-package pkgJson
+package pkg_kit
 
 import (
 	"github.com/stretchr/testify/assert"
@@ -98,7 +98,7 @@ func TestPanicInitPkgJsonContentError(t *testing.T) {
 func TestPanicPackageJsonLoadName(t *testing.T) {
 	// mock TestPanicPackageJsonLoadName
 
-	errString := "pkgJson parse package.json name is empty"
+	errString := "pkg_kit parse package.json name is empty"
 
 	if !assert.PanicsWithError(t, errString, func() {
 		// do TestPanicPackageJsonLoadName
@@ -115,7 +115,7 @@ func TestPanicPackageJsonLoadName(t *testing.T) {
 func TestPanicPackageJsonLoadVersion(t *testing.T) {
 	// mock TestPanicPackageJsonLoadVersion
 
-	errString := "pkgJson parse package.json version is empty"
+	errString := "pkg_kit parse package.json version is empty"
 
 	if !assert.PanicsWithError(t, errString, func() {
 		// do TestPanicPackageJsonLoadVersion
@@ -132,7 +132,7 @@ func TestPanicPackageJsonLoadVersion(t *testing.T) {
 func TestPanicPackageJsonLoadAuthor(t *testing.T) {
 	// mock TestPanicPackageJsonLoadAuthor
 
-	errString := "pkgJson parse package.json author name is empty"
+	errString := "pkg_kit parse package.json author name is empty"
 
 	if !assert.PanicsWithError(t, errString, func() {
 		// do TestPanicPackageJsonLoadAuthor
@@ -146,7 +146,7 @@ func TestPanicPackageJsonLoadAuthor(t *testing.T) {
 		t.Fatalf("TestPanicPackageJsonLoadAuthor should panic")
 	}
 
-	errString = "pkgJson parse package.json author email is empty"
+	errString = "pkg_kit parse package.json author email is empty"
 
 	if !assert.PanicsWithError(t, errString, func() {
 		// do TestPanicPackageJsonLoadAuthor
