@@ -10,14 +10,26 @@ updates:
     schedule:
       interval: "monthly"
       day: "sunday"
-    open-pull-requests-limit: 10
-  - package-ecosystem: "gomod"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "sunday"
+    commit-message:
+      prefix: "build(action)"
+      prefix-development: "build(action-dev)"
+      # include: "scope"
     open-pull-requests-limit: 10
 #    ignore:
 #    - dependency-name: foo
 #      versions:
 #      - ">= 2.a, < 3"
+
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "sunday"
+    commit-message:
+      prefix: "build(go)"
+      prefix-development: "build(go-dev)"
+    open-pull-requests-limit: 10
+#     ignore:
+#       - dependency-name: golangci/golangci-lint-action
+#         versions:
+#           - "v3"
