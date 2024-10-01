@@ -8,8 +8,8 @@ github.com/sebdah/goldie/v2 v2.5.5 h1:rx1mwF95RxZ3/83sdS4Yp7t2C5TCokvWP4TBRbAyEW
 github.com/sebdah/goldie/v2 v2.5.5/go.mod h1:oZ9fp0+se1eapSRjfYbsV/0Hqhbuu3bJVvKI/NNtssI=
 github.com/sergi/go-diff v1.0.0 h1:Kpca3qRNrduNnOQeazBd0ysaKrUJiIuISHxogkT9RPQ=
 github.com/sergi/go-diff v1.0.0/go.mod h1:0CfEIISq7TuYL3j771MWULgwwjU+GofnZX9QAmXWZgo=
-github.com/sinlov-go/unittest-kit v1.1.1 h1:Xuml8PGkxdwzRQxlO37q/zvE9fHHQlIDM0KZXhE77Oc=
-github.com/sinlov-go/unittest-kit v1.1.1/go.mod h1:u/+OWj6Wm1mnfMRS8FhWjrg5aZ0yqAQM6y0wcHt/o3s=
+github.com/sinlov-go/unittest-kit v1.2.1 h1:iI8jKiJOuyrPXTZuQHRwUzuuiqE5EUdS3brziFTkb3Y=
+github.com/sinlov-go/unittest-kit v1.2.1/go.mod h1:u/+OWj6Wm1mnfMRS8FhWjrg5aZ0yqAQM6y0wcHt/o3s=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
