@@ -4,17 +4,19 @@ on:
   push:
     paths-ignore:
       - '**/README.md'
+      - '**/doc-dev/*'
     branches:
       # - 'main'
       - 'release-*'
-      - 'FE-*'
       - '*-feature-*'
-      - 'BF-*'
+      - '*-enhancement-*'
+      - '*-hotfix-*'
       - '*-bug-*'
+      - '*-documentation-*'
+      - 'BF-*'
+      - 'FE-*'
       - 'PU-*'
       - 'DOC-*'
-      - '*-documentation-*'
-      - '*-hotfix-*'
     tags:
       - '*' # Push events to matching *, i.e. 1.0.0 v1.0, v20.15.10
   pull_request:
@@ -24,13 +26,13 @@ on:
       - opened
       - reopened
       - closed
-    branches:
-      - 'main'
-      - 'release-*'
-      - 'DOC-*'
-      - 'hotfix-*'
+    # branches:
+    #   - 'main'
+    #   - 'release-*'
+    #   - 'DOC-*'
+    #   - 'hotfix-*'
 
-permissions:
+permissions: # https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#permissions
   contents: write
   discussions: write
 
@@ -45,6 +47,11 @@ jobs:
       - version
     uses: ./.github/workflows/golang-ci.yml
     secrets: inherit
+    with:
+      run_test_case: true
+      run_golangci_lint: true
+      run_benchmark: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) || github.base_ref == 'main' }}
+      run_test_coverage: true
 
   go-build-check-main:
     name: go-build-check-main
@@ -56,6 +63,7 @@ jobs:
     secrets: inherit
     with:
       version_name: latest
+      go_build_id: ${{ needs.version.outputs.short_sha }}
 
   go-release-platform:
     name: go-release-platform
@@ -67,7 +75,8 @@ jobs:
     secrets: inherit
     with:
       version_name: ${{ needs.version.outputs.tag_name }}
-      upload_artifact_name: go-release
+      go_build_id: ${{ needs.version.outputs.short_sha }}
+      # upload_artifact_name: go-release
 
   deploy-tag:
     needs:
@@ -78,7 +87,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     secrets: inherit
     with:
+      dry_run: false # open/close dry run
       prerelease: true
       tag_name: ${{ needs.version.outputs.tag_name }}
       tag_changes: ${{ needs.version.outputs.cc_changes }}
-      download_artifact_name: go-release
+      # download_artifact_name: go-release # download artifact name, download from actions/upload-artifact, as: {download_artifact_name}-{tag_name}-*, empty is not download

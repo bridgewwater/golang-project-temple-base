@@ -1,0 +1,40 @@
+name: 📝documentation
+title: "[documentation]: "
+description: Improvements or additions to documentation
+#assignees:
+#  - octocat
+labels:
+  - documentation
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in the project and taking the time to fill out this report!
+
+  - type: textarea
+    id: additions-documentation
+    attributes:
+      label: Improvements or additions to documentation
+      description: A clear and concise description of improvements or additions to documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Any other context or screenshots about the documentation here.
+
+  - type: checkboxes
+    id: checkboxes
+    attributes:
+      label: Validations
+      description: Before submitting the issue, please make sure you do the following
+      options:
+        - label: Read the [Contributing Guidelines](../blob/main/.github/CONTRIBUTING_DOC/CONTRIBUTING.md).
+          required: true
+        - label: Check that there isn't [already an issue](../issues) that reports the same bug to avoid creating a duplicate.
+          required: true
+        - label: Checked that the bug isn't fixed in the `next` version already.
+          required: true

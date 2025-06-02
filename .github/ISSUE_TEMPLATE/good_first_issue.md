@@ -1,5 +1,5 @@
 ---
-name: good first issue
+name: 👍good first issue
 about: Good for newcomers
 ref: "main"
 title: '[good first issue]'

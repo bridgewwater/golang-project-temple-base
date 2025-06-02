@@ -24,12 +24,12 @@ on:
         required: false
         type: string
       download_artifact_name:
-        description: 'download artifact name, if not set will not use download_artifact'
+        description: 'download artifact name, download from actions/upload-artifact, as: {download_artifact_name}-{tag_name}-*, empty is not download'
         default: ''
         required: false
         type: string
 
-permissions:
+permissions: # https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#permissions
   contents: write
   discussions: write
 
@@ -38,20 +38,28 @@ jobs:
     name: repo-release
     runs-on: ubuntu-latest
     steps:
+      - name: Check inputs
+        run: |
+          echo "inputs.dry_run: ${{ inputs.dry_run }}"
+          echo "inputs.prerelease: ${{ inputs.prerelease }}"
+          echo "inputs.tag_name: ${{ inputs.tag_name }}"
+          echo "inputs.download_artifact_name: ${{ inputs.download_artifact_name }}"
+
       - uses: actions/checkout@v4
 
       - name: Check deploy inputs
         run: |
-          echo "prerelease: ${{inputs.prerelease}}"
-          echo "tag_name: ${{inputs.tag_name}}"
-          echo "download_artifact_name: ${{inputs.download_artifact_name}}"
+          echo "prerelease: ${{ inputs.prerelease }}"
+          echo "tag_name: ${{ inputs.tag_name }}"
+          echo "download_artifact_name: ${{ inputs.download_artifact_name }}"
 
       - name: Download Artifact
         uses: actions/download-artifact@v4
         if: ${{ inputs.download_artifact_name != null }}
         with:
           path: ${{ github.workspace }}/dist
-          pattern: ${{ inputs.download_artifact_name }}-${{inputs.tag_name}}*
+          ## https://github.com/actions/download-artifact/tree/v4?tab=readme-ov-file#breaking-changes
+          pattern: ${{ inputs.download_artifact_name }}-${{ inputs.tag_name }}*
           merge-multiple: true
 
       - name: Display structure of downloaded files
@@ -59,18 +67,19 @@ jobs:
         run: |
           ls -R ${{ github.workspace }}/dist
 
-      - uses: softprops/action-gh-release@master
+      - uses: softprops/action-gh-release@v2
         name: Create Release
         if: ${{ ! inputs.dry_run }}
         with:
-          tag_name: ${{inputs.tag_name}}
+          tag_name: ${{ inputs.tag_name }}
           ## with permissions to create releases in the other repo
           token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: ${{inputs.prerelease}}
+          prerelease: ${{ inputs.prerelease }}
           body: "${{ inputs.tag_changes }}"
           # body_path: ${{ github.workspace }}/CHANGELOG.md
+          ## set release binaries, empty means do not upload files for release
           # https://github.com/isaacs/node-glob
-          files: |
-            **/*.zip
-            **/*.tar.gz
-            **/*.sha256
+          # files: |
+          #   **/*.zip
+          #   **/*.tar.gz
+          #   **/*.sha256

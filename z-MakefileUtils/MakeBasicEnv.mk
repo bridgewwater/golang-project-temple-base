@@ -4,6 +4,7 @@
 ## feature:
 # - can fetch PLATFORM OS_BIT ENV_ROOT ENV_HOME_PATH ENV_NOW_TIME_FORMAT, from runner
 # - can fetch ENV_DIST_VERSION ENV_DIST_MARK , from CI/CD or git
+# - can change by env:ENV_CI_DIST_VERSION , env:ENV_CI_DIST_MARK , env:ENV_CI_DIST_CODE_MARK by CI setting
 ## task:
 # make envHelp
 # make envBasic
@@ -83,11 +84,7 @@ $(info -> change ENV_DIST_MARK by git)
     ENV_DIST_MARK=-$(strip $(shell git --no-pager rev-parse --short HEAD))
 endif
 
-# finally change by ENV_CI_DIST_MARK
-ifneq ($(strip $(ENV_CI_DIST_MARK)),)
-$(info -> change ENV_DIST_MARK by ENV_CI_DIST_MARK)
-    ENV_DIST_MARK=-${ENV_CI_DIST_MARK}
-endif
+ENV_DIST_CODE_MARK=$(subst -,,${ENV_DIST_MARK})
 
 # finally change by env ENV_CI_DIST_VERSION
 ifneq ($(strip $(ENV_CI_DIST_VERSION)),)
@@ -95,7 +92,17 @@ $(info -> change ENV_DIST_VERSION by ENV_CI_DIST_VERSION)
     ENV_DIST_VERSION=${ENV_CI_DIST_VERSION}
 endif
 
-ENV_DIST_CODE_MARK=$(subst -,,${ENV_DIST_MARK})
+# finally change by ENV_CI_DIST_MARK
+ifneq ($(strip $(ENV_CI_DIST_MARK)),)
+$(info -> change ENV_DIST_MARK by ENV_CI_DIST_MARK)
+    ENV_DIST_MARK=-${ENV_CI_DIST_MARK}
+endif
+
+# finally change by env ENV_CI_DIST_CODE_MARK
+ifneq ($(strip $(ENV_CI_DIST_CODE_MARK)),)
+$(info -> change ENV_DIST_VERSION by ENV_CI_DIST_CODE_MARK)
+    ENV_DIST_CODE_MARK=${ENV_CI_DIST_CODE_MARK}
+endif
 
 .PHONY: envHelp
 envBasic:

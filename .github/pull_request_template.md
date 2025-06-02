@@ -1,14 +1,3 @@
----
-name: Feature request
-about: New feature or request
-ref: "main"
-title: '[enhancement]'
-assignees: ''
-labels:
-  - enhancement
-
----
-
 ### Checklist
 
 * [ ] I have read the [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md)

@@ -22,9 +22,11 @@
 
 ### 新建 Issues
 
-如果您准备贡献，请单击此处 [issues/new/choose](../../../../issues/new/choose)
+如果您准备贡献，请单击此处 [issues/new/choose](../../../../../issues/new/choose)
 
-> 如果此repo已打开问题，请首先查看我们标记为 [`help wanted`](../../../../issues?q=is%3Aopen+is%3Aissue+label%3A"help+wanted") 或者 [`good first issue`](../../../../issues?q=is%3Aopen+is%3Aissue+label%3A"good+first+issue")
+> 如果此repo已打开问题，请首先查看我们标记为
+> [`help wanted`](../../../../../issues?q=is%3Aopen+is%3Aissue+label%3A"help+wanted")
+> 或者 [`good first issue`](../../../../../issues?q=is%3Aopen+is%3Aissue+label%3A"good+first+issue").
 
 你可以对这个问题发表评论，让别人知道你有兴趣解决这个问题，或者提出问题.
 
@@ -127,7 +129,3 @@ Closes #1234,#2345
 > 除了 Header、Body 和 Footer 这 3 个部分，Commit Message 还有一种特殊情况：如果当前 commit 还原了先前的 commit，则应以
 > revert: 开头，后跟还原的 commit 的 Header。而且，在 Body 中必须写成 This reverts commit ，其中 hash 是要还原的 commit 的 SHA
 > 标识。
-
-## 生成套件
-
-- 查看 [gh-conventional-kit](https://github.com/sinlov/gh-conventional-kit) 以获取更多信息
