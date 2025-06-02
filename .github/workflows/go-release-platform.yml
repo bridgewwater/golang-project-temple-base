@@ -13,12 +13,17 @@ on:
         default: ''
         required: false
         type: string
+      go_build_id:
+        description: 'setup go build id'
+        default: 'unknown'
+        required: false
+        type: string
 
 env:
   DIST_BINARY_NAME: golang-project-temple-base # to change your binary name, windows will auto add .exe
   DIST_BUILD_ENTRANCE: cmd/golang-project-temple-base/main.go # to change your build entrance
 
-permissions:
+permissions: # https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#permissions
   contents: write
 
 jobs:
@@ -57,6 +62,14 @@ jobs:
             go_arch: arm64
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Check inputs
+        run: |
+          echo "github.run_id: ${{ github.run_id }}"
+          echo "github.run_attempt: ${{ github.run_attempt }}"
+          echo "inputs.version_name: ${{ inputs.version_name }}"
+          echo "inputs.upload_artifact_name: ${{ inputs.upload_artifact_name }}"
+          echo "inputs.go_build_id: ${{ inputs.go_build_id }}"
+
       - uses: actions/checkout@v4
       - name: Set up Go SDK
         uses: actions/setup-go@v5
@@ -69,7 +82,7 @@ jobs:
           go mod verify
           go mod download -x
           go mod tidy -v
-          go mod vendor
+          # go mod vendor
           # Replace with the name of your binary
           binary_name=${{ env.DIST_BINARY_NAME }}
 
@@ -80,7 +93,7 @@ jobs:
           dirname="${{ env.DIST_BINARY_NAME }}-${{ inputs.version_name }}-${{ matrix.go_os }}-${{ matrix.go_arch }}"
 
           # change build tag and ldflags if you need
-          go build -a -tags netgo -ldflags '-w -s --extldflags "-static -fpic"' -o $dirname/$binary_name ${{ env.DIST_BUILD_ENTRANCE }}
+          go build -a -tags netgo -ldflags '-X main.buildID=${{ inputs.go_build_id }} -w -s --extldflags "-static -fpic"' -o $dirname/$binary_name ${{ env.DIST_BUILD_ENTRANCE }}
 
           # add more resource to archive
           # mv doc/cmd.md "$dirname"
@@ -111,7 +124,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ inputs.upload_artifact_name != null }}
         with:
-          name: ${{ inputs.upload_artifact_name }}-${{inputs.version_name}}-${{ matrix.go_os }}-${{ matrix.go_arch }}
+          name: ${{ inputs.upload_artifact_name }}-${{ inputs.version_name }}-${{ matrix.go_os }}-${{ matrix.go_arch }}
           retention-days: 5
           overwrite: true
           if-no-files-found: error

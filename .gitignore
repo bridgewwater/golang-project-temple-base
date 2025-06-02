@@ -4,8 +4,12 @@
 logs/
 
 ### build temple
+
 build/
 dist/
+.task/
+gosec.json
+golangci-lint.out
 
 ### go mod
 

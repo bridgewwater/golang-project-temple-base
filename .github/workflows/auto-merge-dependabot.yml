@@ -20,19 +20,21 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Enable auto-merge for Dependabot PRs
+      - name: Add label for Dependabot PRs
         # Automatically merge the following dependency upgrades:
-        if: "${{  steps.metadata.outputs.dependency-names == '@actions/core' ||
-                  steps.metadata.outputs.dependency-names == 'actions/checkout' ||
-                  steps.metadata.outputs.dependency-names == 'actions/setup-go' ||
-                  steps.metadata.outputs.dependency-names == 'github.com/stretchr/testify' ||
-                  steps.metadata.outputs.dependency-names == 'github.com/sinlov-go/unittest-kit' ||
-                  steps.metadata.outputs.dependency-names == 'codecov/codecov-action' ||
-                  steps.metadata.outputs.dependency-names == 'convention-change/conventional-version-check'
-            }}"
-
+        # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#ignore
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
         run: |
           gh pr edit "$PR_URL" --add-label "dependencies"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Enable auto-merge for Dependabot PRs
+        # Automatically merge the following dependency upgrades:
+        # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#ignore
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: |
           gh pr merge --auto --merge '${{ github.event.pull_request.html_url }}'
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
