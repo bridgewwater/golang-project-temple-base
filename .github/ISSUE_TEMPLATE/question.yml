@@ -1,0 +1,77 @@
+name: ❓Question
+title: "[question]: "
+description: Want ask question for this project
+#assignees:
+#  - octocat
+labels:
+  - question
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in the project and taking the time to fill out this report!
+
+  - type: textarea
+    id: question-description
+    attributes:
+      label: A clear and concise description of what you question
+      description: I want [goal / wish] so that [benefit]. If you intend to submit a question, tell us in the description.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: 'A clear and concise description of what you expected to happen'
+    validations:
+      required: true
+
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Info
+      description: Output of `system version`
+      render: shell
+      placeholder: |
+        get system info by command
+        # UNIX like
+        $ uname -a
+        # linux
+        $ lsb_release -a
+        # macOS
+        $ sw_vers
+        # windows
+        $ systeminfo
+
+        # OS: [e.g. iOS]
+        # Browser [e.g. chrome, safari]
+        # Version [e.g. 22]
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Any other context or screenshots about the question here.
+
+  - type: checkboxes
+    id: checkboxes
+    attributes:
+      label: Validations
+      description: Before submitting the issue, please make sure you do the following
+      options:
+        - label: Read the [Contributing Guidelines](../blob/main/.github/CONTRIBUTING_DOC/CONTRIBUTING.md).
+          required: true
+        - label: Check that there isn't [already an issue](../issues) that reports the same bug to avoid creating a duplicate.
+          required: true
+        - label: Checked that the bug isn't fixed in the `next` version already.
+          required: true
