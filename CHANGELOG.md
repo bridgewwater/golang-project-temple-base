@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [2.2.0](https://github.com/bridgewwater/golang-project-temple-base/compare/v2.1.0...v2.2.0) (2025-06-02)
+
+### ✨ Features
+
+* use github.com/sinlov-go/unittest-kit ([443d78ca](https://github.com/bridgewwater/golang-project-temple-base/commit/443d78cad198cc5e7cc8cf4fe1b4f9b84980bc16))
+
+* update test case and make ci* for fast task run ([08e22c45](https://github.com/bridgewwater/golang-project-temple-base/commit/08e22c4562219f8d4f659e29d4e2432bcd442ec4))
+
+### ♻ Refactor
+
+* rename pkg name and file name ([af0eb580](https://github.com/bridgewwater/golang-project-temple-base/commit/af0eb580898f4ff467fd1d3b648669141d809300))
+
+### 👷‍ Build System
+
+* improve CI/CD workflows and code quality ([221f359f](https://github.com/bridgewwater/golang-project-temple-base/commit/221f359ffd5a0a7ae843bf2bca3d3d566a3c4fea))
+
+* bump github.com/stretchr/testify from 1.9.0 to 1.10.0 ([d7e9ab2a](https://github.com/bridgewwater/golang-project-temple-base/commit/d7e9ab2af4854bc7a981a28aa2108e294444a954))
+
+* bump github.com/sinlov-go/unittest-kit from 1.1.1 to 1.2.1 ([ae68d256](https://github.com/bridgewwater/golang-project-temple-base/commit/ae68d2565e458a066cfc8733588ebba224f9e219))
+
+* bump github.com/sinlov-go/unittest-kit from 1.1.0 to 1.1.1 ([c43b20fe](https://github.com/bridgewwater/golang-project-temple-base/commit/c43b20fe54004b788c2ffd07978b4964e856b8e0))
+
+* bump github.com/sebdah/goldie/v2 from 2.5.3 to 2.5.5 ([7f26c1f2](https://github.com/bridgewwater/golang-project-temple-base/commit/7f26c1f23150d24ed08e44e8101495a187ecf128))
+
+* support inject `buildID` at CI pipline ([c3ef6436](https://github.com/bridgewwater/golang-project-temple-base/commit/c3ef643638a152d5b9c60ee7329e9c4d00fb1896))
+
+* bump golangci/golangci-lint-action from 5 to 6 ([00ecdb73](https://github.com/bridgewwater/golang-project-temple-base/commit/00ecdb73317a9ee97ebd220a10a99c564bd3e45e))
+
+* bump convention-change/conventional-version-check ([46aecae8](https://github.com/bridgewwater/golang-project-temple-base/commit/46aecae8bb07a07aea493199dd6803feca3f5ce3))
+
+* bump golangci/golangci-lint-action from 4 to 5 ([9de0b661](https://github.com/bridgewwater/golang-project-temple-base/commit/9de0b661e014cbb1cfbff16bde938cfd3b70b3f5))
+
+* bump github.com/stretchr/testify from 1.8.4 to 1.9.0 ([301da77c](https://github.com/bridgewwater/golang-project-temple-base/commit/301da77ce9a088d62b4ab6d1424c281cbb50d92d))
+
+* bump github.com/sinlov-go/unittest-kit from 1.0.0 to 1.1.0 ([17f55d1d](https://github.com/bridgewwater/golang-project-temple-base/commit/17f55d1d6481216787399487046738158ed15729))
+
+* bump github.com/stretchr/testify from 1.8.4 to 1.9.0 ([b5db8740](https://github.com/bridgewwater/golang-project-temple-base/commit/b5db87406c3599e0900caf5bb65000033b5fba0d))
+
+* bump actions/upload-artifact from 3 to 4 ([2de7acbc](https://github.com/bridgewwater/golang-project-temple-base/commit/2de7acbc4b61594cc28c13e8c8650e0a6d05f59a))
+
+* bump actions/setup-go from 4 to 5 ([dc8404db](https://github.com/bridgewwater/golang-project-temple-base/commit/dc8404db010da50c555b805704c81bb263a70500))
+
+* bump actions/download-artifact from 3 to 4 ([b2a99836](https://github.com/bridgewwater/golang-project-temple-base/commit/b2a99836c58a3828734dda3917dd51ede70d5ff3))
+
+* update go version to 1.19.12 for build ([99d5a3c5](https://github.com/bridgewwater/golang-project-temple-base/commit/99d5a3c568e3573b9297aa170e143df9f749bb18))
+
+* fix name of go-release-platform.yml ([4f58c9c1](https://github.com/bridgewwater/golang-project-temple-base/commit/4f58c9c1a6e399be602a03edef0a6839f4e860b3))
+
 ## [2.1.0](https://github.com/bridgewwater/golang-project-temple-base/compare/2.0.0...v2.1.0) (2023-12-19)
 
 ### 🐛 Bug Fixes
