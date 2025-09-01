@@ -70,7 +70,7 @@ jobs:
           echo "inputs.upload_artifact_name: ${{ inputs.upload_artifact_name }}"
           echo "inputs.go_build_id: ${{ inputs.go_build_id }}"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Go SDK
         uses: actions/setup-go@v5
         with:

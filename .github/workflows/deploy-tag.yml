@@ -45,7 +45,7 @@ jobs:
           echo "inputs.tag_name: ${{ inputs.tag_name }}"
           echo "inputs.download_artifact_name: ${{ inputs.download_artifact_name }}"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check deploy inputs
         run: |
