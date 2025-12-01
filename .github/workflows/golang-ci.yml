@@ -67,7 +67,7 @@ jobs:
         # https://github.com/golangci/golangci-lint-action?tab=readme-ov-file#compatibility
         # * `v8.0.0` works with `golangci-lint` version >= `v2.1.0`
         # * `v7.0.0` supports golangci-lint v2 only.
-        uses: golangci/golangci-lint-action@v8
+        uses: golangci/golangci-lint-action@v9
         with:
           # Require: The version of golangci-lint to use.
           # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
